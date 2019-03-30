@@ -1,0 +1,29 @@
+.diskon{
+   
+    position: absolute;
+    right: 0px;
+    top:0px;
+    width: 70px;
+    height: 30px;
+    background-color:orange;
+    color: white;
+    
+    text-align: center;
+    font-weight: 600;
+    font-size: 20px;
+    
+}
+.gambar{
+    cursor: pointer;
+}
+
+.kategori{
+    cursor: pointer;
+    width: 100px;
+    background-color: orange;
+    color: white;
+    text-align: center;
+    font-weight: 600;
+    font-size: 20px;
+    
+}

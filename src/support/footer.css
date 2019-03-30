@@ -1,0 +1,15 @@
+#footer {
+    clear: both;
+    position: relative;
+    height: 40px;
+    margin-top: -40px;
+    font-family: 'Dosis', sans-serif;
+    font-size: 20px;
+}
+ul li a {
+    text-decoration: none;
+    color:orange;
+}
+ul li a:hover{
+    color:inherit;
+}

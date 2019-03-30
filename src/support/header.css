@@ -1,0 +1,21 @@
+.mainLogo{
+float: left;
+border-right: 2px solid black;
+width: 120px;
+
+}
+.navbar2{
+    width: 100px;
+    float: left;
+    margin-left: 10px;
+    
+}
+.topTitle{
+    font-weight: 700;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    margin: 5px 0 0 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+}
