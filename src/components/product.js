@@ -55,11 +55,15 @@ class Product extends React.Component{
     render(){
         
         return(
-            <div className="container">
+            <div className="container wrapProduct">
+            <h3 style={{textAlign:"left",marginTop:"10px"}}>Product List</h3>
+                <hr></hr>
                 <div className="row justify-content-center">
+                
                 {this.renderProductJsx()}
+            
                 </div>
-             
+            
             </div>
         )
     }

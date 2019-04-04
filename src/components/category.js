@@ -10,7 +10,7 @@ const Example = (props) => {
         <CardBody>
           <CardTitle>Shoes</CardTitle>
           <CardText>Many variation of "Preloved" Luxury Shoes available here .</CardText>
-          <input type="button" className="btn border-warning" value="Browse" onClick={()=>alert("hai")}/>
+          <input type="button" className="btn btn-outline-warning" value="Browse" onClick={()=>alert("hai")}/>
         </CardBody>
       </Card>
       <Card>
@@ -18,7 +18,7 @@ const Example = (props) => {
         <CardBody>
           <CardTitle>Bags</CardTitle>
           <CardText>Many variation of "Preloved" Luxury Bags available here .</CardText>
-          <input type="button" className="btn border-warning" value="Browse" onClick={()=>alert("hai")}/>
+          <input type="button" className="btn btn-outline-warning" value="Browse" onClick={()=>alert("hai")}/>
           
           
         </CardBody>
@@ -28,7 +28,7 @@ const Example = (props) => {
         <CardBody>
           <CardTitle>Accessories</CardTitle>
           <CardText>Many variation of "Preloved" Luxury items available here .</CardText>
-          <input type="button" className="btn border-warning" value="Browse" onClick={()=>alert("hai")}/>
+          <input type="button" className="btn btn-outline-warning" value="Browse" onClick={()=>alert("hai")}/>
         </CardBody>
       </Card>
      
@@ -37,7 +37,8 @@ const Example = (props) => {
         <CardBody>
           <CardTitle>Clothes</CardTitle>
           <CardText>Many variation of "Preloved" Luxury Clothes available here .</CardText>
-          <input type="button" className="btn border-warning" value="Browse" onClick={()=>alert("hai")}/>
+          <input type="button" className="btn btn-outline-warning" value="Browse" onClick={()=>alert("hai")}/>
+        
         </CardBody>
       </Card>
       

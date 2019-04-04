@@ -1,8 +1,8 @@
 const INITIAL_STATE = {
     error:'',
     id:0, 
-    username:0,
-    role:'',
+    username:'',
+    role:0,
     cookie:false,
     loading:false
 
@@ -11,9 +11,20 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action)=>{
     switch(action.type){
         case "PASSWORD_DID_NOT_MATCH":
-            return {...INITIAL_STATE,error:"Password did not match"}
-            
+            return {...INITIAL_STATE,error:"Password did not match",cookie:true}
+        case "LOADING":
+            return{...INITIAL_STATE,loading:true}  
+        case "RESET_USER":
+            return{...INITIAL_STATE,cookie:true}
+        case "LOGIN_SUCCESS":
+            return{...INITIAL_STATE,id:action.payload[0].id,role:action.payload[0].role,cookie:true}
+        case "ERROR":
+            return{...INITIAL_STATE,error:"USERNAME SUDAH ADA",cookie:true}
+        case "LOGIN_ERROR":
+            return{...INITIAL_STATE,error:"CHECK USERNAME OR PASSWORD AGAIN",cookie:true}
+        case "COOKIE_CHECKED":
+            return{...state,cookie:true}
+        default:
+            return state 
     }
-
-
 }

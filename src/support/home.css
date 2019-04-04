@@ -2,7 +2,7 @@
 .latestProduct{
     font-size: 20px;
     margin-top: 10px;
-   
+    margin-bottom: 40px;
 
 }
 .category{
@@ -10,4 +10,11 @@
     margin-top: 10px;
     
     
+}
+.slick-prev:before,
+.slick-next:before {
+  color: orange;
+  z-index: 1000;
+  position: absolute;
+  
 }

@@ -11,7 +11,7 @@ code {
     monospace;
 }
 
-h1,h2,h3,p{
+h1,h2,h3,p,ul{
   font-family: 'Dosis', sans-serif;
   text-decoration: none
   

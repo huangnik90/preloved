@@ -4,10 +4,10 @@ import '../support/footer.css'
 class Footer extends React.Component {
     render() {
         return (
-        <footer  id="footer" className="page-footer font-small special-color-dark pt-4">
+        <footer  id="footer"  className="page-footer font-small special-color-dark pt-4">
         <div className="footer-copyright text-center py-3">© 2019 : NIKOLAS WIJAYA - PRELOVED
         </div>
-        <div className="container">
+        <div className="container-fluid">
           <ul className="list-unstyled list-inline text-center">
             <li className="list-inline-item">
               <a className="btn-floating btn-fb mx-1" href="https://www.google.com">

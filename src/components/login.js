@@ -1,9 +1,46 @@
 import React from 'react'
 import '../support/login.css'
-import {Link} from 'react-router-dom'
+import {Link,Redirect} from 'react-router-dom'
+import {loginUser} from '../1.actions/userAction'
+import {connect} from 'react-redux'
+import Loader from 'react-loader-spinner'
 
 class Login extends React.Component{
+    state={error:[]}
+    onBtnLoginClick =()=>{
+        var username= this.refs.username.value
+        var password=this.refs.password.value
+        if (username===""||password===""){
+            this.setState({error:"Empty"})
+        }else{
+            this.props.loginUser(username,password)
+            this.setState({error:""})
+        }
+    }
+    renderErrorMessage= ()=>{
+        if (this.props.error !==""){
+            return <div style={{fontSize:"12px", fontWeight:"700"}} className="alert alert-danger mt-3" role="alert">
+                {this.props.error}
+            </div>
+        }
+    }
+    renderLoaderOrBtn = ()=>{
+        if(this.props.loading === true){
+            return  <Loader
+            type="Hearts"
+            color="#FF0000"
+            height="30"
+            width="30"/>
+         }else{
+             return <button type="button" className="btn btn-warning" onClick={this.onBtnLoginClick} style={{width:"300px"}} ><i className="fas fa-sign-in-alt" /> Login</button>
+         }
+
+    }
+
     render(){
+        if(this.props.id >0){
+            return <Redirect to="/"/>
+        }
         return(
             <div className="container myBody" style={{minHeight:"450px"}}>
                 <div className="row justify-content-sm-center ml-auto mr-auto mt-3" >
@@ -31,11 +68,14 @@ class Login extends React.Component{
                             
                             <div className="form-group row">
                                 <div className="col-12" style={{textAlign:'center'}}>
-                                <button type="button" className="btn btn-warning" onClick={this.onBtnLoginClick} style={{width:"300px"}} ><i className="fas fa-sign-in-alt" /> Login</button>
-                                
-                                </div>
-                                    
+                                        {this.renderLoaderOrBtn()}       
+                                        {this.renderErrorMessage()}          
+                                </div> 
                             </div>
+                            <div className="form-group row">
+                            
+                            </div>
+                            
                             <div className="btn my-auto"><p>Don't have Account? <Link to="/register" className="border-bottom">Sign Up!</Link></p></div>
                         </fieldset>
                     </form>
@@ -45,5 +85,12 @@ class Login extends React.Component{
         )
     }
 }
+const mapStatetoProps =(state)=>{
+    return {
+        id :state.user.id,
+        loading:state.user.loading,
+        error:state.user.error
+    }
+}
 
-export default Login;
+export default  connect(mapStatetoProps,{loginUser})(Login);

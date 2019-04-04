@@ -1,8 +1,11 @@
 import React from 'react'
+import Loader from 'react-loader-spinner'
+import {connect} from 'react-redux'
+import {registerUser} from '../1.actions/userAction'
 
 
 class Register extends React.Component{
-    state = {error:[]}
+    state = {error:[],success:[]}
    
     btnRegister=()=>{
         var firstname = this.refs.firstname.value 
@@ -11,19 +14,39 @@ class Register extends React.Component{
         var password = this.refs.password.value 
         var password2 = this.refs.password2.value 
         var username = this.refs.username.value
+        var role = 2
 
         if (password !== password2){
             this.setState({error:"Password did not match!"})
         }else if (firstname==="" || lastname==="" || email==="" || username===""){
             this.setState({error:"Data Empty"})
-        }else if(email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)){
+        }else if(!(email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i))){
             this.setState({error:"please enter a valid email"})
+        }else if(password.length <5){
+            this.setState({error:"Password is too short (Minimum 6 characters)"})
         }
         else{
-            alert("registering..")
+            this.props.registerUser(firstname,lastname,email,username,password,role)
+            this.setState({error:""})
+            this.setState({success:"ONE MORE STEP - Cek Email: "+email+" for verification "})
         }
         
     }
+    
+
+    renderLoaderOrBtn = ()=>{
+        if(this.props.loading === true){
+            return  <Loader
+            type="Hearts"
+            color="#FF0000"
+            height="30"
+            width="30"/>
+         }else{
+             return <button type="button" className="btn btn-warning" onClick={this.btnRegister} style={{width:"100%"}} ><i class="fas fa-arrow-alt-circle-up"></i> Sign Up</button>
+         }
+
+    }
+   
     render(){
         return(
             <div className="container myBody" style={{minHeight:"450px"}}>
@@ -70,23 +93,28 @@ class Register extends React.Component{
                             <div className="form-group row">
                                 <label className="col-sm-3 col-form-label">Confirm Password</label>
                                 <div className="col-sm-9">
-                                <input type="password" ref="password2" className="form-control" id="inputPassword" placeholder="Password" onKeyPress={this.renderOnKeyPress} required />
+                                <input type="password" ref="password2" className="form-control" id="inputPassword" placeholder="Retype-Password" onKeyPress={this.renderOnKeyPress} required />
                                 </div>
                             </div>
                             
                             <div className="form-group row">
                                 <div className="col-12" style={{textAlign:'center'}}>
-                                <button type="button" className="btn btn-warning" onClick={this.btnRegister} style={{width:"100%"}} ><i class="fas fa-arrow-alt-circle-up"></i> Sign Up</button>
+
+                                {this.renderLoaderOrBtn()}
                                 
                                 </div>
                                     
                             </div>
                             <div className="form-group row">
-                                <div className="col-12" style={{color:"red",fontWeight:"700",textAlign:'center'}}>
-                                    
+                                <div className="col-12" style={{color:"red",fontSize:"15px",textAlign:'center'}}>
                                     {this.state.error}
-                                
                                 </div>
+                                {this.props.error===""?<div className="col-12" style={{color:"green",fontWeight:"700",textAlign:'center'}}>
+                                    {this.state.success}
+                                </div>:
+                                <div className="col-12" style={{color:"red",fontSize:"15px",textAlign:'center'}}>
+                               {this.props.error}
+                                </div>}
                                     
                             </div>
                             
@@ -100,5 +128,10 @@ class Register extends React.Component{
         )
     }
 }
-
-export default Register;
+const mapStateToProps =(state)=>{
+    return{
+        loading : state.user.loading,
+        error:state.user.error
+    }
+}
+export default connect (mapStateToProps,{registerUser})(Register);
