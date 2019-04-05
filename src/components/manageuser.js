@@ -127,7 +127,7 @@ class CustomPaginationActionsTable extends React.Component {
     this.getAllUser()
   }
   getAllUser = ()=>{
-      axios.get("http://localhost:2000/user/showalluser")
+      axios.get("http://localhost:2000/user/getalluser")
       .then((res)=>{
           this.setState({rows:res.data})
       })
