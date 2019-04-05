@@ -15,6 +15,8 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import axios from 'axios'
+import swal from 'sweetalert'
+import Button from '@material-ui/core/Button';
 
 const actionsStyles = theme => ({
   root: {
@@ -113,6 +115,8 @@ class CustomPaginationActionsTable extends React.Component {
     rows: [],
     page: 0,
     rowsPerPage: 10,
+    isEdit: false,
+    editIndex:Number
   };
 
   handleChangePage = (event, page) => {
@@ -122,7 +126,7 @@ class CustomPaginationActionsTable extends React.Component {
   handleChangeRowsPerPage = event => {
     this.setState({ page: 0, rowsPerPage: event.target.value });
   };
-  //------------------------------------------NIKO FUNCTION-------------------------------------------------------------
+  //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
   componentDidMount(){
     this.getAllUser()
   }
@@ -135,8 +139,42 @@ class CustomPaginationActionsTable extends React.Component {
           console.log(err)
       })
   }
-  
-  
+  onBtnDelete = (id)=>{
+    
+      axios.delete("http://localhost:2000/user/deleteuserbyid",{params:{id:id}})
+      .then((res)=>{
+        console.log(res.data)
+        this.getAllUser()
+      })
+      .catch((err)=>console.log(err))
+  }
+  onBtnEdit = (id,index)=>{
+    this.setState({isEdit:true,editIndex:index})
+  }
+  cekVerifikasi = (numberawal)=>{
+    var number = this.refs.verifikasi.value
+    if (number < 0) {
+      this.refs.verifikasi.value = numberawal
+      swal("Error","1 untuk verifikasi 0 untuk belum verifikasi","error")
+    }else if(number >1){
+      this.refs.verifikasi.value = numberawal
+      swal("Error","1 untuk verifikasi 0 untuk belum verifikasi","error")
+    }
+  }
+  onBtnCancel=()=>{
+    this.setState({isEdit:false})
+  }  
+  onBtnEditSave = (id)=>{
+    var nilaiverifikasi = this.refs.verifikasi.value
+    axios.get("http://localhost:2000/user/editverifikasiuser?",{params:{id:id,verif:nilaiverifikasi}})
+    .then((res)=>{
+      console.log(res)
+      swal("OK","Sudah terupdate","success")
+      this.getAllUser()
+      this.setState({isEdit:false})
+    })
+    .catch((err)=>console.log(err))
+  }
   renderJSX = ()=>{
     var jsx = this.state.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
     .map((val,index)=>{
@@ -145,12 +183,33 @@ class CustomPaginationActionsTable extends React.Component {
             <TableCell align="center">{index+1}</TableCell>
             <TableCell align="center">{val.id}</TableCell>
             <TableCell align="center">{val.firstname}</TableCell>
-            <TableCell align="center">{val.email}</TableCell>
-            <TableCell align="center">{val.verif}</TableCell>
+            <TableCell align="left">{val.email}</TableCell>
+            {this.state.isEdit===true&& this.state.editIndex===index? <TableCell align="center">
+              <input type="number" defaultValue={val.verif} onChange={()=>this.cekVerifikasi(val.verif)} className="form-control" ref="verifikasi" min={0} max={1}></input>
+            </TableCell>:
+              <TableCell align="center">{val.verif}</TableCell>
+            }
+            {this.state.isEdit===true&& this.state.editIndex===index? 
             <TableCell align="center">
-                {/* <input type="button" className="btn btn-warning">Edit</input>
-                <input type="button" className="btn btn-danger">Delete</input> */}
+            <Button animated onClick={()=>this.onBtnEditSave(val.id)}>
+            <i class="far fa-save"></i>
+            </Button>
+            <Button animated onClick={()=>this.onBtnCancel()}>
+            <i class="fas fa-times"></i>
+            </Button>
             </TableCell>
+            
+            :
+              <TableCell align="center">
+            <Button animated onClick={()=>this.onBtnEdit(val,index)}>
+            <i class="fas fa-pen-fancy"></i>
+            </Button>
+            <Button animated onClick={()=>this.onBtnDelete(val.id)}>
+            <i class="fas fa-recycle"></i>
+            </Button>
+            </TableCell>
+            }
+            
         </TableRow>
         )
     })
@@ -174,7 +233,7 @@ class CustomPaginationActionsTable extends React.Component {
                   <TableCell align="center">ID</TableCell>
                   <TableCell align="center">Nama</TableCell>
                   <TableCell align="center">Email Address</TableCell>
-                  <TableCell align="center">Status</TableCell>
+                  <TableCell align="center">Status Verifikasi</TableCell>
                   <TableCell align="center">Action</TableCell>
               </TableRow>
               
