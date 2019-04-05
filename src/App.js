@@ -1,4 +1,14 @@
 import React, { Component } from 'react';
+
+//CONNECT SAMBUNG NYAMBUNG
+import { Route,withRouter,Switch} from 'react-router-dom'
+import Coookie from 'universal-cookie'
+import {connect} from 'react-redux'
+
+//MODULE MODULE JANGAN DI RUSAK YANG INTIP CODE GW
+import Home from './components/home'
+import Login from './components/login'
+import PageNotFound from './components/404'
 import Header from './components/header'
 import Register from './components/register'
 import Footer from './components/footer'
@@ -6,13 +16,9 @@ import Productdetail from './components/productDetail'
 import Cart from './components/cart'
 import Product from './components/product'
 import ScrollTop from './components/scrollToTop'
-//CONNECT SAMBUNG NYAMBUNG
-import { Route,withRouter,Switch} from 'react-router-dom'
-import Coookie from 'universal-cookie'
-import {connect} from 'react-redux'
-import Home from './components/home'
-import Login from './components/login'
-import PageNotFound from './components/404'
+import ManageUser from './components/manageuser'
+
+//IMPORT SESUATU BIAR CANTIK
 import {keepLogin,cookieChecked} from './1.actions'
 import Loader from 'react-loader-spinner'
 
@@ -42,8 +48,9 @@ class App extends Component {
                  <Route path='/' component={Home} exact></Route>
                  <Route path='/login' component={Login}></Route>
                  <Route path='/register' component={Register}></Route>
+                 <Route path='/manageuser' component={ManageUser}></Route>
                  <Route path='*' component={PageNotFound} />
-                
+                 
 
              </Switch>
                  
@@ -65,7 +72,7 @@ class App extends Component {
 }
 const mapStateToProps = (state)=>{
   return {
-      cookie : state.user.cookie,
+      cookie : state.user.cookie
 
   }
 }

@@ -4,7 +4,8 @@ const INITIAL_STATE = {
     username:'',
     role:0,
     cookie:false,
-    loading:false
+    loading:false,
+    verif:0
 
 }
 
@@ -17,7 +18,11 @@ export default (state = INITIAL_STATE, action)=>{
         case "RESET_USER":
             return{...INITIAL_STATE,cookie:true}
         case "LOGIN_SUCCESS":
-            return{...INITIAL_STATE,id:action.payload[0].id,role:action.payload[0].role,cookie:true}
+            return{...INITIAL_STATE,verif:action.payload[0].verif,id:action.payload[0].id,role:action.payload[0].role,cookie:true}
+        case "REGISTER_SUCCESS":
+            return{...INITIAL_STATE,cookie:true}
+        case "VERIFIKASI_DOLO":
+            return{...INITIAL_STATE,error:"CHECK EMAIL DAHULU",cookie:true}
         case "ERROR":
             return{...INITIAL_STATE,error:"USERNAME SUDAH ADA",cookie:true}
         case "LOGIN_ERROR":

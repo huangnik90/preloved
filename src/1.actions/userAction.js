@@ -20,13 +20,9 @@ export const registerUser = (firstname,lastname,email,username,password,role)=>{
                 
             }else{
                 dispatch({
-                    type:"LOGIN_SUCCESS",
-                    payload: res.data.id
+                    type:"REGISTER_SUCCESS"
                 })
             }
-           
-            
-            
         })
         .catch((err)=>{
             console.log(err)
@@ -62,7 +58,12 @@ export const loginUser = (username,password)=>{
                 dispatch({
                     type:"LOGIN_ERROR"
                 })
-            }else{
+            }else if(res.data[0].verif===0){
+                dispatch({
+                    type:"VERIFIKASI_DOLO"
+                })
+            }
+            else{
                 dispatch({
                     type:"LOGIN_SUCCESS",
                     payload: res.data

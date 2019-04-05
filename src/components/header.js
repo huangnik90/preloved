@@ -61,7 +61,6 @@ class Header extends React.Component {
           </Navbar>
           <div class="topTitle text-center">
                   BECOME PART OF SOMEONE HISTORY - SELL YOUR LUXURY | PRELOVED ITEM HERE 
-           
                   </div>
           
         </div>
@@ -91,7 +90,7 @@ class Header extends React.Component {
                  <NavLink href="/"> Manage Product</NavLink>
                 </NavItem>
                 <NavItem>
-                 <NavLink href="/"> Manage User</NavLink>
+                 <NavLink href="/manageuser"> Manage User</NavLink>
                 </NavItem>
                
                 <NavItem>
@@ -153,7 +152,8 @@ class Header extends React.Component {
 const mapStateToProp = (state)=>{
   return{
       idUser : state.user.id,
-      role: state.user.role
+      role: state.user.role,
+      verif: state.user.verif
   }
   
 }

@@ -2,10 +2,11 @@ import React from 'react'
 import Loader from 'react-loader-spinner'
 import {connect} from 'react-redux'
 import {registerUser} from '../1.actions/userAction'
+import swal from 'sweetalert'
 
 
 class Register extends React.Component{
-    state = {error:[],success:[]}
+    state = {error:[]}
    
     btnRegister=()=>{
         var firstname = this.refs.firstname.value 
@@ -22,14 +23,13 @@ class Register extends React.Component{
             this.setState({error:"Data Empty"})
         }else if(!(email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i))){
             this.setState({error:"please enter a valid email"})
-        }else if(password.length <5){
+        }else if(password.length <6){
             this.setState({error:"Password is too short (Minimum 6 characters)"})
         }
         else{
             this.props.registerUser(firstname,lastname,email,username,password,role)
-            this.setState({error:""})
-            this.setState({success:"ONE MORE STEP - Cek Email: "+email+" for verification "})
-        }
+            swal("SUCCESS","ONE MORE STEP - Cek Email: "+email+" for verification","success")
+        }   
         
     }
     
@@ -131,7 +131,7 @@ class Register extends React.Component{
 const mapStateToProps =(state)=>{
     return{
         loading : state.user.loading,
-        error:state.user.error
+        error : state.user.error
     }
 }
 export default connect (mapStateToProps,{registerUser})(Register);
