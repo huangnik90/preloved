@@ -7,7 +7,11 @@ import {
 } from 'reactstrap';
 
 const items = [
-  
+  {
+    src: 'https://localcdn.tinkerlust.com/media/wysiwyg/homepage_promo/0319/home-banner-desktop/banner-april2019-5.jpg',
+    altText: '',
+    caption: ''
+  },
   {
     src: 'https://localcdn.tinkerlust.com/media/wysiwyg/homepage_promo/0119/home-banner-desktop/0119-W2-b-dress.jpg',
     altText: '',
@@ -23,6 +27,7 @@ const items = [
     altText: '',
     caption: ''
   }
+  
   
   
   

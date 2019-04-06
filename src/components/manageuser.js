@@ -112,9 +112,9 @@ const styles = theme => ({
 
 class CustomPaginationActionsTable extends React.Component {
   state = {
-    rows: [],
+    rows: [], searchRows:[],
     page: 0,
-    rowsPerPage: 10,
+    rowsPerPage: 5,
     isEdit: false,
     editIndex:Number
   };
@@ -129,6 +129,7 @@ class CustomPaginationActionsTable extends React.Component {
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
   componentDidMount(){
     this.getAllUser()
+    
   }
   getAllUser = ()=>{
       axios.get("http://localhost:2000/user/getalluser")
@@ -148,9 +149,11 @@ class CustomPaginationActionsTable extends React.Component {
       })
       .catch((err)=>console.log(err))
   }
+
   onBtnEdit = (id,index)=>{
     this.setState({isEdit:true,editIndex:index})
   }
+
   cekVerifikasi = (numberawal)=>{
     var number = this.refs.verifikasi.value
     if (number < 0) {
@@ -161,9 +164,11 @@ class CustomPaginationActionsTable extends React.Component {
       swal("Error","1 untuk verifikasi 0 untuk belum verifikasi","error")
     }
   }
+
   onBtnCancel=()=>{
     this.setState({isEdit:false})
   }  
+
   onBtnEditSave = (id)=>{
     var nilaiverifikasi = this.refs.verifikasi.value
     axios.get("http://localhost:2000/user/editverifikasiuser?",{params:{id:id,verif:nilaiverifikasi}})
@@ -175,6 +180,18 @@ class CustomPaginationActionsTable extends React.Component {
     })
     .catch((err)=>console.log(err))
   }
+
+  onBtnSearch = ()=>{
+    var searching = this.refs.search.value
+    axios.get("http://localhost:2000/user/searching?",{params:{username:searching}})
+    .then((res)=>{
+      console.log(res)
+      this.setState({searchRows:res.data})
+      
+    })
+    .catch((err)=>console.log(err))
+  }
+
   renderJSX = ()=>{
     var jsx = this.state.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
     .map((val,index)=>{
@@ -182,7 +199,51 @@ class CustomPaginationActionsTable extends React.Component {
             <TableRow>
             <TableCell align="center">{index+1}</TableCell>
             <TableCell align="center">{val.id}</TableCell>
-            <TableCell align="center">{val.firstname}</TableCell>
+            <TableCell align="center">{val.username}</TableCell>
+            <TableCell align="left">{val.email}</TableCell>
+            {
+              this.state.isEdit===true&& this.state.editIndex===index
+              ? 
+              <TableCell align="center">
+              <input type="number" defaultValue={val.verif} onChange={()=>this.cekVerifikasi(val.verif)} className="form-control" ref="verifikasi" min={0} max={1}></input>
+              </TableCell>
+              :
+              <TableCell align="center">{val.verif}</TableCell>
+            }
+            {this.state.isEdit===true&& this.state.editIndex===index? 
+            <TableCell align="center">
+            <Button animated onClick={()=>this.onBtnEditSave(val.id)}>
+            <i class="far fa-save"></i>
+            </Button>
+            <Button animated onClick={()=>this.onBtnCancel()}>
+            <i class="fas fa-times"></i>
+            </Button>
+            </TableCell>
+            :
+              <TableCell align="center">
+            <Button animated onClick={()=>this.onBtnEdit(val,index)}>
+            <i class="fas fa-pen-fancy"></i>
+            </Button>
+            <Button animated onClick={()=>this.onBtnDelete(val.id)}>
+            <i class="fas fa-recycle"></i>
+            </Button>
+            </TableCell>
+            }
+            
+        </TableRow>
+        )
+    })
+     return jsx;
+  }
+  
+  renderSearchJSX = ()=>{
+    var jsx = this.state.searchRows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+    .map((val,index)=>{
+        return (
+            <TableRow>
+            <TableCell align="center">{index+1}</TableCell>
+            <TableCell align="center">{val.id}</TableCell>
+            <TableCell align="center">{val.username}</TableCell>
             <TableCell align="left">{val.email}</TableCell>
             {this.state.isEdit===true&& this.state.editIndex===index? <TableCell align="center">
               <input type="number" defaultValue={val.verif} onChange={()=>this.cekVerifikasi(val.verif)} className="form-control" ref="verifikasi" min={0} max={1}></input>
@@ -225,23 +286,31 @@ class CustomPaginationActionsTable extends React.Component {
     return (
       <Paper className={classes.root} style={{marginBottom:"50px"}}>
         <div className={classes.tableWrapper}>
+        <nav className="navbar justify-content-between">
+        <h1>Manage User</h1>
+        <form className="form-inline">
+          <input className="form-control mr-sm-2" ref="search" type="search" placeholder="Find username.." aria-label="Search" />
+          <button className="btn btn-outline-warning my-2 my-sm-0" onClick={this.onBtnSearch} type="submit">Search</button>
+        </form>
+      </nav>
+        <hr></hr>
           <Table className={classes.table}>
           <TableHead>
               
               <TableRow>
-              <TableCell align="center">No</TableCell>
-                  <TableCell align="center">ID</TableCell>
-                  <TableCell align="center">Nama</TableCell>
-                  <TableCell align="center">Email Address</TableCell>
-                  <TableCell align="center">Status Verifikasi</TableCell>
+              <TableCell align="center">Nomor</TableCell>
+                  <TableCell align="center">User ID</TableCell>
+                  <TableCell align="center">Username</TableCell>
+                  <TableCell align="center">Email</TableCell>
+                  <TableCell align="center">Verifikasi</TableCell>
                   <TableCell align="center">Action</TableCell>
               </TableRow>
               
           </TableHead>
             <TableBody>
-             {this.renderJSX()}
 
-
+             {this.state.searchRows.length===0 ? this.renderJSX(): this.renderSearchJSX()}
+          
              {emptyRows > 0 && (
                 <TableRow style={{ height: 48 * emptyRows }}>
                   <TableCell colSpan={6} />
@@ -266,6 +335,7 @@ class CustomPaginationActionsTable extends React.Component {
               </TableRow>
             </TableFooter>
           </Table>
+          
         </div>
       </Paper>
       
