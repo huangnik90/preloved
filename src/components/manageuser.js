@@ -128,9 +128,13 @@ class CustomPaginationActionsTable extends React.Component {
   };
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
   componentDidMount(){
-    this.getAllUser()
-    
+    if(this.state.searchRows.length===0){
+      this.getAllUser()
+    }else{
+      this.onBtnSearch()
+    }
   }
+  
   getAllUser = ()=>{
       axios.get("http://localhost:2000/user/getalluser")
       .then((res)=>{
@@ -139,6 +143,17 @@ class CustomPaginationActionsTable extends React.Component {
       .catch((err)=>{
           console.log(err)
       })
+  }
+
+  onBtnSearch = ()=>{
+    var searching = this.refs.search.value
+    axios.get("http://localhost:2000/user/searching?",{params:{username:searching}})
+    .then((res)=>{
+      console.log(res)
+      this.setState({searchRows:res.data})
+      
+    })
+    .catch((err)=>console.log(err))
   }
   onBtnDelete = (id)=>{
     
@@ -181,18 +196,10 @@ class CustomPaginationActionsTable extends React.Component {
     .catch((err)=>console.log(err))
   }
 
-  onBtnSearch = ()=>{
-    var searching = this.refs.search.value
-    axios.get("http://localhost:2000/user/searching?",{params:{username:searching}})
-    .then((res)=>{
-      console.log(res)
-      this.setState({searchRows:res.data})
-      
-    })
-    .catch((err)=>console.log(err))
-  }
+  
 
   renderJSX = ()=>{
+    
     var jsx = this.state.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
     .map((val,index)=>{
         return (

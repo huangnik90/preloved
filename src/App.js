@@ -17,7 +17,8 @@ import Cart from './components/cart'
 import Product from './components/product'
 import ScrollTop from './components/scrollToTop'
 import ManageUser from './components/manageuser'
-
+import ProductAdd from './components/productAdd'
+import ProductManage from './components/productManage'
 //IMPORT SESUATU BIAR CANTIK
 import {keepLogin,cookieChecked} from './1.actions'
 import Loader from 'react-loader-spinner'
@@ -42,6 +43,8 @@ class App extends Component {
           <ScrollTop>
              <Header/>
              <Switch>
+             <Route path='/productmanage' component={ProductManage}></Route>
+             <Route path='/productadd' component={ProductAdd}></Route>
               <Route path="/product" component={Product}></Route>
                  <Route path='/cart' component={Cart} ></Route>
                  <Route path="/productdetail" component={Productdetail}></Route>
@@ -50,7 +53,7 @@ class App extends Component {
                  <Route path='/register' component={Register}></Route>
                  <Route path='/manageuser' component={ManageUser}></Route>
                  <Route path='*' component={PageNotFound} />
-                 
+                
 
              </Switch>
                  
