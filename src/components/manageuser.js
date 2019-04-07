@@ -232,7 +232,7 @@ class CustomPaginationActionsTable extends React.Component {
             <i class="fas fa-pen-fancy"></i>
             </Button>
             <Button animated onClick={()=>this.onBtnDelete(val.id)}>
-            <i class="fas fa-recycle"></i>
+            <i class="far fa-trash-alt"></i>
             </Button>
             </TableCell>
             }
@@ -273,7 +273,7 @@ class CustomPaginationActionsTable extends React.Component {
             <i class="fas fa-pen-fancy"></i>
             </Button>
             <Button animated onClick={()=>this.onBtnDelete(val.id)}>
-            <i class="fas fa-recycle"></i>
+            <i class="far fa-trash-alt"></i>
             </Button>
             </TableCell>
             }

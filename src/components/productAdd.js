@@ -15,9 +15,9 @@ class ProductAdd extends React.Component{
         var discount = this.refs.diskon.value
         var product_name = this.refs.productname.value
         var price = this.refs.productharga.value
-       
+        var category = this.refs.category.value
         var data = {
-                product_name,price,discount
+                product_name,price,discount,category
             }
             var formData = new FormData()
             formData.append("image",this.state.selectedFile,this.state.selectedFile.name)
@@ -34,6 +34,7 @@ class ProductAdd extends React.Component{
         
 
     }
+    
 
     
 
@@ -67,6 +68,18 @@ class ProductAdd extends React.Component{
                                 </div>
                             </div>
                             <div className="form-group row">
+                                <label className="col-sm-3 col-form-label">Category Product</label>
+                                <div className="col-sm-9 btn-group dropdown">
+                                <select ref="category" style={{width:"100%"}} >
+                                    <option>--- SELECT CATEGORY ---</option>
+                                    <option value="1">SHOES</option>
+                                    <option value="2">BAGS</option>
+                                    <option value="3">AKSESORIS</option>
+                                    <option value="4">CLOTHES</option>
+                                </select>
+                                </div>
+                            </div>
+                            <div className="form-group row">
                                 <label className="col-sm-3 col-form-label">Gambar Product</label>
                                 <div className="col-sm-9">
                                 <input className="form-control btn-success" type="button" onClick={()=>this.refs.input.click()} value={this.valueHandler()}></input>
@@ -79,7 +92,7 @@ class ProductAdd extends React.Component{
                                 <div className="col-9" style={{textAlign:'center'}}>
 
                                 <button type="button" className="btn btn-warning" onClick={this.btnAdd} style={{width:"100%"}} ><i class="fas fa-plus"></i></button>
-                                
+                               
                                 </div>
                                     
                             </div>
