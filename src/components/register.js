@@ -27,8 +27,14 @@ class Register extends React.Component{
             this.setState({error:"Password is too short (Minimum 6 characters)"})
         }
         else{
-            this.props.registerUser(firstname,lastname,email,username,password,role)
-            swal("SUCCESS","ONE MORE STEP - Cek Email: "+email+" for verification","success")
+            if(this.props.error ===""){
+                this.props.registerUser(firstname,lastname,email,username,password,role)
+                swal("SUCCESS","ONE MORE STEP - Cek Email: "+email+" for verification","success")
+            }else{
+                swal("NO",this.props.error,"error")
+            }
+           
+           
         }   
         
     }
@@ -108,14 +114,7 @@ class Register extends React.Component{
                             <div className="form-group row">
                                 <div className="col-12" style={{color:"red",fontSize:"15px",textAlign:'center'}}>
                                     {this.state.error}
-                                </div>
-                                {this.props.error===""?<div className="col-12" style={{color:"green",fontWeight:"700",textAlign:'center'}}>
-                                    {this.state.success}
-                                </div>:
-                                <div className="col-12" style={{color:"red",fontSize:"15px",textAlign:'center'}}>
-                               {this.props.error}
-                                </div>}
-                                    
+                                </div>    
                             </div>
                             
                           

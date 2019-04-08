@@ -22,7 +22,7 @@ export default (state = INITIAL_STATE, action)=>{
         case "REGISTER_SUCCESS":
             return{...INITIAL_STATE,cookie:true}
         case "VERIFIKASI_DOLO":
-            return{...INITIAL_STATE,error:"CHECK EMAIL DAHULU",cookie:true}
+            return{...INITIAL_STATE,error:"EMAIL BELUM VERIFIKASI",cookie:true}
         case "ERROR":
             return{...INITIAL_STATE,error:"USERNAME SUDAH ADA",cookie:true}
         case "LOGIN_ERROR":

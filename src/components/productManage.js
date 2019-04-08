@@ -17,6 +17,7 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import axios from 'axios'
 import swal from 'sweetalert'
 import Button from '@material-ui/core/Button';
+import {  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 const actionsStyles = theme => ({
   root: {
@@ -114,9 +115,9 @@ class CustomPaginationActionsTable extends React.Component {
   state = {
     rows: [], searchRows:[],
     page: 0,
-    rowsPerPage: 5,
+    rowsPerPage: 15,
     isEdit: false,
-    editIndex:Number
+    editIndex:Number,modal:false,dataEdit:{},selectedFileEdit:null
   };
 
   handleChangePage = (event, page) => {
@@ -128,14 +129,10 @@ class CustomPaginationActionsTable extends React.Component {
   };
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
   componentDidMount(){
-    if(this.state.searchRows.length===0){
-      this.getAllUser()
-    }else{
-      this.onBtnSearch()
-    }
+    this.getAllProduct()
   }
   
-  getAllUser = ()=>{
+  getAllProduct = ()=>{
       axios.get("http://localhost:2000/product/getallproduct")
       .then((res)=>{
           this.setState({rows:res.data})
@@ -146,27 +143,21 @@ class CustomPaginationActionsTable extends React.Component {
   }
 
   onBtnSearch = ()=>{
-    var searching = this.refs.search.value
-    axios.get("http://localhost:2000/user/searching?",{params:{username:searching}})
-    .then((res)=>{
-      console.log(res)
-      this.setState({searchRows:res.data})
-      
-    })
-    .catch((err)=>console.log(err))
+   alert("blom digarap")
   }
   onBtnDelete = (id)=>{
     
-      axios.delete("http://localhost:2000/user/deleteuserbyid",{params:{id:id}})
+      axios.delete("http://localhost:2000/product/deleteproductbyid",{params:{id:id}})
       .then((res)=>{
         console.log(res.data)
-        this.getAllUser()
+        swal("Ok","delete item success","success")
+        this.getAllProduct()
       })
       .catch((err)=>console.log(err))
   }
 
-  onBtnEdit = (id,index)=>{
-    this.setState({isEdit:true,editIndex:index})
+  onBtnEdit = (val,index)=>{
+    this.setState({isEdit:true,editIndex:index,modal:true,dataEdit:val})
   }
 
   cekVerifikasi = (numberawal)=>{
@@ -185,21 +176,40 @@ class CustomPaginationActionsTable extends React.Component {
   }  
 
   onBtnEditSave = (id)=>{
-    var nilaiverifikasi = this.refs.verifikasi.value
-    axios.get("http://localhost:2000/user/editverifikasiuser?",{params:{id:id,verif:nilaiverifikasi}})
-    .then((res)=>{
-      console.log(res)
-      swal("OK","Sudah terupdate","success")
-      this.getAllUser()
-      this.setState({isEdit:false})
-    })
-    .catch((err)=>console.log(err))
+ 
   }
+  valueHandlerEdit = ()=>{
+    return  this.state.selectedFileEdit ? this.state.selectedFileEdit.name :"pick a picture"
+  }
+  //DAPETIN VALUE IMAGE EDIT - AMPUN!!
+  onChangeHandlerEdit = (event)=>{
+    this.setState({selectedFileEdit:event.target.files[0]})
+  }
+  onBtnSaveEdit =()=>{
+    var product_name = this.refs.editNama.value
+    var price = this.refs.editHarga.value
+    var discount = this.refs.editDiskon.value
+    var category = this.refs.editCategory.value
+    var newData ={
+      product_name,price,discount,category
+    }
 
+    if(this.state.selectedFileEdit!==null){
+        var fd = new FormData()
+        fd.append('edit',this.state.selectedFileEdit)
+        fd.append('data',JSON.stringify(newData))
+        fd.append('imageBefore',this.state.dataEdit.image)
+
+        
+    }
+    
+
+
+    
+  }
   
 
   renderJSX = ()=>{
-    
     var jsx = this.state.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
     .map((val,index)=>{
         return (
@@ -239,46 +249,7 @@ class CustomPaginationActionsTable extends React.Component {
      return jsx;
   }
   
-  renderSearchJSX = ()=>{
-    var jsx = this.state.searchRows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
-    .map((val,index)=>{
-        return (
-            <TableRow>
-            <TableCell align="center">{index+1}</TableCell>
-            <TableCell align="center">{val.id}</TableCell>
-            <TableCell align="center">{val.username}</TableCell>
-            <TableCell align="left">{val.email}</TableCell>
-            {this.state.isEdit===true&& this.state.editIndex===index? <TableCell align="center">
-              <input type="number" defaultValue={val.verif} onChange={()=>this.cekVerifikasi(val.verif)} className="form-control" ref="verifikasi" min={0} max={1}></input>
-            </TableCell>:
-              <TableCell align="center">{val.verif}</TableCell>
-            }
-            {this.state.isEdit===true&& this.state.editIndex===index? 
-            <TableCell align="center">
-            <Button animated onClick={()=>this.onBtnEditSave(val.id)}>
-            <i class="far fa-save"></i>
-            </Button>
-            <Button animated onClick={()=>this.onBtnCancel()}>
-            <i class="fas fa-times"></i>
-            </Button>
-            </TableCell>
-            
-            :
-              <TableCell align="center">
-            <Button animated onClick={()=>this.onBtnEdit(val,index)}>
-            <i class="fas fa-pen-fancy"></i>
-            </Button>
-            <Button animated onClick={()=>this.onBtnDelete(val.id)}>
-            <i class="far fa-trash-alt"></i>
-            </Button>
-            </TableCell>
-            }
-            
-        </TableRow>
-        )
-    })
-     return jsx;
-  }
+  
   
   
   render() {
@@ -292,7 +263,7 @@ class CustomPaginationActionsTable extends React.Component {
         <nav className="navbar justify-content-between">
         <h1>Manage Product</h1>
         <form className="form-inline">
-          <input className="form-control mr-sm-2" ref="search" type="search" placeholder="Find username.." aria-label="Search" />
+          <input className="form-control mr-sm-2" ref="search" type="search" placeholder="Find Product.." aria-label="Search" />
           <button className="btn btn-outline-warning my-2 my-sm-0" onClick={this.onBtnSearch} type="submit">Search</button>
         </form>
       </nav>
@@ -314,7 +285,7 @@ class CustomPaginationActionsTable extends React.Component {
           </TableHead>
             <TableBody>
 
-             {this.state.searchRows.length===0 ? this.renderJSX(): this.renderSearchJSX()}
+             {this.renderJSX()}
           
              {emptyRows > 0 && (
                 <TableRow style={{ height: 48 * emptyRows }}>
@@ -340,8 +311,48 @@ class CustomPaginationActionsTable extends React.Component {
               </TableRow>
             </TableFooter>
           </Table>
+
+          
           
         </div>
+        <div>
+        <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+          <ModalHeader toggle={()=>this.setState({modal:false})}> Edit : {this.state.dataEdit.product_name}</ModalHeader>
+          <ModalBody>
+            <div className="row">
+                <div className="col-4 col-md-4">
+                  <img src={`http://localhost:2000/${this.state.dataEdit.image}`}  width="100%" alt="broken"/>
+                  <input type="file" onChange={this.onChangeHandlerEdit}style={{display:"none"}} ref="inputEdit"></input>
+                  <input type="button" value={this.valueHandlerEdit()} className="form-control btn-warning" onClick={()=>this.refs.inputEdit.click()}></input>
+                </div>
+                <div className="col-8 col-md-8">
+                <p>Name</p>  
+                <input type="text" ref="editNama" className="form-control" defaultValue={this.state.dataEdit.product_name}/>
+                <p>Price</p>   
+                <input type="number" ref="editHarga"className="form-control" defaultValue={this.state.dataEdit.price}/>
+                <p>Discount</p>   
+                <input type="number" ref="editDiskon"className="form-control" defaultValue={this.state.dataEdit.discount}/>
+                <p>Category</p>   
+                <select defaultValue={this.state.dataEdit.category} className="form-control"  ref="editCategory" style={{width:"100%"}} >
+                     <option>--- SELECT CATEGORY ---</option>
+                     <option value="1">SHOES</option>
+                     <option value="2">BAGS</option>
+                     <option value="3">AKSESORIS</option>
+                     <option value="4">CLOTHES</option>
+                  </select>
+                </div>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.onBtnSaveEdit}>Save</Button>{' '}
+            <Button color="secondary" onClick={()=>this.setState({modal:false})}>Cancel</Button>
+          </ModalFooter>
+        </Modal>
+        </div>
+                  
+
+
+
       </Paper>
       
     );

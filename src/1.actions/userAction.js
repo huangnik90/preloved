@@ -15,9 +15,7 @@ export const registerUser = (firstname,lastname,email,username,password,role)=>{
             if (res.data==="data sudah ada"){
                 dispatch({
                     type:"ERROR",
-                 
                 })
-                
             }else{
                 dispatch({
                     type:"REGISTER_SUCCESS"

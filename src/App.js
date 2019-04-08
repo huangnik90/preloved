@@ -19,9 +19,11 @@ import ScrollTop from './components/scrollToTop'
 import ManageUser from './components/manageuser'
 import ProductAdd from './components/productAdd'
 import ProductManage from './components/productManage'
+
 //IMPORT SESUATU BIAR CANTIK
 import {keepLogin,cookieChecked} from './1.actions'
 import Loader from 'react-loader-spinner'
+
 
 import './App.css';
 var kookie = new Coookie ()
@@ -46,6 +48,7 @@ class App extends Component {
              <Route path='/productmanage' component={ProductManage}></Route>
              <Route path='/productadd' component={ProductAdd}></Route>
               <Route path="/product" component={Product}></Route>
+             
                  <Route path='/cart' component={Cart} ></Route>
                  <Route path="/productdetail" component={Productdetail}></Route>
                  <Route path='/' component={Home} exact></Route>

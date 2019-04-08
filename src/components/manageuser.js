@@ -169,16 +169,16 @@ class CustomPaginationActionsTable extends React.Component {
     this.setState({isEdit:true,editIndex:index})
   }
 
-  cekVerifikasi = (numberawal)=>{
-    var number = this.refs.verifikasi.value
-    if (number < 0) {
-      this.refs.verifikasi.value = numberawal
-      swal("Error","1 untuk verifikasi 0 untuk belum verifikasi","error")
-    }else if(number >1){
-      this.refs.verifikasi.value = numberawal
-      swal("Error","1 untuk verifikasi 0 untuk belum verifikasi","error")
-    }
-  }
+  // cekVerifikasi = (numberawal)=>{
+  //   var number = this.refs.verifikasi.value
+  //   if (number < 0) {
+  //     this.refs.verifikasi.value = numberawal
+  //     swal("Error","1 untuk verifikasi 0 untuk belum verifikasi","error")
+  //   }else if(number >1){
+  //     this.refs.verifikasi.value = numberawal
+  //     swal("Error","1 untuk verifikasi 0 untuk belum verifikasi","error")
+  //   }
+  // }
 
   onBtnCancel=()=>{
     this.setState({isEdit:false})
@@ -212,10 +212,15 @@ class CustomPaginationActionsTable extends React.Component {
               this.state.isEdit===true&& this.state.editIndex===index
               ? 
               <TableCell align="center">
-              <input type="number" defaultValue={val.verif} onChange={()=>this.cekVerifikasi(val.verif)} className="form-control" ref="verifikasi" min={0} max={1}></input>
+              <select defaultValue={val.verif} className="form-control"  ref="verifikasi" style={{width:"100%"}} >
+                     <option>--- SELECT ACTION ---</option>
+                     <option value="0">Tidak Aktif</option>
+                     <option value="1">Aktif</option>
+                  </select>
+              {/* <input type="number" defaultValue={val.verif} onChange={()=>this.cekVerifikasi(val.verif)} className="form-control" ref="verifikasi" min={0} max={1}></input> */}
               </TableCell>
               :
-              <TableCell align="center">{val.verif}</TableCell>
+              <TableCell align="center">{val.verif === 1 ? 'Aktif' : 'Tidak Aktif'}</TableCell>
             }
             {this.state.isEdit===true&& this.state.editIndex===index? 
             <TableCell align="center">

@@ -70,7 +70,7 @@ class ProductAdd extends React.Component{
                             <div className="form-group row">
                                 <label className="col-sm-3 col-form-label">Category Product</label>
                                 <div className="col-sm-9 btn-group dropdown">
-                                <select ref="category" style={{width:"100%"}} >
+                                <select ref="category" className="form-control" style={{width:"100%"}} >
                                     <option>--- SELECT CATEGORY ---</option>
                                     <option value="1">SHOES</option>
                                     <option value="2">BAGS</option>
