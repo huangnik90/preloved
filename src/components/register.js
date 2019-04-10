@@ -2,12 +2,13 @@ import React from 'react'
 import Loader from 'react-loader-spinner'
 import {connect} from 'react-redux'
 import {registerUser} from '../1.actions/userAction'
-import swal from 'sweetalert'
 
 
 class Register extends React.Component{
-    state = {error:[]}
-   
+    state = {error:''}
+    componentWillReceiveProps(newProps){
+        this.setState({error:newProps.error})
+    }
     btnRegister=()=>{
         var firstname = this.refs.firstname.value 
         var lastname = this.refs.lastname.value 
@@ -27,18 +28,15 @@ class Register extends React.Component{
             this.setState({error:"Password is too short (Minimum 6 characters)"})
         }
         else{
-            if(this.props.error ===""){
-                this.props.registerUser(firstname,lastname,email,username,password,role)
-                swal("SUCCESS","ONE MORE STEP - Cek Email: "+email+" for verification","success")
-            }else{
-                swal("NO",this.props.error,"error")
-            }
-           
+            this.props.registerUser(firstname,lastname,email,username,password,role)
+        
+            
            
         }   
         
     }
     
+   
 
     renderLoaderOrBtn = ()=>{
         if(this.props.loading === true){
@@ -114,7 +112,8 @@ class Register extends React.Component{
                             <div className="form-group row">
                                 <div className="col-12" style={{color:"red",fontSize:"15px",textAlign:'center'}}>
                                     {this.state.error}
-                                </div>    
+                                </div>
+                                
                             </div>
                             
                           

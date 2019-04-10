@@ -252,38 +252,46 @@ class CustomPaginationActionsTable extends React.Component {
     var jsx = this.state.searchRows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
     .map((val,index)=>{
         return (
-            <TableRow>
-            <TableCell align="center">{index+1}</TableCell>
-            <TableCell align="center">{val.id}</TableCell>
-            <TableCell align="center">{val.username}</TableCell>
-            <TableCell align="left">{val.email}</TableCell>
-            {this.state.isEdit===true&& this.state.editIndex===index? <TableCell align="center">
-              <input type="number" defaultValue={val.verif} onChange={()=>this.cekVerifikasi(val.verif)} className="form-control" ref="verifikasi" min={0} max={1}></input>
-            </TableCell>:
-              <TableCell align="center">{val.verif}</TableCell>
-            }
-            {this.state.isEdit===true&& this.state.editIndex===index? 
+          <TableRow>
+          <TableCell align="center">{index+1}</TableCell>
+          <TableCell align="center">{val.id}</TableCell>
+          <TableCell align="center">{val.username}</TableCell>
+          <TableCell align="left">{val.email}</TableCell>
+          {
+            this.state.isEdit===true&& this.state.editIndex===index
+            ? 
             <TableCell align="center">
-            <Button animated onClick={()=>this.onBtnEditSave(val.id)}>
-            <i class="far fa-save"></i>
-            </Button>
-            <Button animated onClick={()=>this.onBtnCancel()}>
-            <i class="fas fa-times"></i>
-            </Button>
+            <select defaultValue={val.verif} className="form-control"  ref="verifikasi" style={{width:"100%"}} >
+                   <option>--- SELECT ACTION ---</option>
+                   <option value="0">Tidak Aktif</option>
+                   <option value="1">Aktif</option>
+                </select>
+            {/* <input type="number" defaultValue={val.verif} onChange={()=>this.cekVerifikasi(val.verif)} className="form-control" ref="verifikasi" min={0} max={1}></input> */}
             </TableCell>
-            
             :
-              <TableCell align="center">
-            <Button animated onClick={()=>this.onBtnEdit(val,index)}>
-            <i class="fas fa-pen-fancy"></i>
-            </Button>
-            <Button animated onClick={()=>this.onBtnDelete(val.id)}>
-            <i class="far fa-trash-alt"></i>
-            </Button>
-            </TableCell>
-            }
-            
-        </TableRow>
+            <TableCell align="center">{val.verif === 1 ? 'Aktif' : 'Tidak Aktif'}</TableCell>
+          }
+          {this.state.isEdit===true&& this.state.editIndex===index? 
+          <TableCell align="center">
+          <Button animated onClick={()=>this.onBtnEditSave(val.id)}>
+          <i class="far fa-save"></i>
+          </Button>
+          <Button animated onClick={()=>this.onBtnCancel()}>
+          <i class="fas fa-times"></i>
+          </Button>
+          </TableCell>
+          :
+            <TableCell align="center">
+          <Button animated onClick={()=>this.onBtnEdit(val,index)}>
+          <i class="fas fa-pen-fancy"></i>
+          </Button>
+          <Button animated onClick={()=>this.onBtnDelete(val.id)}>
+          <i class="far fa-trash-alt"></i>
+          </Button>
+          </TableCell>
+          }
+          
+      </TableRow>
         )
     })
      return jsx;

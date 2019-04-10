@@ -117,7 +117,9 @@ class CustomPaginationActionsTable extends React.Component {
     page: 0,
     rowsPerPage: 15,
     isEdit: false,
-    editIndex:Number,modal:false,dataEdit:{},selectedFileEdit:null
+    editIndex:Number,modal:false,dataEdit:{},selectedFileEdit:null,
+    dataCategory:[]
+
   };
 
   handleChangePage = (event, page) => {
@@ -130,7 +132,15 @@ class CustomPaginationActionsTable extends React.Component {
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
   componentDidMount(){
     this.getAllProduct()
+    this.getAllCategory()
   }
+  getAllCategory =()=>{
+    axios.get("http://localhost:2000/category/getallcategory")
+    .then((res)=>{
+        this.setState({dataCategory:res.data})
+    })
+    .catch((err)=>console.log(err))
+}
   
   getAllProduct = ()=>{
       axios.get("http://localhost:2000/product/getallproduct")
@@ -141,7 +151,14 @@ class CustomPaginationActionsTable extends React.Component {
           console.log(err)
       })
   }
-
+  renderCategoryJSX=()=>{
+    var jsx = this.state.dataCategory.map((val,index)=>{
+        return(
+            <option value={val.id}>{val.category}</option>
+        )
+    })
+    return jsx
+}
   onBtnSearch = ()=>{
    alert("blom digarap")
   }
@@ -186,12 +203,13 @@ class CustomPaginationActionsTable extends React.Component {
     this.setState({selectedFileEdit:event.target.files[0]})
   }
   onBtnSaveEdit =()=>{
+    
     var product_name = this.refs.editNama.value
     var price = this.refs.editHarga.value
     var discount = this.refs.editDiskon.value
-    var category = this.refs.editCategory.value
+    var category_id = this.refs.editCategory.value
     var newData ={
-      product_name,price,discount,category
+      product_name,price,discount,category_id
     }
 
     if(this.state.selectedFileEdit!==null){
@@ -199,8 +217,21 @@ class CustomPaginationActionsTable extends React.Component {
         fd.append('edit',this.state.selectedFileEdit)
         fd.append('data',JSON.stringify(newData))
         fd.append('imageBefore',this.state.dataEdit.image)
-
-        
+        axios.put(`http://localhost:2000/product/editproductbyid/`+this.state.dataEdit.id,fd)
+        .then((res)=>{
+          swal("ok",res.data,"success")
+          this.setState({modal:false,editIndex:-1})
+          this.getAllProduct()
+        })
+        .catch((err)=>console.log(err))
+    }else{
+      axios.put(`http://localhost:2000/product/editproductbyid/`+this.state.dataEdit.id,newData)
+      .then((res)=>{
+        swal("ok",res.data,"success")
+        this.setState({modal:false,editIndex:-1})
+        this.getAllProduct()
+      })
+      .catch((err)=>console.log(err))
     }
     
 
@@ -215,10 +246,10 @@ class CustomPaginationActionsTable extends React.Component {
         return (
             <TableRow>
             <TableCell align="center">{index+1}</TableCell>
-            <TableCell align="center">{val.product_name}</TableCell>
+            <TableCell align="left">{val.product_name}</TableCell>
             <TableCell align="center">Rp. {val.price}</TableCell>
             <TableCell align="center">{val.discount}</TableCell>
-            <TableCell align="center">{val.category}</TableCell>
+            <TableCell align="center">{val.category_id}</TableCell>
             <TableCell align="center">
                <img width="30px"src={`http://localhost:2000/${val.image}`} alt="gambar"></img>
             </TableCell>
@@ -333,12 +364,9 @@ class CustomPaginationActionsTable extends React.Component {
                 <p>Discount</p>   
                 <input type="number" ref="editDiskon"className="form-control" defaultValue={this.state.dataEdit.discount}/>
                 <p>Category</p>   
-                <select defaultValue={this.state.dataEdit.category} className="form-control"  ref="editCategory" style={{width:"100%"}} >
+                <select defaultValue={this.state.dataEdit.category_id} className="form-control"  ref="editCategory" style={{width:"100%"}} >
                      <option>--- SELECT CATEGORY ---</option>
-                     <option value="1">SHOES</option>
-                     <option value="2">BAGS</option>
-                     <option value="3">AKSESORIS</option>
-                     <option value="4">CLOTHES</option>
+                     {this.renderCategoryJSX()}
                   </select>
                 </div>
             </div>

@@ -11,6 +11,10 @@ class Product extends React.Component{
     ]
 }
 
+getProduct =()=>{
+    
+}
+
     renderProductJsx = ()=>{
         var jsx = this.state.dataProduct.map((val)=>{
             

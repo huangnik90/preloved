@@ -1,5 +1,6 @@
 import axios from "axios";
 import kukie from 'universal-cookie'
+import swal from 'sweetalert'
 const objCookie = new kukie()
 
 
@@ -16,10 +17,13 @@ export const registerUser = (firstname,lastname,email,username,password,role)=>{
                 dispatch({
                     type:"ERROR",
                 })
+                swal("Error","Username already Taken","error")
             }else{
                 dispatch({
                     type:"REGISTER_SUCCESS"
+                    
                 })
+                swal("success","Preloved - Thank you tolong check email untuk verifikasi","success")
             }
         })
         .catch((err)=>{

@@ -2,8 +2,25 @@ import React from 'react'
 import axios from 'axios'
 import swal from 'sweetalert'
 class ProductAdd extends React.Component{
-    state ={selectedFile:null,success:""}
-
+    state ={selectedFile:null,success:"",dataCategory:[]}
+    componentDidMount(){
+        this.getAllCategory()
+    }
+    getAllCategory =()=>{
+        axios.get("http://localhost:2000/category/getallcategory")
+        .then((res)=>{
+            this.setState({dataCategory:res.data})
+        })
+        .catch((err)=>console.log(err))
+    }
+    renderCategoryJSX=()=>{
+        var jsx = this.state.dataCategory.map((val,index)=>{
+            return(
+                <option value={val.id}>{val.category}</option>
+            )
+        })
+        return jsx
+    }
     onChangeHandler = (event)=>{
         //untuk mendapatkan file image
         this.setState({selectedFile:event.target.files[0]})
@@ -32,13 +49,8 @@ class ProductAdd extends React.Component{
             })
             .catch((err)=>console.log(err))
         
-
     }
     
-
-    
-
-
     render(){
         return(
             <div className="container-fluid form" style={{minHeight:"450px"}}>
@@ -72,10 +84,7 @@ class ProductAdd extends React.Component{
                                 <div className="col-sm-9 btn-group dropdown">
                                 <select ref="category" className="form-control" style={{width:"100%"}} >
                                     <option>--- SELECT CATEGORY ---</option>
-                                    <option value="1">SHOES</option>
-                                    <option value="2">BAGS</option>
-                                    <option value="3">AKSESORIS</option>
-                                    <option value="4">CLOTHES</option>
+                                    {this.renderCategoryJSX()}
                                 </select>
                                 </div>
                             </div>

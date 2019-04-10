@@ -95,6 +95,9 @@ class Header extends React.Component {
                 <NavItem>
                  <NavLink href="/manageuser"> Manage User</NavLink>
                 </NavItem>
+                <NavItem>
+                 <NavLink href="/managecategory"> Manage Category</NavLink>
+                </NavItem>
                
                 <NavItem>
                   <NavLink onClick={this.btnSignOut} href="/">Exit <i class="fas fa-sign-out-alt"></i></NavLink>
