@@ -29,6 +29,8 @@ export default (state = INITIAL_STATE, action)=>{
             return{...INITIAL_STATE,error:"CHECK USERNAME OR PASSWORD AGAIN",cookie:true}
         case "COOKIE_CHECKED":
             return{...state,cookie:true}
+        case "SYSTEM_ERROR":
+            return{...INITIAL_STATE,error:"API/DATABASE OFFLINE"}
         default:
             return state 
     }

@@ -1,8 +1,23 @@
 import React from 'react'
 import ReactImageMagnify from 'react-image-magnify';
-
+import axios from 'axios'
+import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
 class ProductDetail extends React.Component{
-    state = {quantity:""}
+    
+    state = {quantity:"",detailProduct:[]}
+
+    componentDidMount(){
+        this.getDetailProduct()
+    }
+    getDetailProduct= ()=>{
+        var id = this.props.match.params.id
+        axios.get(`http://localhost:2000/product/getdetailproductbyid/${id}`)
+        .then((res)=>{
+            this.setState({detailProduct:res.data[0]})
+        })
+        .catch((err)=>console.log(err))
+    }
 
     cekQuantity = ()=>{
         var jumlah = this.refs.quantity.value
@@ -13,8 +28,15 @@ class ProductDetail extends React.Component{
             this.setState({quantity:""})
         }
     }
+    addCart=()=>{
+        alert(this.props.id +" product id:" + this.state.detailProduct.id)
+    }
 
     render(){
+        var {id,price,discount,category,description,extra_note,
+            image,
+            product_name,
+            grade} = this.state.detailProduct
         return(
         <div className="container justify-content-sm-center ml-auto mr-auto mt-3">
             <div className="row">
@@ -23,12 +45,12 @@ class ProductDetail extends React.Component{
                         smallImage: {
                             alt: 'Wristwatch by Ted Baker London',
                             isFluidWidth: true,
-                            src:"https://images.pexels.com/photos/1030895/pexels-photo-1030895.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+                            src:`http://localhost:2000/${image}`,
                         },
                         
                         largeImage: {
-                            src: "https://images.pexels.com/photos/1030895/pexels-photo-1030895.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-                            
+                            src: `http://localhost:2000/${image}`,
+                    
                             width: 1200,
                             height: 1800
                         },
@@ -40,17 +62,17 @@ class ProductDetail extends React.Component{
 
                 </div>
                 <div className="col-6 col-md-6">
-                    <h1>Product Detail: Product Name</h1>
+                    <h1>Product Detail {id} : {product_name} </h1>
                     <hr/>
                     <p>
-                    "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+                    {description}
                     </p>
                     <hr/>
                     <ul>
-                        <li>Item Condition: Used</li>
-                        <li>Grade Quality: A</li>
-                        <li>Status Item: Original</li>
-                        <li>Extra Note: 90% like new, slightly damages</li>
+                        <li>Category: {category}</li>
+                        <li>Grade Quality: {grade}</li>
+                        <li>Price Item: Rp. {price} / {discount}% = Rp. {price-(price*discount/100)}</li>
+                        <li>Extra Note: {extra_note}</li>
                     </ul>
                     <div className="row">
                             <div className="col-md-2 col-2">
@@ -61,18 +83,18 @@ class ProductDetail extends React.Component{
                                 <div style={{color:"red",fontSize:"12px"}}> {this.state.quantity}</div>
 
                             </div>
-                            <div className="col-md-8 col-8">
-                                <div style={{fontSize:"14px",fontWeight:"700",marginTop:"10px"}} >
-                                <i class="far fa-comments"></i> Catatan Untuk Penjual (Optional)
-                                </div>
-                                <input type="text" placeholder="Contoh: Design or color" ref="catatanuntukpenjual" className="form-control" style={{marginTop:"13px"}}></input>
-                            </div>
-
                     </div>
                     <br></br>
-                    <input type="button" className="btn border-success col-md-4" value="Masukan Keranjang ">
                     
-                    </input>
+                    {this.props.id !==0 ?
+                     <input type="button" className="btn border-success col-md-4" value="Masukan Keranjang" onClick={this.addCart}/>
+                    :
+                    <Link to="/login">
+                     <input disable type="button" className="btn border-success col-md-4" value="Masukan Keranjang "/> 
+                    </Link>
+                     
+                    }
+                   
                     
                 </div>
                 
@@ -83,5 +105,9 @@ class ProductDetail extends React.Component{
         )
     }
 }
-
-export default ProductDetail;
+const mapStateToProps = (state)=>{
+    return{
+        id:state.user.id
+    }
+}
+export default connect(mapStateToProps)(ProductDetail);

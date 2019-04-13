@@ -27,7 +27,9 @@ export const registerUser = (firstname,lastname,email,username,password,role)=>{
             }
         })
         .catch((err)=>{
-            console.log(err)
+            dispatch({
+                type:"SYSTEM_ERROR"
+            })
         })
         
     }
@@ -76,7 +78,9 @@ export const loginUser = (username,password)=>{
             
         })
         .catch((err)=>{
-            console.log(err)
+            dispatch({
+                type:"SYSTEM_ERROR"
+            })
         })
     }
 }

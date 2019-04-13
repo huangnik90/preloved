@@ -7,6 +7,7 @@ import Loader from 'react-loader-spinner'
 
 class Login extends React.Component{
     state={error:[]}
+    
     onBtnLoginClick =()=>{
         var username= this.refs.username.value
         var password=this.refs.password.value

@@ -26,7 +26,10 @@ class Home extends React.Component{
             return(
                 <div>
                   <div>
+                    <Link to={`/productdetail/`+val.id}>
                     <img src={`http://localhost:2000/${val.image}`} className="card-img-top gambar" width="200px" height="300px;" alt="..." />
+                    </Link>
+                    
                   </div>
               
               </div>

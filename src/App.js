@@ -20,6 +20,8 @@ import ManageUser from './components/manageuser'
 import ProductAdd from './components/productAdd'
 import ProductManage from './components/productManage'
 import ManageCategory from './components/managecategory'
+import ProductAddDescription from './components/productAddDescription'
+import ProductEditDescription from './components/productEditDescription'
 //IMPORT SESUATU BIAR CANTIK
 import {keepLogin,cookieChecked} from './1.actions'
 import Loader from 'react-loader-spinner'
@@ -49,8 +51,10 @@ class App extends Component {
              <Route path='/productadd' component={ProductAdd}></Route>
               <Route path="/product" component={Product}></Route>
               <Route path="/managecategory" component={ManageCategory}></Route>
+              <Route path="/productadddescription/:id" component={ProductAddDescription}></Route>
+              <Route path="/producteditdescription/:id" component={ProductEditDescription}></Route>
                  <Route path='/cart' component={Cart} ></Route>
-                 <Route path="/productdetail" component={Productdetail}></Route>
+                 <Route path="/productdetail/:id" component={Productdetail}></Route>
                  <Route path='/' component={Home} exact></Route>
                  <Route path='/login' component={Login}></Route>
                  <Route path='/register' component={Register}></Route>

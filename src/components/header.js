@@ -133,10 +133,10 @@ class Header extends React.Component {
               <Nav navbar>
               {this.state.idUser}
                 <NavItem>
-                 <NavLink href="/login">Our Items <i class="far fa-gem"></i></NavLink>
+                 <NavLink href="/product">Check Collection <i class="far fa-gem"></i></NavLink>
                 </NavItem>
                 <NavItem>
-                 <NavLink href="/login"> Cart <i class="fas fa-shopping-cart"></i> </NavLink>
+                 <NavLink href="/cart">Transaction Detail <i class="fas fa-shopping-cart"></i> </NavLink>
                 </NavItem>
                
                 <NavItem>

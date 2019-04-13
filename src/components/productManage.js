@@ -18,6 +18,9 @@ import axios from 'axios'
 import swal from 'sweetalert'
 import Button from '@material-ui/core/Button';
 import {  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import {Link} from 'react-router-dom'
+import PageNotFound from './404';
+import {connect} from 'react-redux'
 
 const actionsStyles = theme => ({
   root: {
@@ -113,12 +116,12 @@ const styles = theme => ({
 
 class CustomPaginationActionsTable extends React.Component {
   state = {
-    rows: [], searchRows:[],
+    rows: [],
     page: 0,
     rowsPerPage: 15,
     isEdit: false,
     editIndex:Number,modal:false,dataEdit:{},selectedFileEdit:null,
-    dataCategory:[]
+    dataCategory:[],searchRows:'',filterCategory: 5
 
   };
 
@@ -159,11 +162,8 @@ class CustomPaginationActionsTable extends React.Component {
     })
     return jsx
 }
-  onBtnSearch = ()=>{
-   alert("blom digarap")
-  }
+  
   onBtnDelete = (id)=>{
-    
       axios.delete("http://localhost:2000/product/deleteproductbyid",{params:{id:id}})
       .then((res)=>{
         console.log(res.data)
@@ -238,10 +238,18 @@ class CustomPaginationActionsTable extends React.Component {
 
     
   }
-  
+  onBtnSearch = ()=>{
+    var searchProduct = this.refs.searchProduct.value
+    this.setState({searchRows:searchProduct.toLowerCase()})
+   }
 
   renderJSX = ()=>{
-    var jsx = this.state.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+    var arrSearchAndFilter = this.state.rows.filter((val)=>{
+      return val.product_name.toLowerCase().includes(this.state.searchRows) &&
+      (parseInt(val.category_id) === parseInt(this.state.filterCategory) || this.state.filterCategory > 4)
+      //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
+    })
+    var jsx = arrSearchAndFilter.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
     .map((val,index)=>{
         return (
             <TableRow>
@@ -250,8 +258,9 @@ class CustomPaginationActionsTable extends React.Component {
             <TableCell align="center">Rp. {val.price}</TableCell>
             <TableCell align="center">{val.discount}</TableCell>
             <TableCell align="center">{val.category_id}</TableCell>
+            <TableCell align="center">{val.grade}</TableCell>
             <TableCell align="center">
-               <img width="30px"src={`http://localhost:2000/${val.image}`} alt="gambar"></img>
+               <img width="100px"src={`http://localhost:2000/${val.image}`} alt="gambar"></img>
             </TableCell>
             
             {this.state.isEdit===true&& this.state.editIndex===index? 
@@ -265,6 +274,8 @@ class CustomPaginationActionsTable extends React.Component {
             </TableCell>
             :
               <TableCell align="center">
+            
+           
             <Button animated onClick={()=>this.onBtnEdit(val,index)}>
             <i class="fas fa-pen-fancy"></i>
             </Button>
@@ -273,7 +284,28 @@ class CustomPaginationActionsTable extends React.Component {
             </Button>
             </TableCell>
             }
-            
+            {
+              val.grade ===null ?
+              <TableCell align="center">
+             <Link to={`/productadddescription/${val.id}`}>
+            <Button animated>
+            <i class="fas fa-plus"></i> 
+            </Button>
+            </Link>
+            </TableCell>
+              :
+            <TableCell align="center">
+             <Link to={`/producteditdescription/${val.id}`}>
+            <Button animated>
+            <i class="far fa-edit"></i>
+            </Button>
+            </Link>
+            </TableCell>
+
+            }
+             
+           
+
         </TableRow>
         )
     })
@@ -284,111 +316,126 @@ class CustomPaginationActionsTable extends React.Component {
   
   
   render() {
+  
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    if(this.props.role===1){
+      return (
+        <Paper className={classes.root} style={{marginBottom:"50px"}}>
+          <div className={classes.tableWrapper}>
+          <nav className="navbar justify-content-between">
+          <h1>Manage Product</h1>
+          <form className="form-inline">
+          <select onChange={()=>this.setState({filterCategory:this.refs.categorySearch.value})} ref="categorySearch" className="form-control mr-2">
+                                        <option value={5}>--- SELECT CATEGORY ---</option>
+                                        {this.renderCategoryJSX()}
+          </select>
+            <input className="form-control mr-sm-2" ref="searchProduct" type="search" onChange={this.onBtnSearch} placeholder="Find Product.." aria-label="Search" />
 
-    return (
-      <Paper className={classes.root} style={{marginBottom:"50px"}}>
-        <div className={classes.tableWrapper}>
-        <nav className="navbar justify-content-between">
-        <h1>Manage Product</h1>
-        <form className="form-inline">
-          <input className="form-control mr-sm-2" ref="search" type="search" placeholder="Find Product.." aria-label="Search" />
-          <button className="btn btn-outline-warning my-2 my-sm-0" onClick={this.onBtnSearch} type="submit">Search</button>
-        </form>
-      </nav>
-        <hr></hr>
-          <Table className={classes.table}>
-          <TableHead>
-              
-              <TableRow>
-              <TableCell align="center">Nomor</TableCell>
-                  
-                  <TableCell align="center">Product Name</TableCell>
-                  <TableCell align="center">Product Price</TableCell>
-                  <TableCell align="center">Discount</TableCell>
-                  <TableCell align="center">Category</TableCell>
-                  <TableCell align="center">Image</TableCell>
-                  <TableCell align="center">Action</TableCell>
-              </TableRow>
-              
-          </TableHead>
-            <TableBody>
-
-             {this.renderJSX()}
-          
-             {emptyRows > 0 && (
-                <TableRow style={{ height: 48 * emptyRows }}>
-                  <TableCell colSpan={6} />
+          </form>
+        </nav>
+          <hr></hr>
+            <Table className={classes.table}>
+            <TableHead>
+                <TableRow>
+                <TableCell align="center">No</TableCell>
+                    <TableCell align="center">Product Name</TableCell>
+                    <TableCell align="center">Product Price</TableCell>
+                    <TableCell align="center">Discount</TableCell>
+                    <TableCell align="center">Category</TableCell>
+                    <TableCell align="center">Grade</TableCell>
+                    <TableCell align="center">Image</TableCell>
+                    <TableCell align="center">Product Action</TableCell>
+                    <TableCell align="center">Description Action</TableCell>
                 </TableRow>
-              )}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25]}
-                  colSpan={3}
-                  count={rows.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  SelectProps={{
-                    native: true,
-                  }}
-                  onChangePage={this.handleChangePage}
-                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActionsWrapped}
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
-
-          
-          
-        </div>
-        <div>
-        <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-          <ModalHeader toggle={()=>this.setState({modal:false})}> Edit : {this.state.dataEdit.product_name}</ModalHeader>
-          <ModalBody>
-            <div className="row">
-                <div className="col-4 col-md-4">
-                  <img src={`http://localhost:2000/${this.state.dataEdit.image}`}  width="100%" alt="broken"/>
-                  <input type="file" onChange={this.onChangeHandlerEdit}style={{display:"none"}} ref="inputEdit"></input>
-                  <input type="button" value={this.valueHandlerEdit()} className="form-control btn-warning" onClick={()=>this.refs.inputEdit.click()}></input>
-                </div>
-                <div className="col-8 col-md-8">
-                <p>Name</p>  
-                <input type="text" ref="editNama" className="form-control" defaultValue={this.state.dataEdit.product_name}/>
-                <p>Price</p>   
-                <input type="number" ref="editHarga"className="form-control" defaultValue={this.state.dataEdit.price}/>
-                <p>Discount</p>   
-                <input type="number" ref="editDiskon"className="form-control" defaultValue={this.state.dataEdit.discount}/>
-                <p>Category</p>   
-                <select defaultValue={this.state.dataEdit.category_id} className="form-control"  ref="editCategory" style={{width:"100%"}} >
-                     <option>--- SELECT CATEGORY ---</option>
-                     {this.renderCategoryJSX()}
-                  </select>
-                </div>
-            </div>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={this.onBtnSaveEdit}>Save</Button>{' '}
-            <Button color="secondary" onClick={()=>this.setState({modal:false})}>Cancel</Button>
-          </ModalFooter>
-        </Modal>
-        </div>
-                  
-
-
-
-      </Paper>
-      
-    );
+                
+            </TableHead>
+              <TableBody>
+  
+               {this.renderJSX()}
+            
+               {emptyRows > 0 && (
+                  <TableRow style={{ height: 48 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    colSpan={3}
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      native: true,
+                    }}
+                    onChangePage={this.handleChangePage}
+                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActionsWrapped}
+                  />
+                </TableRow>
+              </TableFooter>
+            </Table>
+  
+            
+            
+          </div>
+          <div>
+          <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+            <ModalHeader toggle={()=>this.setState({modal:false})}> Edit : {this.state.dataEdit.product_name}</ModalHeader>
+            <ModalBody>
+              <div className="row">
+                  <div className="col-4 col-md-4">
+                    <img src={`http://localhost:2000/${this.state.dataEdit.image}`}  width="100%" alt="broken"/>
+                    <input type="file" onChange={this.onChangeHandlerEdit}style={{display:"none"}} ref="inputEdit"></input>
+                    <input type="button" value={this.valueHandlerEdit()} className="form-control btn-warning" onClick={()=>this.refs.inputEdit.click()}></input>
+                  </div>
+                  <div className="col-8 col-md-8">
+                  <p>Name</p>  
+                  <input type="text" ref="editNama" className="form-control" defaultValue={this.state.dataEdit.product_name}/>
+                  <p>Price</p>   
+                  <input type="number" ref="editHarga"className="form-control" defaultValue={this.state.dataEdit.price}/>
+                  <p>Discount</p>   
+                  <input type="number" ref="editDiskon"className="form-control" defaultValue={this.state.dataEdit.discount}/>
+                  <p>Category</p>   
+                  <select defaultValue={this.state.dataEdit.category_id} className="form-control"  ref="editCategory" style={{width:"100%"}} >
+                       <option>--- SELECT CATEGORY ---</option>
+                       {this.renderCategoryJSX()}
+                    </select>
+                  </div>
+              </div>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="primary" onClick={this.onBtnSaveEdit}>Save</Button>{' '}
+              <Button color="secondary" onClick={()=>this.setState({modal:false})}>Cancel</Button>
+            </ModalFooter>
+          </Modal>
+          </div>
+                    
+  
+  
+  
+        </Paper>
+        
+      );
+    }else{
+      return <PageNotFound></PageNotFound>
+    }
+    
   }
 }
 
 CustomPaginationActionsTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
+const mapStateToProp = (state)=>{
+  return{
+      role: state.user.role  
+  }    
+}
 
-export default withStyles(styles)(CustomPaginationActionsTable);
+
+export default connect(mapStateToProp)(withStyles(styles)(CustomPaginationActionsTable));

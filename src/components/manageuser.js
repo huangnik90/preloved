@@ -17,6 +17,8 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import axios from 'axios'
 import swal from 'sweetalert'
 import Button from '@material-ui/core/Button';
+import {connect} from 'react-redux'
+import PageNotFound from './404';
 
 const actionsStyles = theme => ({
   root: {
@@ -112,7 +114,7 @@ const styles = theme => ({
 
 class CustomPaginationActionsTable extends React.Component {
   state = {
-    rows: [], searchRows:[],
+    rows: [], searchRows:'',
     page: 0,
     rowsPerPage: 5,
     isEdit: false,
@@ -128,11 +130,7 @@ class CustomPaginationActionsTable extends React.Component {
   };
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
   componentDidMount(){
-    if(this.state.searchRows.length===0){
-      this.getAllUser()
-    }else{
-      this.onBtnSearch()
-    }
+    this.getAllUser()
   }
   
   getAllUser = ()=>{
@@ -147,16 +145,9 @@ class CustomPaginationActionsTable extends React.Component {
 
   onBtnSearch = ()=>{
     var searching = this.refs.search.value
-    axios.get("http://localhost:2000/user/searching?",{params:{username:searching}})
-    .then((res)=>{
-      console.log(res)
-      this.setState({searchRows:res.data})
-      
-    })
-    .catch((err)=>console.log(err))
+    this.setState({searchRows:searching.toLowerCase()})
   }
   onBtnDelete = (id)=>{
-    
       axios.delete("http://localhost:2000/user/deleteuserbyid",{params:{id:id}})
       .then((res)=>{
         console.log(res.data)
@@ -168,17 +159,6 @@ class CustomPaginationActionsTable extends React.Component {
   onBtnEdit = (id,index)=>{
     this.setState({isEdit:true,editIndex:index})
   }
-
-  // cekVerifikasi = (numberawal)=>{
-  //   var number = this.refs.verifikasi.value
-  //   if (number < 0) {
-  //     this.refs.verifikasi.value = numberawal
-  //     swal("Error","1 untuk verifikasi 0 untuk belum verifikasi","error")
-  //   }else if(number >1){
-  //     this.refs.verifikasi.value = numberawal
-  //     swal("Error","1 untuk verifikasi 0 untuk belum verifikasi","error")
-  //   }
-  // }
 
   onBtnCancel=()=>{
     this.setState({isEdit:false})
@@ -199,8 +179,12 @@ class CustomPaginationActionsTable extends React.Component {
   
 
   renderJSX = ()=>{
+    var arrSearchAndFilter = this.state.rows.filter((val)=>{
+      return val.username.toLowerCase().includes(this.state.searchRows)
+      //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
+    })
     
-    var jsx = this.state.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+    var jsx = arrSearchAndFilter.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
     .map((val,index)=>{
         return (
             <TableRow>
@@ -247,124 +231,82 @@ class CustomPaginationActionsTable extends React.Component {
     })
      return jsx;
   }
-  
-  renderSearchJSX = ()=>{
-    var jsx = this.state.searchRows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
-    .map((val,index)=>{
-        return (
-          <TableRow>
-          <TableCell align="center">{index+1}</TableCell>
-          <TableCell align="center">{val.id}</TableCell>
-          <TableCell align="center">{val.username}</TableCell>
-          <TableCell align="left">{val.email}</TableCell>
-          {
-            this.state.isEdit===true&& this.state.editIndex===index
-            ? 
-            <TableCell align="center">
-            <select defaultValue={val.verif} className="form-control"  ref="verifikasi" style={{width:"100%"}} >
-                   <option>--- SELECT ACTION ---</option>
-                   <option value="0">Tidak Aktif</option>
-                   <option value="1">Aktif</option>
-                </select>
-            {/* <input type="number" defaultValue={val.verif} onChange={()=>this.cekVerifikasi(val.verif)} className="form-control" ref="verifikasi" min={0} max={1}></input> */}
-            </TableCell>
-            :
-            <TableCell align="center">{val.verif === 1 ? 'Aktif' : 'Tidak Aktif'}</TableCell>
-          }
-          {this.state.isEdit===true&& this.state.editIndex===index? 
-          <TableCell align="center">
-          <Button animated onClick={()=>this.onBtnEditSave(val.id)}>
-          <i class="far fa-save"></i>
-          </Button>
-          <Button animated onClick={()=>this.onBtnCancel()}>
-          <i class="fas fa-times"></i>
-          </Button>
-          </TableCell>
-          :
-            <TableCell align="center">
-          <Button animated onClick={()=>this.onBtnEdit(val,index)}>
-          <i class="fas fa-pen-fancy"></i>
-          </Button>
-          <Button animated onClick={()=>this.onBtnDelete(val.id)}>
-          <i class="far fa-trash-alt"></i>
-          </Button>
-          </TableCell>
-          }
-          
-      </TableRow>
-        )
-    })
-     return jsx;
-  }
-  
-  
+    
   render() {
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+if(this.props.role===1){
+  return (
+    <Paper className={classes.root} style={{marginBottom:"50px"}}>
+      <div className={classes.tableWrapper}>
+      <nav className="navbar justify-content-between">
+      <h1>Manage User</h1>
+      <form className="form-inline">
+        <input className="form-control mr-sm-2" ref="search" onChange={this.onBtnSearch} type="search" placeholder="Find username.." />
+      </form>
+    </nav>
+      <hr></hr>
+        <Table className={classes.table}>
+        <TableHead>
+            <TableRow>
+            <TableCell align="center">Nomor</TableCell>
+                <TableCell align="center">User ID</TableCell>
+                <TableCell align="center">Username</TableCell>
+                <TableCell align="center">Email</TableCell>
+                <TableCell align="center">Verifikasi</TableCell>
+                <TableCell align="center">Action</TableCell>
+            </TableRow>     
+        </TableHead>
+          <TableBody>
 
-    return (
-      <Paper className={classes.root} style={{marginBottom:"50px"}}>
-        <div className={classes.tableWrapper}>
-        <nav className="navbar justify-content-between">
-        <h1>Manage User</h1>
-        <form className="form-inline">
-          <input className="form-control mr-sm-2" ref="search" type="search" placeholder="Find username.." aria-label="Search" />
-          <button className="btn btn-outline-warning my-2 my-sm-0" onClick={this.onBtnSearch} type="submit">Search</button>
-        </form>
-      </nav>
-        <hr></hr>
-          <Table className={classes.table}>
-          <TableHead>
-              
-              <TableRow>
-              <TableCell align="center">Nomor</TableCell>
-                  <TableCell align="center">User ID</TableCell>
-                  <TableCell align="center">Username</TableCell>
-                  <TableCell align="center">Email</TableCell>
-                  <TableCell align="center">Verifikasi</TableCell>
-                  <TableCell align="center">Action</TableCell>
+          {this.renderJSX()}
+        
+           {emptyRows > 0 && (
+              <TableRow style={{ height: 48 * emptyRows }}>
+                <TableCell colSpan={6} />
               </TableRow>
-              
-          </TableHead>
-            <TableBody>
-
-             {this.state.searchRows.length===0 ? this.renderJSX(): this.renderSearchJSX()}
-          
-             {emptyRows > 0 && (
-                <TableRow style={{ height: 48 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25]}
-                  colSpan={3}
-                  count={rows.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  SelectProps={{
-                    native: true,
-                  }}
-                  onChangePage={this.handleChangePage}
-                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActionsWrapped}
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
-          
-        </div>
-      </Paper>
-      
-    );
+            )}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                colSpan={3}
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                SelectProps={{
+                  native: true,
+                }}
+                onChangePage={this.handleChangePage}
+                onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                ActionsComponent={TablePaginationActionsWrapped}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+        
+      </div>
+    </Paper>
+    
+  );
+}else{
+  return <PageNotFound></PageNotFound>
+}
+    
   }
 }
 
 CustomPaginationActionsTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-
-export default withStyles(styles)(CustomPaginationActionsTable);
+const mapStateToProp = (state)=>{
+  return{
+     
+      role: state.user.role
+     
+  }
+  
+}
+export default connect (mapStateToProp)(withStyles(styles)(CustomPaginationActionsTable)) ;

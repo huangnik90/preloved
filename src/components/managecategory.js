@@ -2,7 +2,8 @@ import React from 'react'
 import Axios from 'axios';
 import Button from '@material-ui/core/Button';
 import swal from 'sweetalert'
-
+import {connect} from 'react-redux'
+import PageNotFound from './404';
 
 class ManageCategory extends React.Component{
     state = {dataCategory:[],
@@ -108,60 +109,70 @@ class ManageCategory extends React.Component{
     }
 
     render(){
-        return(
-<div className="container-fluid form" style={{minHeight:"450px"}}>
-        <div className="row justify-content-sm-center ml-auto mr-auto mt-3">
-                <div className="col-5 col-md-5">
-                        <form className="border mb-3" style={{padding:"20px", width:"65%",borderRadius:"5%"}}>
-                        <fieldset>
-                            <div className="head">
-                                <h1>CATEGORY ADD</h1>
-                            </div>
-                            <hr/>
-                            <div className="form-group row">
-                                <label className="col-sm-3 col-form-label">Category</label>
-                                <div className="col-sm-9">
-                                <input type="text" ref="categoryname" className="form-control"  placeholder="New Category" required autoFocus/>
-                                </div>
-                            </div>
-                            <div className="form-group row">
-                            <div className="col-3"/>
-                        
-                                <div className="col-9" style={{textAlign:'center'}}>
-
-                                <button type="button" className="btn btn-warning" onClick={this.btnAdd} style={{width:"100%"}} ><i class="fas fa-plus"></i></button>
-                               
-                                </div>  
-                            </div>
-                        </fieldset>
-                    </form>
-                 </div>
-                 <div className="col-7 col-md-7">
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <td align="center">No</td>
-                                <td align="center">ID Category</td>
-                                <td align="center">Nama Category</td>
-                                <td align="center">Action</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                                  {this.renderJSX()}
-                        </tbody>
-                           
-
-                    </table>
-                 
-                 
-                 </div>
+        if(this.props.role===1){
+            return(
+                <div className="container-fluid form" style={{minHeight:"450px"}}>
+                        <div className="row justify-content-sm-center ml-auto mr-auto mt-3">
+                                <div className="col-5 col-md-5">
+                                        <form className="border mb-3" style={{padding:"20px", width:"65%",borderRadius:"5%"}}>
+                                        <fieldset>
+                                            <div className="head">
+                                                <h1>CATEGORY ADD</h1>
+                                            </div>
+                                            <hr/>
+                                            <div className="form-group row">
+                                                <label className="col-sm-3 col-form-label">Category</label>
+                                                <div className="col-sm-9">
+                                                <input type="text" ref="categoryname" className="form-control"  placeholder="New Category" required autoFocus/>
+                                                </div>
+                                            </div>
+                                            <div className="form-group row">
+                                            <div className="col-3"/>
+                                        
+                                                <div className="col-9" style={{textAlign:'center'}}>
                 
-     </div>
-</div>
-
-
-        )
+                                                <button type="button" className="btn btn-warning" onClick={this.btnAdd} style={{width:"100%"}} ><i class="fas fa-plus"></i></button>
+                                               
+                                                </div>  
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                 </div>
+                                 <div className="col-7 col-md-7">
+                                    <table className="table">
+                                        <thead>
+                                            <tr>
+                                                <td align="center">No</td>
+                                                <td align="center">ID Category</td>
+                                                <td align="center">Nama Category</td>
+                                                <td align="center">Action</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                  {this.renderJSX()}
+                                        </tbody>
+                                           
+                
+                                    </table>
+                                 
+                                 
+                                 </div>
+                                
+                     </div>
+                </div>
+                
+                
+                        )
+        }else{
+            return <PageNotFound></PageNotFound>
+        }
+        
     }
 }
-
-export default ManageCategory;
+const mapStateToProp = (state)=>{
+    return{
+        role: state.user.role  
+    }    
+  }
+  
+export default connect(mapStateToProp)(ManageCategory);
