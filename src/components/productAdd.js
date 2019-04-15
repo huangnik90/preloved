@@ -32,24 +32,29 @@ class ProductAdd extends React.Component{
     }
     btnAdd =()=>{
         var discount = this.refs.diskon.value
-        var product_name = this.refs.productname.value
-        var price = this.refs.productharga.value
-        var category_id = this.refs.category.value
-        var data = {
-                product_name,price,discount,category_id
-            }
-            var formData = new FormData()
-            formData.append("image",this.state.selectedFile,this.state.selectedFile.name)
-            formData.append('data',JSON.stringify(data))
-            axios.post("http://localhost:2000/product/addproduct",formData)
-            .then((res)=>{
-                console.log(res.data)
-                swal("Ok","Product added","success")
-                this.refs.diskon.value=0
-                this.refs.productname.value=""
-                this.refs.productharga.value=0
-            })
-            .catch((err)=>console.log(err))
+            var product_name = this.refs.productname.value
+            var price = this.refs.productharga.value
+            var category_id = this.refs.category.value
+        if(price===''||product_name===''||category_id==="0"){
+            swal("Input Error","Masih ada data kosong.. Harap di cek ulang","error")
+        }else{
+            var data = {
+                    product_name,price,discount,category_id
+                }
+                var formData = new FormData()
+                formData.append("image",this.state.selectedFile,this.state.selectedFile.name)
+                formData.append('data',JSON.stringify(data))
+                axios.post("http://localhost:2000/product/addproduct",formData)
+                .then((res)=>{
+                    console.log(res.data)
+                    swal("Ok","Product added","success")
+                    this.refs.diskon.value=0
+                    this.refs.productname.value=""
+                    this.refs.productharga.value=0
+                })
+                .catch((err)=>console.log(err))
+            
+        }
         
     }
     
@@ -86,7 +91,7 @@ class ProductAdd extends React.Component{
                                     <label className="col-sm-3 col-form-label">Category Product</label>
                                     <div className="col-sm-9 btn-group dropdown">
                                     <select ref="category" className="form-control" style={{width:"100%"}} >
-                                        <option>--- SELECT CATEGORY ---</option>
+                                        <option value="0">--- SELECT CATEGORY ---</option>
                                         {this.renderCategoryJSX()}
                                     </select>
                                     </div>

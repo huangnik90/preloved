@@ -5,6 +5,7 @@ import Category from './category'
 import {Link} from 'react-router-dom'
 import Slider from "react-slick";
 import Axios from 'axios';
+import Testimoni from './testimoni'
 
 
 class Home extends React.Component{
@@ -86,7 +87,7 @@ class Home extends React.Component{
                 
                 <div class="latestProduct text-center" >
                 
-                <h3>PRELOVED LATEST ITEMS</h3>
+                <h3>Preloved New Items</h3>
                 <hr/>
                 <div style={{width:"95%",marginLeft:"25px",paddingLeft:"5px",paddingRight:"5px"}}>
                 <Slider {...settings}>
@@ -100,14 +101,16 @@ class Home extends React.Component{
                 </div>
                 <div class="category text-center">
                 <hr/>
-                <h3>CATEGORY</h3>
+                <h3>Category</h3>
                 <hr/>
                  <Category/>
-                    
-
                 </div>
-              
-
+                <div class="text-center">
+                <h3 style={{marginTop:"10px"}}>Testimonials</h3>
+                 <hr/>
+                 <Testimoni/>
+                </div>
+              <hr></hr>
             </div>
         )
     }

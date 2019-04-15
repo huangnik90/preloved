@@ -68,29 +68,29 @@ class ProductDetail extends React.Component{
                     {description}
                     </p>
                     <hr/>
-                    <ul>
+                    <ul className="ml-4">
                         <li>Category: {category}</li>
                         <li>Grade Quality: {grade}</li>
                         <li>Price Item: Rp. {price} / {discount}% = Rp. {price-(price*discount/100)}</li>
                         <li>Extra Note: {extra_note}</li>
                     </ul>
-                    <div className="row">
-                            <div className="col-md-2 col-2">
-                                <div style={{fontSize:"14px",fontWeight:"700",marginTop:"10px"}} >
+                    <hr/>
+                    <div style={{fontSize:"14px",fontWeight:"700",marginTop:"10px"}} >
                                 Jumlah
                                 </div>
                                 <input type="number" ref="quantity" min={1} className="form-control" onChange={this.cekQuantity} defaultValue="1" style={{marginTop:"13px",width:"60px"}}></input>
-                                <div style={{color:"red",fontSize:"12px"}}> {this.state.quantity}</div>
-
-                            </div>
-                    </div>
+                    <div style={{color:"red",fontSize:"12px"}}> {this.state.quantity}</div>
+                                 <div style={{fontSize:"14px",fontWeight:"700",marginTop:"10px"}} >
+                                Catatan Untuk Penjual <i class="far fa-comments"></i> 
+                                </div>
+                                <input type="text" ref="pesanPenjual" placeholder="CONTOH: WARNA, UKURAN ATAU DESIGN" className="form-control" style={{marginTop:"13px"}}></input>
                     <br></br>
                     
                     {this.props.id !==0 ?
-                     <input type="button" className="btn border-success col-md-4" value="Masukan Keranjang" onClick={this.addCart}/>
+                     <input type="button" className="btn border-warning col-md-4" value="Masukan Keranjang" onClick={this.addCart}/>
                     :
                     <Link to="/login">
-                     <input disable type="button" className="btn border-success col-md-4" value="Masukan Keranjang "/> 
+                     <input disable type="button" className="btn border-success col-md-4" value="Redirect to Login"/> 
                     </Link>
                      
                     }

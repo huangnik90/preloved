@@ -21,11 +21,6 @@ const items = [
     src: 'https://localcdn.tinkerlust.com/media/wysiwyg/homepage_promo/0319/home-banner-desktop/0319-W3-b-bloom.jpg',
     altText: '',
     caption: ''
-  },
-  {
-    src: 'https://cdn.rebelle.com/ho/homepageteaser_newin_desktop.jpg?height=480px&width=1440px',
-    altText: '',
-    caption: ''
   }
   
   

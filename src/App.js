@@ -47,6 +47,7 @@ class App extends Component {
           <ScrollTop>
              <Header/>
              <Switch>
+            
              <Route path='/productmanage' component={ProductManage}></Route>
              <Route path='/productadd' component={ProductAdd}></Route>
               <Route path="/product" component={Product}></Route>

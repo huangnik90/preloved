@@ -93,19 +93,25 @@ class ManageCategory extends React.Component{
 
     btnAdd =()=>{
         var category = this.refs.categoryname.value
-        var newdata ={
-            category:category
+        if(category===""){
+            swal("Error Detected","Tidak bole kosong","error")
+        }else{
+            var newdata ={
+                category:category
+            }
+            Axios.post("http://localhost:2000/category/addcategory",newdata)
+            .then((res)=>{
+                console.log(res.data)
+                swal("Success",res.data,"success")
+                this.getAllCategory()
+                this.refs.categoryname.value=""
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
         }
-        Axios.post("http://localhost:2000/category/addcategory",newdata)
-        .then((res)=>{
-            console.log(res.data)
-            swal("Ok",res.data,"success")
-            this.getAllCategory()
-            this.refs.categoryname.value=""
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
+        
+       
     }
 
     render(){
