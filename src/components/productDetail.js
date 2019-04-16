@@ -3,6 +3,8 @@ import ReactImageMagnify from 'react-image-magnify';
 import axios from 'axios'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
+import swal from 'sweetalert'
+import {cartLength} from '../1.actions'
 class ProductDetail extends React.Component{
     
     state = {quantity:"",detailProduct:[]}
@@ -29,7 +31,24 @@ class ProductDetail extends React.Component{
         }
     }
     addCart=()=>{
-        alert(this.props.id +" product id:" + this.state.detailProduct.id)
+        var id = this.props.id
+        var buyer_note = this.refs.buyer_note.value
+        var product_id = this.props.match.params.id
+        var quantity = this.refs.quantity.value 
+      // alert("product ID: "+id +"\nproduct ID ambil dari state: " +product+"\nproduct ambil dr url: "+ product2 +"\nquantity: "+quantity)
+        var newData = {
+            user_id:id,
+            product_id,
+            quantity,
+            buyer_note
+        }
+        axios.post(`http://localhost:2000/cart/addcart?id=${id}&productid=${product_id}`,newData)
+        .then((res)=>{
+            swal("Cart",res.data,"success")
+            this.props.cartLength(id)
+        })
+        .catch((err)=>console.log(err))
+
     }
 
     render(){
@@ -83,7 +102,7 @@ class ProductDetail extends React.Component{
                                  <div style={{fontSize:"14px",fontWeight:"700",marginTop:"10px"}} >
                                 Catatan Untuk Penjual <i class="far fa-comments"></i> 
                                 </div>
-                                <input type="text" ref="pesanPenjual" placeholder="CONTOH: WARNA, UKURAN ATAU DESIGN" className="form-control" style={{marginTop:"13px"}}></input>
+                                <input type="text" ref="buyer_note" placeholder="CONTOH: WARNA, UKURAN ATAU DESIGN" className="form-control" style={{marginTop:"13px"}}></input>
                     <br></br>
                     
                     {this.props.id !==0 ?
@@ -110,4 +129,4 @@ const mapStateToProps = (state)=>{
         id:state.user.id
     }
 }
-export default connect(mapStateToProps)(ProductDetail);
+export default connect(mapStateToProps,{cartLength})(ProductDetail);

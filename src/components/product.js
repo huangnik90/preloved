@@ -3,6 +3,9 @@ import {Link} from 'react-router-dom'
 import '../support/product.css'
 import axios from 'axios'
 import QueryString from 'query-string'
+import {connect} from 'react-redux'
+import swal from 'sweetalert'
+import {cartLength} from '../1.actions'
 
 class Product extends React.Component{
     state = {dataProduct:[],dataPerPage:12,searchData:'',dataCategory:[],filterCategory:0
@@ -13,6 +16,8 @@ componentDidMount(){
     this.getAllCategory()
     this.getDataUrl()
 }
+
+
 getAllCategory =()=>{
     axios.get("http://localhost:2000/category/getallcategory")
     .then((res)=>{
@@ -88,6 +93,24 @@ pushUrl = ()=>{
     }
     this.props.history.push(newLink)
 }
+
+//--------------------------------ADD CART-----------------------------------------------------------------------------------------------------------------
+    addCart = (idProduct)=>{
+        var id = this.props.id
+        var quantity =1
+        var newData = {
+            user_id:id,
+            product_id:idProduct,
+            quantity
+        }
+        axios.post(`http://localhost:2000/cart/addcart?id=${id}&productid=${idProduct}`,newData)
+        .then((res)=>{
+            swal("Cart",res.data,"success")
+            this.props.cartLength(id)
+        })
+        .catch((err)=>console.log(err))
+
+    }
     renderProductJsx = ()=>{
         var arrSearchAndFilter = this.state.dataProduct.filter((val) => {
             return val.product_name.toLowerCase().includes(this.state.searchData) 
@@ -113,8 +136,9 @@ pushUrl = ()=>{
                 
                 <div className="kategori">
                 <p>Grade: {val.grade}</p>
-
-
+                </div> 
+                <div className="addcart">
+                      <i onClick={()=>this.addCart(val.id)} class="fas fa-shopping-basket"></i>
                 </div>
                     <p className="card-text">{val.desc}</p>
                 {  
@@ -161,16 +185,21 @@ pushUrl = ()=>{
             
                 </div><br/>
                 {this.state.dataPerPage > this.state.dataProduct.length ? null:
-                <div className="showMore">
-                <p onClick={this.loadMore}>
-                    SHOW MORE
-                </p>
-            </div>
+                    <div className="showMore">
+                        <p onClick={this.loadMore}>
+                            SHOW MORE
+                        </p>
+                    </div>
                 }
                 
             </div>
         )
     }
 }
+const mapStateToProps = (state)=>{
+    return{
+        id : state.user.id
+    }
+}
 
-export default Product
+export default connect(mapStateToProps,{cartLength})(Product)

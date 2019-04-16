@@ -4,7 +4,7 @@ import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } f
 import '../support/header.css'
 import {connect} from 'react-redux'
 import kookie from 'universal-cookie'
-import {resetUser} from '../1.actions'
+import {resetUser,cartLength} from '../1.actions'
 
 var kokie = new kookie()
 
@@ -28,6 +28,8 @@ class Header extends React.Component {
     this.props.resetUser()
     
   }
+  
+
   render() {
     if (this.props.idUser ===0 && this.props.role===0){
       return (
@@ -76,7 +78,7 @@ class Header extends React.Component {
             </div>
             <div className="navbar2" style={{style:"pointer"}}>
                 <Link to="/cart" style={{color:"inherit",textDecoration:"none"}}>
-                  <h1 style={{fontSize:"20px"}}> 0 CART <i class="fas fa-shopping-bag"></i></h1>
+                  <h1 style={{fontSize:"20px"}}> {this.props.cart} CART <i class="fas fa-shopping-bag"></i></h1>
                 </Link> 
             </div>
             </NavbarBrand>
@@ -122,7 +124,7 @@ class Header extends React.Component {
             </div>
             <div className="navbar2" style={{style:"pointer"}}>
                 <Link to="/cart" style={{color:"inherit",textDecoration:"none"}}>
-                  <h1 style={{fontSize:"20px"}}> 0 CART <i class="fas fa-shopping-bag"></i></h1>
+                  <h1 style={{fontSize:"20px"}}> {this.props.cart} CART <i class="fas fa-shopping-bag"></i></h1>
                 </Link> 
             </div>
             </NavbarBrand>
@@ -159,8 +161,9 @@ const mapStateToProp = (state)=>{
   return{
       idUser : state.user.id,
       role: state.user.role,
-      verif: state.user.verif
+      verif: state.user.verif,
+      cart :state.cart.cartLength
   }
   
 }
-export default connect(mapStateToProp,{resetUser}) (Header);
+export default connect(mapStateToProp,{resetUser,cartLength}) (Header);

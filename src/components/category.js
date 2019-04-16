@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardImg, CardTitle, CardText, CardGroup,CardBody } from 'reactstrap';
  import '../support/category.css'
-
+import {Link} from 'react-router-dom'
 const Example = (props) => {
   return (
     <CardGroup>
@@ -10,7 +10,10 @@ const Example = (props) => {
         <CardBody>
           <CardTitle>Shoes</CardTitle>
           <CardText>Many variation of "Preloved" Luxury Shoes available here .</CardText>
-          <input type="button" className="btn btn-outline-warning" value="Browse" onClick={()=>alert("hai")}/>
+          <Link to="/product/search?categoryProduct=1">
+          <input type="button" className="btn btn-outline-warning" value="Browse" style={{cursor:"pointer"}}/>
+          </Link>
+         
         </CardBody>
       </Card>
       <Card>
@@ -18,8 +21,9 @@ const Example = (props) => {
         <CardBody>
           <CardTitle>Bags</CardTitle>
           <CardText>Many variation of "Preloved" Luxury Bags available here .</CardText>
-          <input type="button" className="btn btn-outline-warning" value="Browse" onClick={()=>alert("hai")}/>
-          
+          <Link to="/product/search?categoryProduct=2">
+          <input type="button" className="btn btn-outline-warning" value="Browse" style={{cursor:"pointer"}}/>
+          </Link>
           
         </CardBody>
       </Card>
@@ -28,7 +32,9 @@ const Example = (props) => {
         <CardBody>
           <CardTitle>Accessories</CardTitle>
           <CardText>Many variation of "Preloved" Luxury items available here .</CardText>
-          <input type="button" className="btn btn-outline-warning" value="Browse" onClick={()=>alert("hai")}/>
+          <Link to="/product/search?categoryProduct=3">
+          <input type="button" className="btn btn-outline-warning" value="Browse" style={{cursor:"pointer"}}/>
+          </Link>
         </CardBody>
       </Card>
      
@@ -37,8 +43,9 @@ const Example = (props) => {
         <CardBody>
           <CardTitle>Clothes</CardTitle>
           <CardText>Many variation of "Preloved" Luxury Clothes available here .</CardText>
-          <input type="button" className="btn btn-outline-warning" value="Browse" onClick={()=>alert("hai")}/>
-        
+          <Link to="/product/search?categoryProduct=4">
+          <input type="button" className="btn btn-outline-warning" value="Browse" style={{cursor:"pointer"}}/>
+          </Link>
         </CardBody>
       </Card>
       

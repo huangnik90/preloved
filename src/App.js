@@ -23,7 +23,7 @@ import ManageCategory from './components/managecategory'
 import ProductAddDescription from './components/productAddDescription'
 import ProductEditDescription from './components/productEditDescription'
 //IMPORT SESUATU BIAR CANTIK
-import {keepLogin,cookieChecked} from './1.actions'
+import {keepLogin,cookieChecked,cartLength} from './1.actions'
 import Loader from 'react-loader-spinner'
 
 
@@ -34,6 +34,7 @@ class App extends Component {
     var usernameCookie = kookie.get('userData')
     if (usernameCookie!== undefined){
       this.props.keepLogin(usernameCookie)
+      this.props.cartLength(usernameCookie)
     }else{
       this.props.cookieChecked()
     }
@@ -87,4 +88,4 @@ const mapStateToProps = (state)=>{
 
   }
 }
-export default withRouter(connect(mapStateToProps,{keepLogin,cookieChecked}) (App));
+export default withRouter(connect(mapStateToProps,{keepLogin,cookieChecked,cartLength}) (App));

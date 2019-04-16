@@ -1,12 +1,12 @@
 import React from 'react'
 import axios from 'axios'
 import swal from 'sweetalert'
-import {Link} from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 import PageNotFound from './404';
 import {connect} from 'react-redux'
 
 class ProductAddDescription extends React.Component{
-    
+    state = {udahdiklik : false}
 
     onBtnSaveDescription =()=>{
         var id_product = this.props.match.params.id   
@@ -20,11 +20,15 @@ class ProductAddDescription extends React.Component{
         axios.post(`http://localhost:2000/product/addproductdescription/${id_product}`,newData)
         .then((res)=>{
             swal("ok",res.data,"success")
+            this.setState({udahdiklik : true})
             
         })
         .catch((err)=>console.log(err))
     }
     render(){
+        if(this.state.udahdiklik){
+            return <Redirect to='/productmanage'/>
+        }
         if(this.props.role===1){
             return(
                 <div className="container-fluid form" style={{minHeight:"450px"}}>
@@ -68,9 +72,9 @@ class ProductAddDescription extends React.Component{
                                             <div className="col-3"/>
                                         
                                                 <div className="col-9" style={{textAlign:'center'}}>
-                                                <Link to="/productmanage">
+                                                
                                                 <button type="button" className="btn btn-warning" onClick={this.onBtnSaveDescription} style={{width:"100%"}} ><i class="fas fa-plus"></i></button>
-                                                </Link>
+                                                
                                                 </div>
                                                     
                                             </div>

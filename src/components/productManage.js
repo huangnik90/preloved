@@ -118,7 +118,7 @@ class CustomPaginationActionsTable extends React.Component {
   state = {
     rows: [],
     page: 0,
-    rowsPerPage: 15,
+    rowsPerPage: 25,
     isEdit: false,
     editIndex:Number,modal:false,dataEdit:{},selectedFileEdit:null,
     dataCategory:[],searchRows:'',filterCategory: 5
@@ -137,13 +137,14 @@ class CustomPaginationActionsTable extends React.Component {
     this.getAllProduct()
     this.getAllCategory()
   }
+
   getAllCategory =()=>{
     axios.get("http://localhost:2000/category/getallcategory")
     .then((res)=>{
         this.setState({dataCategory:res.data})
     })
     .catch((err)=>console.log(err))
-}
+ }
   
   getAllProduct = ()=>{
       axios.get("http://localhost:2000/product/getallproduct")

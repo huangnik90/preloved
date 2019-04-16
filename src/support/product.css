@@ -7,14 +7,27 @@
     height: 30px;
     background-color:orange;
     color: white;
-    
     text-align: center;
     font-weight: 600;
     font-size: 20px;
     
 }
+.addcart{
+    position: absolute;
+    left: 20px;
+    top:0px;
+    cursor: pointer;
+}
+.addcart:hover{
+    position: absolute;
+    left: 20px;
+    top:0px;
+    cursor: pointer;
+    color: orange;
+}
 .gambar{
     cursor: pointer;
+
 }
 
 .kategori{
@@ -25,8 +38,8 @@
     text-align: center;
     font-weight: 600;
     font-size: 20px;
-    
-}
+    border-radius: 20px;
+}   
 .wrapProduct{
     padding-bottom: 2%;
 
