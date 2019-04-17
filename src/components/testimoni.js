@@ -35,7 +35,7 @@ class Testimoni extends React.Component{
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
                 <i class="far fa-star"></i>
               </div>
 
@@ -53,7 +53,7 @@ class Testimoni extends React.Component{
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
-                <i class="far fa-star"></i>
+                <i class="fas fa-star"></i>
                 <i class="far fa-star"></i>
               </div>
 

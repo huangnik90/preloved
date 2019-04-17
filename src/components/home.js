@@ -13,7 +13,7 @@ class Home extends React.Component{
     componentDidMount(){
       this.getLatestProduct()
     }
-    
+  
     getLatestProduct = ()=>{
       Axios.get(`http://localhost:2000/product/getlatestproduct`)
       .then((res)=>{
@@ -99,18 +99,19 @@ class Home extends React.Component{
                    
 
                 </div>
+                <div class="text-center">
+                <h3 style={{marginTop:"10px"}}>Testimonials</h3>
+                 <hr/>
+                 <Testimoni/>
+                </div>
+
+
                 <div class="category text-center">
                 <hr/>
                 <h3>Category</h3>
                 <hr/>
                  <Category/>
                 </div>
-                <div class="text-center">
-                <h3 style={{marginTop:"10px"}}>Testimonials</h3>
-                 <hr/>
-                 <Testimoni/>
-                </div>
-              <hr></hr>
             </div>
         )
     }

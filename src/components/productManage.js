@@ -220,7 +220,7 @@ class CustomPaginationActionsTable extends React.Component {
         fd.append('imageBefore',this.state.dataEdit.image)
         axios.put(`http://localhost:2000/product/editproductbyid/`+this.state.dataEdit.id,fd)
         .then((res)=>{
-          swal("ok",res.data,"success")
+          swal("Edit Product",res.data,"success")
           this.setState({modal:false,editIndex:-1})
           this.getAllProduct()
         })
@@ -228,7 +228,7 @@ class CustomPaginationActionsTable extends React.Component {
     }else{
       axios.put(`http://localhost:2000/product/editproductbyid/`+this.state.dataEdit.id,newData)
       .then((res)=>{
-        swal("ok",res.data,"success")
+        swal("Edit Product",res.data,"success")
         this.setState({modal:false,editIndex:-1})
         this.getAllProduct()
       })

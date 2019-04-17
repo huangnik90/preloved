@@ -29,11 +29,14 @@
   }
   .testimonial img{
     width: 100%;
-   
+    transition: transform .9s;
   }
+  .testimonial img:hover{
+    transform: scale(1.2);
+  }
+  
   .name{
     font-size: 20px;
-    text-transform: uppercase;
     margin: 20px 0;
   }
   .stars{

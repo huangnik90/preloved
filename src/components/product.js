@@ -133,42 +133,86 @@ pushUrl = ()=>{
 
 
         var jsx = arrSearchAndFilter.slice(0,this.state.dataPerPage).map((val)=>{
-            return(
-            <div className="card col-md-3 mt-3" style={{width: '18rem'}}>
-                <Link to={`/productdetail/${val.id}`}>
-                <img src={`http://localhost:2000/${val.image}`} className="card-img-top gambar" width="20%" alt="..." />
-                </Link>
-                {
-                    val.discount>0 ? 
-                        <div className="diskon">
-                    <p>
-                        {val.discount} %
-                    </p>
-                        </div>:null
-                }
-                <div className="card-body">
-                
-                <div className="kategori">
-                <p>Grade: {val.grade}</p>
-                </div> 
-                <div className="addcart">
-                      <i onClick={()=>this.addCart(val.id)} class="fas fa-shopping-basket"></i>
-                </div>
-                    <p className="card-text">{val.desc}</p>
-                {  
-                     val.discount>0?
-                    <p className="card-text" style={{fontSize:"12px",display:"inline",textDecoration:"line-through",color:"red"}}>Rp. {val.price}</p>:null
-                }
-                    <p className="card-text" style={{marginLeft:"5px",display:"inline",color:"black",fontWeight:"500"}}>Rp. {val.price - (val.price*val.discount/100)}</p>
-                    <hr/>
-                    <div>
-                     <h3>{val.product_name}</h3>
-                    </div>
-                </div>
+            if(val.quantity===0){
+                return(
+                    <div className="card col-md-3 mt-3" style={{width: '18rem'}}>
+                        <Link to={`/productdetail/${val.id}`}>
+                        <img src={`http://localhost:2000/${val.image}`} className="card-img-top gambarStockAbis" width="20%" alt="..." />
+                        </Link>
+    
+                      <div className="outofstock">OUT OF STOCK</div>
+                      {
+                          val.discount>0 ? 
+                              <div className="diskon">
+                          <p>
+                              {val.discount} %
+                          </p>
+                              </div>:null
+                      }
+                      <div className="card-body">
+                      
+                      <div className="kategori">
+                      <p>Grade: {val.grade}</p>
+                      </div> 
 
-            </div>
+                          <p className="card-text">{val.desc}</p>
+                      {  
+                           val.discount>0?
+                          <p className="card-text" style={{fontSize:"12px",display:"inline",textDecoration:"line-through",color:"red"}}>Rp. {val.price}</p>:null
+                      }
+                          <p className="card-text" style={{marginLeft:"5px",display:"inline",color:"black",fontWeight:"500"}}>Rp. {val.price - (val.price*val.discount/100)}</p>
+                          <hr/>
+                          <div>
+                           <h3>{val.product_name}</h3>
+                          </div>
+                      </div>
+      
+                  </div>
+                )
+            }else{
+                return(
+                    <div className="card col-md-3 mt-3" style={{width: '18rem'}}>
+                    
+                        <Link to={`/productdetail/${val.id}`}>
+                        <img src={`http://localhost:2000/${val.image}`} className="card-img-top gambar" width="20%" alt="..." />
+                        </Link>
+                        {
+                            val.discount>0 ? 
+                                <div className="diskon">
+                            <p>
+                                {val.discount} %
+                            </p>
+                                </div>:null
+                        }
+                        <div className="card-body">
+                        
+                        <div className="kategori">
+                        <p>Grade: {val.grade}</p>
+                        </div> 
+                        <div className="quantity">
+                        <p>Available: {val.quantity} Unit(s)</p>
+                        </div> 
+                        <div className="addcart">
+                              <i onClick={()=>this.addCart(val.id)} class="fas fa-shopping-basket"></i>
+                        </div>
+                            <p className="card-text">{val.desc}</p>
+                        {  
+                             val.discount>0?
+                            <p className="card-text" style={{fontSize:"12px",display:"inline",textDecoration:"line-through",color:"red"}}>Rp. {val.price}</p>:null
+                        }
+                            <p className="card-text" style={{marginLeft:"5px",display:"inline",color:"black",fontWeight:"500"}}>Rp. {val.price - (val.price*val.discount/100)}</p>
+                            <hr/>
+                            <div>
+                             <h3>{val.product_name}</h3>
+                            </div>
+                        </div>
+        
+                    </div>
+                    
+                    )  
+
+            }
             
-            )  
         })
         return jsx
     }
@@ -177,18 +221,23 @@ pushUrl = ()=>{
         return(
             <div className="container wrapProduct">
             <div className="row">
-                <div className="col-md-9 form-inline">
+                <div className="col-md-4 form-inline">
                     <h3 style={{marginTop:"10px"}}>Product List</h3>
                 </div>
-                <div className="col-md-3 " style={{marginTop:"10px"}}>
+                <div className="col-md-2 " style={{marginTop:"10px"}}>
                         <select ref="categoryDropdown" onChange={this.categorySearch} className="form-control">
-                        <option value={0}>--- SELECT CATEGORY ---</option>
-                            
+                        <option value={0}>--CATEGORY--</option>
                             {this.renderCategoryJSX()}
                         </select>
-                        <input type="text" placeholder="Search product.."ref="search" className="form-control"/>
-                        <input type="button" value="Search" onClick={this.onBtnCariSave} className="btn btn-warning"/>
                 </div>
+                <div className="col-md-4" style={{marginTop:"10px"}}>
+                <input type="text" placeholder="Search product.."ref="search" className="form-control"/>
+                </div>
+                <div className="col-md-2" style={{marginTop:"10px"}}>
+                <input type="button" value="Search" onClick={this.onBtnCariSave} className="btn btn-warning"/>
+                </div>
+             
+               
             </div>
                
                 
