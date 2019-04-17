@@ -34,6 +34,7 @@ class Header extends React.Component {
     if (this.props.idUser ===0 && this.props.role===0){
       return (
         <div>
+          
           <Navbar color="faded" light>
             <NavbarBrand href="/" className="mr-auto">
             <div className="mainLogo">
@@ -41,13 +42,9 @@ class Header extends React.Component {
                 <h1 style={{fontSize:"20px"}}> PRELOVED</h1> 
             </div>
             <div className="navbar2" style={{style:"pointer"}}>
-                <Link to="/cart" style={{color:"inherit",textDecoration:"none"}}>
-                  <h1 style={{fontSize:"20px"}}> 0 CART <i class="fas fa-shopping-bag"></i></h1>
-                </Link> 
+            <h1 className="notification"> {this.props.cart} </h1><i class="fas fa-shopping-basket"></i>
             </div>
-            </NavbarBrand>
-              
-            
+            </NavbarBrand>   
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse isOpen={!this.state.collapsed} navbar>
               <Nav navbar>
@@ -78,7 +75,7 @@ class Header extends React.Component {
             </div>
             <div className="navbar2" style={{style:"pointer"}}>
                 <Link to="/cart" style={{color:"inherit",textDecoration:"none"}}>
-                  <h1 style={{fontSize:"20px"}}> {this.props.cart} CART <i class="fas fa-shopping-bag"></i></h1>
+                <h1 className="notification"> {this.props.cart}  </h1><i class="fas fa-shopping-basket"></i>
                 </Link> 
             </div>
             </NavbarBrand>
@@ -124,7 +121,7 @@ class Header extends React.Component {
             </div>
             <div className="navbar2" style={{style:"pointer"}}>
                 <Link to="/cart" style={{color:"inherit",textDecoration:"none"}}>
-                  <h1 style={{fontSize:"20px"}}> {this.props.cart} CART <i class="fas fa-shopping-bag"></i></h1>
+                  <h1 className="notification"> {this.props.cart} </h1><i class="fas fa-shopping-basket"></i>
                 </Link> 
             </div>
             </NavbarBrand>

@@ -21,8 +21,13 @@ const items = [
     src: 'https://localcdn.tinkerlust.com/media/wysiwyg/homepage_promo/0319/home-banner-desktop/0319-W3-b-bloom.jpg',
     altText: '',
     caption: ''
+  },
+  {
+    src: ' https://localcdn.tinkerlust.com/media/wysiwyg/homepage_promo/0419/home-banner-desktop/0419-W2-b-dress.jpg',
+    altText: '',
+    caption: ''
   }
-  
+ 
   
   
   

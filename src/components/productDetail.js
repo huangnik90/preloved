@@ -81,7 +81,7 @@ class ProductDetail extends React.Component{
 
                 </div>
                 <div className="col-6 col-md-6">
-                    <h1>Product Detail {id} : {product_name} </h1>
+                    <h1>Product Detail #{id}:<br/>{product_name} </h1>
                     <hr/>
                     <p>
                     {description}

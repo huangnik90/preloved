@@ -97,20 +97,34 @@ pushUrl = ()=>{
 //--------------------------------ADD CART-----------------------------------------------------------------------------------------------------------------
     addCart = (idProduct)=>{
         var id = this.props.id
-        var quantity =1
-        var newData = {
-            user_id:id,
-            product_id:idProduct,
-            quantity
+        if(id){
+            var quantity =1
+            var newData = {
+                user_id:id,
+                product_id:idProduct,
+                quantity
+            }
+            axios.post(`http://localhost:2000/cart/addcart?id=${id}&productid=${idProduct}`,newData)
+            .then((res)=>{
+                swal("Cart",res.data,"success")
+                this.props.cartLength(id)
+            })
+            .catch((err)=>console.log(err))
+        }else{
+           
+        
+           swal({ title: "User Required",
+            text: "Please Login or Register first",
+            type: "success"}).then(okay => {
+            if (okay) {
+                window.location.href = "/login";
+            }
+            });
         }
-        axios.post(`http://localhost:2000/cart/addcart?id=${id}&productid=${idProduct}`,newData)
-        .then((res)=>{
-            swal("Cart",res.data,"success")
-            this.props.cartLength(id)
-        })
-        .catch((err)=>console.log(err))
+
 
     }
+    
     renderProductJsx = ()=>{
         var arrSearchAndFilter = this.state.dataProduct.filter((val) => {
             return val.product_name.toLowerCase().includes(this.state.searchData) 
