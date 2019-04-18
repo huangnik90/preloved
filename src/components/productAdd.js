@@ -30,16 +30,37 @@ class ProductAdd extends React.Component{
     valueHandler = ()=>{
         return  this.state.selectedFile ? this.state.selectedFile.name :"Browse Image"
     }
+    cekNumber = () =>{
+        var qty = this.refs.quantity.value
+        var diskon = this.refs.diskon.value
+        if(qty){
+            if(qty <0 || diskon <0){
+                swal("Input","Data tidak boleh minus","error")
+                this.refs.quantity.value=1
+            }
+        }
+    }
+    cekdiskon = () =>{
+        var diskon = this.refs.diskon.value
+        if(diskon){
+            if(diskon <0){
+                swal("Input","Data tidak boleh minus","error")
+                this.refs.diskon.value=0
+            }
+        }
+    }
     btnAdd =()=>{
-        var discount = this.refs.diskon.value
+            var discount = this.refs.diskon.value
             var product_name = this.refs.productname.value
             var price = this.refs.productharga.value
             var category_id = this.refs.category.value
-        if(price===''||product_name===''||category_id==="0"){
+            var quantity = this.refs.quantity.value
+         
+        if(price===''||product_name===''||category_id==="0" || quantity===""){
             swal("Input Error","Masih ada data kosong.. Harap di cek ulang","error")
         }else{
             var data = {
-                    product_name,price,discount,category_id
+                    product_name,price,discount,category_id,quantity
                 }
                 var formData = new FormData()
                 formData.append("image",this.state.selectedFile,this.state.selectedFile.name)
@@ -51,6 +72,7 @@ class ProductAdd extends React.Component{
                     this.refs.diskon.value=0
                     this.refs.productname.value=""
                     this.refs.productharga.value=0
+                    this.refs.quantity.value=1
                 })
                 .catch((err)=>console.log(err))
             
@@ -82,9 +104,15 @@ class ProductAdd extends React.Component{
                                     </div>
                                 </div>
                                 <div className="form-group row">
+                                    <label className="col-sm-3 col-form-label">Quantity Product</label>
+                                    <div className="col-sm-9">
+                                    <input type="number" defaultValue={1} onChange={this.cekNumber} ref="quantity" className="form-control"  placeholder="Stock awal.." required autoFocus/>
+                                    </div>
+                                </div>
+                                <div className="form-group row">
                                     <label className="col-sm-3 col-form-label">Diskon Product</label>
                                     <div className="col-sm-9">
-                                    <input type="number" defaultValue={0} ref="diskon" className="form-control"  placeholder="Diskon" required autoFocus/>
+                                    <input type="number" defaultValue={0} ref="diskon" onChange={this.cekdiskon} className="form-control"  placeholder="Diskon" required autoFocus/>
                                     </div>
                                 </div>
                                 <div className="form-group row">

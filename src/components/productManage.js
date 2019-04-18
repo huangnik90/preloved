@@ -136,6 +136,7 @@ class CustomPaginationActionsTable extends React.Component {
   componentDidMount(){
     this.getAllProduct()
     this.getAllCategory()
+   
   }
 
   getAllCategory =()=>{
@@ -209,8 +210,9 @@ class CustomPaginationActionsTable extends React.Component {
     var price = this.refs.editHarga.value
     var discount = this.refs.editDiskon.value
     var category_id = this.refs.editCategory.value
+    var quantity = this.refs.editQty.value
     var newData ={
-      product_name,price,discount,category_id
+      product_name,price,discount,category_id,quantity
     }
 
     if(this.state.selectedFileEdit!==null){
@@ -399,9 +401,12 @@ class CustomPaginationActionsTable extends React.Component {
                   <input type="text" ref="editNama" className="form-control" defaultValue={this.state.dataEdit.product_name}/>
                   <p>Price</p>   
                   <input type="number" ref="editHarga"className="form-control" defaultValue={this.state.dataEdit.price}/>
+                  <p>Jumlah Stock</p>  
+                  <input type="number" ref="editQty" className="form-control" defaultValue={this.state.dataEdit.quantity}/>
                   <p>Discount</p>   
                   <input type="number" ref="editDiskon"className="form-control" defaultValue={this.state.dataEdit.discount}/>
                   <p>Category</p>   
+                  
                   <select defaultValue={this.state.dataEdit.category_id} className="form-control"  ref="editCategory" style={{width:"100%"}} >
                        <option>--- SELECT CATEGORY ---</option>
                        {this.renderCategoryJSX()}

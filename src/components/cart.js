@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead'
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableFooter from '@material-ui/core/TableFooter';
@@ -13,6 +14,11 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
+import axios from 'axios'
+import swal from 'sweetalert'
+import Button from '@material-ui/core/Button';
+import {connect} from 'react-redux'
+import PageNotFound from './404';
 
 const actionsStyles = theme => ({
   root: {
@@ -93,12 +99,6 @@ const TablePaginationActionsWrapped = withStyles(actionsStyles, { withTheme: tru
   TablePaginationActions,
 );
 
-let counter = 0;
-function createData(name, calories, fat) {
-  counter += 1;
-  return { id: counter, name, calories, fat };
-}
-
 const styles = theme => ({
   root: {
     width: '100%',
@@ -114,23 +114,11 @@ const styles = theme => ({
 
 class CustomPaginationActionsTable extends React.Component {
   state = {
-    rows: [
-      createData('Cupcake', 305, 3.7),
-      createData('Donut', 452, 25.0),
-      createData('Eclair', 262, 16.0),
-      createData('Frozen yoghurt', 159, 6.0),
-      createData('Gingerbread', 356, 16.0),
-      createData('Honeycomb', 408, 3.2),
-      createData('Ice cream sandwich', 237, 9.0),
-      createData('Jelly Bean', 375, 0.0),
-      createData('KitKat', 518, 26.0),
-      createData('Lollipop', 392, 0.2),
-      createData('Marshmallow', 318, 0),
-      createData('Nougat', 360, 19.0),
-      createData('Oreo', 437, 18.0),
-    ].sort((a, b) => (a.calories < b.calories ? -1 : 1)),
+    rows: [], searchRows:'',
     page: 0,
-    rowsPerPage: 10,
+    rowsPerPage: 5,
+    isEdit: false,
+    editIndex:Number
   };
 
   handleChangePage = (event, page) => {
@@ -140,59 +128,173 @@ class CustomPaginationActionsTable extends React.Component {
   handleChangeRowsPerPage = event => {
     this.setState({ page: 0, rowsPerPage: event.target.value });
   };
+  //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
+  componentDidMount(){
+    this.getAllCart()
+  }
+  
+  getAllCart = ()=>{
+      axios.get("http://localhost:2000/cart/getallcart?id="+this.props.id)
+      .then((res)=>{
+          this.setState({rows:res.data})
+      })
+      .catch((err)=>{
+          console.log(err)
+      })
+  }
 
+  onBtnSearch = ()=>{
+    var searching = this.refs.search.value
+    this.setState({searchRows:searching.toLowerCase()})
+  }
+  onBtnDelete = (id)=>{
+      axios.delete("http://localhost:2000/user/deleteuserbyid",{params:{id:id}})
+      .then((res)=>{
+        console.log(res.data)
+        this.getAllUser()
+      })
+      .catch((err)=>console.log(err))
+  }
+
+  onBtnEdit = (id,index)=>{
+    this.setState({isEdit:true,editIndex:index})
+  }
+
+  onBtnCancel=()=>{
+    this.setState({isEdit:false})
+  }  
+
+  onBtnEditSave = (id)=>{
+    alert("masih progress")
+  }
+
+  
+
+  renderJSX = ()=>{
+   
+    
+    var jsx = this.state.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+    .map((val,index)=>{
+        return (
+            <TableRow>
+            <TableCell align="center">{index+1}</TableCell>
+            <TableCell align="center">{val.id}</TableCell>
+            <TableCell align="center">{val.username}</TableCell>
+            <TableCell align="left">{val.email}</TableCell>
+            {
+              this.state.isEdit===true&& this.state.editIndex===index
+              ? 
+              <TableCell align="center">
+              
+              <input type="number" defaultValue={val.cart_quantity} className="form-control"></input>
+             
+              {/* <input type="number" defaultValue={val.verif} onChange={()=>this.cekVerifikasi(val.verif)} className="form-control" ref="verifikasi" min={0} max={1}></input> */}
+              </TableCell>
+              :
+              <TableCell align="center">{val.cart_quantity}</TableCell>
+            }
+            {this.state.isEdit===true&& this.state.editIndex===index? 
+            <TableCell align="center">
+            <Button animated onClick={()=>this.onBtnEditSave(val.id)}>
+            <i class="far fa-save"></i>
+            </Button>
+            <Button animated onClick={()=>this.onBtnCancel()}>
+            <i class="fas fa-times"></i>
+            </Button>
+            </TableCell>
+            :
+              <TableCell align="center">
+            <Button animated onClick={()=>this.onBtnEdit(val,index)}>
+            <i class="fas fa-pen-fancy"></i>
+            </Button>
+            <Button animated onClick={()=>this.onBtnDelete(val.id)}>
+            <i class="far fa-trash-alt"></i>
+            </Button>
+            </TableCell>
+            }
+            
+        </TableRow>
+        )
+    })
+     return jsx;
+  }
+    
   render() {
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+if(this.props.role===1){
+  return (
+    <Paper className={classes.root} style={{marginBottom:"50px"}}>
+      <div className={classes.tableWrapper}>
+      <nav className="navbar justify-content-between">
+      <h1>Cart</h1>
+      <form className="form-inline">
+        <input className="form-control mr-sm-2" ref="search" onChange={this.onBtnSearch} type="search" placeholder="Find username.." />
+      </form>
+    </nav>
+      <hr></hr>
+        <Table className={classes.table}>
+        <TableHead>
+            <TableRow>
+            <TableCell align="center">Nomor</TableCell>
+                <TableCell align="center">User ID</TableCell>
+                <TableCell align="center">Username</TableCell>
+                <TableCell align="center">Email</TableCell>
+                <TableCell align="center">Verifikasi</TableCell>
+                <TableCell align="center">Action</TableCell>
+            </TableRow>     
+        </TableHead>
+          <TableBody>
 
-    return (
-      <Paper className={classes.root} style={{marginBottom:"50px"}}>
-        <div className={classes.tableWrapper}>
-          <Table className={classes.table}>
-            <TableBody>
-              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => (
-                <TableRow key={row.id}>
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="right">{row.calories}</TableCell>
-                  <TableCell align="right">{row.fat}</TableCell>
-                </TableRow>
-              ))}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 48 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25]}
-                  colSpan={3}
-                  count={rows.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  SelectProps={{
-                    native: true,
-                  }}
-                  onChangePage={this.handleChangePage}
-                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActionsWrapped}
-                />
+          {this.renderJSX()}
+        
+           {emptyRows > 0 && (
+              <TableRow style={{ height: 48 * emptyRows }}>
+                <TableCell colSpan={6} />
               </TableRow>
-            </TableFooter>
-          </Table>
-        </div>
-      </Paper>
-      
-    );
+            )}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                colSpan={3}
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                SelectProps={{
+                  native: true,
+                }}
+                onChangePage={this.handleChangePage}
+                onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                ActionsComponent={TablePaginationActionsWrapped}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+        
+      </div>
+    </Paper>
+    
+  );
+}else{
+  return <PageNotFound></PageNotFound>
+}
+    
   }
 }
 
 CustomPaginationActionsTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-
-export default withStyles(styles)(CustomPaginationActionsTable);
+const mapStateToProp = (state)=>{
+  return{
+     
+      role: state.user.role,
+      id: state.user.id
+     
+  }
+  
+}
+export default connect (mapStateToProp)(withStyles(styles)(CustomPaginationActionsTable)) ;
