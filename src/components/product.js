@@ -16,12 +16,6 @@ componentDidMount(){
     this.getAllCategory()
     this.getDataUrl()
 }
-componentWillReceiveProps(){
-    this.getProduct()
-    this.getAllCategory()
-    this.getDataUrl()
-}
-
 
 getAllCategory =()=>{
     axios.get("http://localhost:2000/category/getallcategory")
@@ -113,6 +107,7 @@ pushUrl = ()=>{
             .then((res)=>{
                 swal("Cart",res.data,"success")
                 this.props.cartLength(id)
+                this.getProduct()
             })
             .catch((err)=>console.log(err))
         }else{

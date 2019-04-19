@@ -18,8 +18,10 @@ import axios from 'axios'
 import swal from 'sweetalert'
 import Button from '@material-ui/core/Button';
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
 import PageNotFound from './404';
 import {cartLength} from '../1.actions'
+import './../support/cart.css'
 
 const actionsStyles = theme => ({
   root: {
@@ -149,7 +151,6 @@ class CustomPaginationActionsTable extends React.Component {
     this.setState({searchRows:searching.toLowerCase()})
   }
   onBtnDelete = (id,userID,quantityCart,product_id)=>{
-
       axios.delete("http://localhost:2000/cart/deletecartbyid",{params:{id:id,cart_quantity:quantityCart,product_id}})
       .then((res)=>{
         swal("Delete Cart",res.data,"success")
@@ -272,7 +273,16 @@ if(this.props.role===1 || this.props.role===2){
             </TableRow>
           </TableFooter>
         </Table>
-        
+      </div>
+      <div className="row">
+          <div className="col-4 col-md-4">
+          <Link to="/product">
+             <input type="button" className="shoppingAgain" value="Back Shopping"></input>
+          </Link>     
+          <Link to="/cekout">
+             <input type="button" className="checkOut" value="Check Out"></input>
+          </Link>  
+          </div>
       </div>
     </Paper>
     

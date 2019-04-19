@@ -1,0 +1,34 @@
+.shoppingAgain {
+    border: 5px solid #333333;
+    color: #333333;
+    font-size: 15px;
+    letter-spacing: 0.1rem;
+    padding: 15px;
+    position: relative;
+    width: 200px;
+    text-align: center;
+    font-family: 'Dosis', sans-serif;
+   float: left;
+}
+
+.shoppingAgain:hover{
+    background-color: orange;
+    color:white;
+}
+.checkOut {
+    float:right;
+    border: 5px solid #333333;
+    color: #333333;
+    font-size: 15px;
+    letter-spacing: 0.1rem;
+    padding: 15px;
+    position: relative;
+    width: 200px;
+    text-align: center;
+    font-family: 'Dosis', sans-serif;
+}
+
+.checkOut:hover{
+    background-color: orange;
+    color:white;
+}

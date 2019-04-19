@@ -35,7 +35,12 @@ class ProductDetail extends React.Component{
         var buyer_note = this.refs.buyer_note.value
         var product_id = this.props.match.params.id
         var cart_quantity = this.refs.quantity.value 
+        var stockItem = this.state.detailProduct.quantity
       // alert("product ID: "+id +"\nproduct ID ambil dari state: " +product+"\nproduct ambil dr url: "+ product2 +"\nquantity: "+quantity)
+       
+      if(cart_quantity>stockItem){
+          swal("Warning",`Stock Item : ${stockItem} Unit, tolong di check kembali pembelian`,"info")
+      }else{
         var newData = {
             user_id:id,
             product_id,
@@ -48,6 +53,9 @@ class ProductDetail extends React.Component{
             this.props.cartLength(id)
         })
         .catch((err)=>console.log(err))
+      }
+      
+     
 
     }
 
@@ -55,7 +63,7 @@ class ProductDetail extends React.Component{
         var {id,price,discount,category,description,extra_note,
             image,
             product_name,
-            grade} = this.state.detailProduct
+            grade,quantity} = this.state.detailProduct
         return(
         <div className="container justify-content-sm-center ml-auto mr-auto mt-3">
             <div className="row">
@@ -92,6 +100,7 @@ class ProductDetail extends React.Component{
                         <li>Grade Quality: {grade}</li>
                         <li>Price Item: Rp. {price} / {discount}% = Rp. {price-(price*discount/100)}</li>
                         <li>Extra Note: {extra_note}</li>
+                        <li>Stock Item: {quantity}</li>
                     </ul>
                     <hr/>
                     <div style={{fontSize:"14px",fontWeight:"700",marginTop:"10px"}} >
