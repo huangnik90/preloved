@@ -19,6 +19,7 @@ import swal from 'sweetalert'
 import Button from '@material-ui/core/Button';
 import {connect} from 'react-redux'
 import PageNotFound from './404';
+import {cartLength} from '../1.actions'
 
 const actionsStyles = theme => ({
   root: {
@@ -147,11 +148,13 @@ class CustomPaginationActionsTable extends React.Component {
     var searching = this.refs.search.value
     this.setState({searchRows:searching.toLowerCase()})
   }
-  onBtnDelete = (id)=>{
-      axios.delete("http://localhost:2000/user/deleteuserbyid",{params:{id:id}})
+  onBtnDelete = (id,userID,quantityCart,product_id)=>{
+
+      axios.delete("http://localhost:2000/cart/deletecartbyid",{params:{id:id,cart_quantity:quantityCart,product_id}})
       .then((res)=>{
-        console.log(res.data)
-        this.getAllUser()
+        swal("Delete Cart",res.data,"success")
+        this.getAllCart()
+        this.props.cartLength(userID)
       })
       .catch((err)=>console.log(err))
   }
@@ -179,8 +182,6 @@ class CustomPaginationActionsTable extends React.Component {
             <TableRow>
             <TableCell align="center">{index+1}</TableCell>
             <TableCell align="center">{val.id}</TableCell>
-            <TableCell align="center">{val.username}</TableCell>
-            <TableCell align="left">{val.email}</TableCell>
             {
               this.state.isEdit===true&& this.state.editIndex===index
               ? 
@@ -207,7 +208,7 @@ class CustomPaginationActionsTable extends React.Component {
             <Button animated onClick={()=>this.onBtnEdit(val,index)}>
             <i class="fas fa-pen-fancy"></i>
             </Button>
-            <Button animated onClick={()=>this.onBtnDelete(val.id)}>
+            <Button animated onClick={()=>this.onBtnDelete(val.id,val.user_id,val.cart_quantity,val.product_id)}>
             <i class="far fa-trash-alt"></i>
             </Button>
             </TableCell>
@@ -223,7 +224,7 @@ class CustomPaginationActionsTable extends React.Component {
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-if(this.props.role===1){
+if(this.props.role===1 || this.props.role===2){
   return (
     <Paper className={classes.root} style={{marginBottom:"50px"}}>
       <div className={classes.tableWrapper}>
@@ -238,10 +239,8 @@ if(this.props.role===1){
         <TableHead>
             <TableRow>
             <TableCell align="center">Nomor</TableCell>
-                <TableCell align="center">User ID</TableCell>
-                <TableCell align="center">Username</TableCell>
-                <TableCell align="center">Email</TableCell>
-                <TableCell align="center">Verifikasi</TableCell>
+                <TableCell align="center">Cart ID</TableCell>
+                <TableCell align="center">Quantity</TableCell>
                 <TableCell align="center">Action</TableCell>
             </TableRow>     
         </TableHead>
@@ -297,4 +296,4 @@ const mapStateToProp = (state)=>{
   }
   
 }
-export default connect (mapStateToProp)(withStyles(styles)(CustomPaginationActionsTable)) ;
+export default connect (mapStateToProp,{cartLength})(withStyles(styles)(CustomPaginationActionsTable)) ;

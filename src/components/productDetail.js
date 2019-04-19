@@ -34,12 +34,12 @@ class ProductDetail extends React.Component{
         var id = this.props.id
         var buyer_note = this.refs.buyer_note.value
         var product_id = this.props.match.params.id
-        var quantity = this.refs.quantity.value 
+        var cart_quantity = this.refs.quantity.value 
       // alert("product ID: "+id +"\nproduct ID ambil dari state: " +product+"\nproduct ambil dr url: "+ product2 +"\nquantity: "+quantity)
         var newData = {
             user_id:id,
             product_id,
-            quantity,
+            cart_quantity,
             buyer_note
         }
         axios.post(`http://localhost:2000/cart/addcart?id=${id}&productid=${product_id}`,newData)

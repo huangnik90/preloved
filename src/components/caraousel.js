@@ -11,9 +11,13 @@ const items = [
     src: 'https://localcdn.tinkerlust.com/media/wysiwyg/homepage_promo/0319/home-banner-desktop/banner-april2019-5.jpg',
     altText: '',
     caption: ''
+  },{
+    src: ' https://localcdn.tinkerlust.com/media/wysiwyg/homepage_promo/0419/home-banner-desktop/banner-april2019-6-min.jpg',
+    altText: '',
+    caption: ''
   },
   {
-    src: 'https://localcdn.tinkerlust.com/media/wysiwyg/homepage_promo/0119/home-banner-desktop/0119-W2-b-dress.jpg',
+    src: 'https://localcdn.tinkerlust.com/media/wysiwyg/homepage_promo/0419/home-banner-desktop/mb-kartini-3_2.jpg',
     altText: '',
     caption: ''
   },
@@ -21,12 +25,8 @@ const items = [
     src: 'https://localcdn.tinkerlust.com/media/wysiwyg/homepage_promo/0319/home-banner-desktop/0319-W3-b-bloom.jpg',
     altText: '',
     caption: ''
-  },
-  {
-    src: ' https://localcdn.tinkerlust.com/media/wysiwyg/homepage_promo/0419/home-banner-desktop/0419-W2-b-dress.jpg',
-    altText: '',
-    caption: ''
   }
+  
  
   
   

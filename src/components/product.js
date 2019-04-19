@@ -16,6 +16,11 @@ componentDidMount(){
     this.getAllCategory()
     this.getDataUrl()
 }
+componentWillReceiveProps(){
+    this.getProduct()
+    this.getAllCategory()
+    this.getDataUrl()
+}
 
 
 getAllCategory =()=>{
@@ -98,11 +103,11 @@ pushUrl = ()=>{
     addCart = (idProduct)=>{
         var id = this.props.id
         if(id){
-            var quantity =1
+            var cart_quantity =1
             var newData = {
                 user_id:id,
                 product_id:idProduct,
-                quantity
+                cart_quantity
             }
             axios.post(`http://localhost:2000/cart/addcart?id=${id}&productid=${idProduct}`,newData)
             .then((res)=>{
