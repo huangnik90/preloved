@@ -51,6 +51,8 @@ class ProductDetail extends React.Component{
         .then((res)=>{
             swal("Cart",res.data,"success")
             this.props.cartLength(id)
+            this.getDetailProduct()
+
         })
         .catch((err)=>console.log(err))
       }

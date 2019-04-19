@@ -153,7 +153,7 @@ class CustomPaginationActionsTable extends React.Component {
   onBtnDelete = (id,userID,quantityCart,product_id)=>{
       axios.delete("http://localhost:2000/cart/deletecartbyid",{params:{id:id,cart_quantity:quantityCart,product_id}})
       .then((res)=>{
-        swal("Delete Cart",res.data,"success")
+        
         this.getAllCart()
         this.props.cartLength(userID)
       })
@@ -169,35 +169,55 @@ class CustomPaginationActionsTable extends React.Component {
   }  
 
   onBtnEditSave = (id)=>{
-    alert("masih progress")
+    var buyer_note = this.refs.editExtra_node.value
+    axios.put('http://localhost:2000/cart/editcartbyid?id='+id+'&buyer_note='+buyer_note)
+    .then((res)=>{
+      swal("Edit Note",res.data,"success")
+      this.getAllCart()
+      this.setState({isEdit:false})
+    })
+    .catch((err)=>console.log(err))
+  }
+
+  getTotalHarga = ()=>{
+    var harga=0
+    
+     for (var i=0;i<this.state.rows.length;i++){
+        harga += parseInt((this.state.rows[i].price - (this.state.rows[i].price *this.state.rows[i].discount/100))*this.state.rows[i].cart_quantity)
+     }
+   
+     return harga
   }
 
   
 
   renderJSX = ()=>{
-   
-    
     var jsx = this.state.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
     .map((val,index)=>{
         return (
             <TableRow>
             <TableCell align="center">{index+1}</TableCell>
-            <TableCell align="center">{val.id}</TableCell>
+           
+            <TableCell align="center">{val.product_name}</TableCell>
+            <TableCell align="center">Rp. {val.price - (val.price*val.discount/100)}</TableCell>
+            <TableCell align="center">{val.cart_quantity}</TableCell>
+            <TableCell align="center"><img width="100px"src={`http://localhost:2000/${val.image}`}></img></TableCell>
             {
               this.state.isEdit===true&& this.state.editIndex===index
               ? 
               <TableCell align="center">
               
-              <input type="number" defaultValue={val.cart_quantity} className="form-control"></input>
-             
-              {/* <input type="number" defaultValue={val.verif} onChange={()=>this.cekVerifikasi(val.verif)} className="form-control" ref="verifikasi" min={0} max={1}></input> */}
+              <input type="text" defaultValue={val.buyer_note} ref="editExtra_node"className="form-control"/>
+              
               </TableCell>
+               
               :
-              <TableCell align="center">{val.cart_quantity}</TableCell>
+              <TableCell align="center">{val.buyer_note}</TableCell>
             }
+            
             {this.state.isEdit===true&& this.state.editIndex===index? 
             <TableCell align="center">
-            <Button animated onClick={()=>this.onBtnEditSave(val.id)}>
+            <Button animated onClick={()=>this.onBtnEditSave(val.id,val.buyer_note)}>
             <i class="far fa-save"></i>
             </Button>
             <Button animated onClick={()=>this.onBtnCancel()}>
@@ -240,8 +260,12 @@ if(this.props.role===1 || this.props.role===2){
         <TableHead>
             <TableRow>
             <TableCell align="center">Nomor</TableCell>
-                <TableCell align="center">Cart ID</TableCell>
-                <TableCell align="center">Quantity</TableCell>
+               
+                <TableCell align="center">Product Name</TableCell>
+                <TableCell align="center">Price (after discount)</TableCell>
+                <TableCell align="center">Total Purchase</TableCell>
+                <TableCell align="center">Image Product</TableCell>
+                <TableCell align="center">Pesen Pembeli</TableCell>
                 <TableCell align="center">Action</TableCell>
             </TableRow>     
         </TableHead>
@@ -275,6 +299,12 @@ if(this.props.role===1 || this.props.role===2){
         </Table>
       </div>
       <div className="row">
+          <div className="col-8 col-md-8">
+                
+                <p className="totalHarga">
+               Total Harga : Rp. {this.getTotalHarga()}
+                </p>
+          </div>
           <div className="col-4 col-md-4">
           <Link to="/product">
              <input type="button" className="shoppingAgain" value="Back Shopping"></input>
