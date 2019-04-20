@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import swal from 'sweetalert'
 import {connect} from 'react-redux'
 import PageNotFound from './404';
+import './../support/category.css'
 
 class ManageCategory extends React.Component{
     state = {dataCategory:[],
@@ -137,7 +138,7 @@ class ManageCategory extends React.Component{
                                         
                                                 <div className="col-9" style={{textAlign:'center'}}>
                 
-                                                <button type="button" className="btn btn-warning" onClick={this.btnAdd} style={{width:"100%"}} ><i class="fas fa-plus"></i></button>
+                                                <button type="button" className="AddStyleButton" onClick={this.btnAdd}>Add New Category</button>
                                                
                                                 </div>  
                                             </div>

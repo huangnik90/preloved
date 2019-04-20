@@ -250,11 +250,9 @@ if(this.props.role===1 || this.props.role===2){
   return (
     <Paper className={classes.root} style={{marginBottom:"50px"}}>
       <div className={classes.tableWrapper}>
-      <nav className="navbar justify-content-between">
-      <h1>Cart</h1>
-      <form className="form-inline">
-        <input className="form-control mr-sm-2" ref="search" onChange={this.onBtnSearch} type="search" placeholder="Find username.." />
-      </form>
+      <nav className="navbar justify-content-center">
+      <h2>Detail Transaction</h2>
+
     </nav>
       <hr></hr>
         <Table className={classes.table}>

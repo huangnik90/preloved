@@ -33,7 +33,7 @@ class Login extends React.Component{
             height="30"
             width="30"/>
          }else{
-             return <button type="button" className="btn btn-warning" onClick={this.onBtnLoginClick} style={{width:"300px"}} ><i className="fas fa-sign-in-alt" /> Login</button>
+             return <button type="button" className="AddStyleButton" onClick={this.onBtnLoginClick}>Login</button>
          }
 
     }

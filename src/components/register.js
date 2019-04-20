@@ -2,7 +2,7 @@ import React from 'react'
 import Loader from 'react-loader-spinner'
 import {connect} from 'react-redux'
 import {registerUser} from '../1.actions/userAction'
-
+import './../support/register.css'
 
 class Register extends React.Component{
     state = {error:''}
@@ -46,7 +46,7 @@ class Register extends React.Component{
             height="30"
             width="30"/>
          }else{
-             return <button type="button" className="btn btn-warning" onClick={this.btnRegister} style={{width:"100%"}} ><i class="fas fa-arrow-alt-circle-up"></i> Sign Up</button>
+             return <button type="button" className="AddStyleButton" onClick={this.btnRegister}>Create New User</button>
          }
 
     }
