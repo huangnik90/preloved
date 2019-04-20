@@ -73,3 +73,19 @@
     cursor: pointer;
     
 }
+.AddStyleButton{
+        border: 2.8px solid #333333;
+        color: #333333;
+        font-size: 15px;
+        letter-spacing: 0.1rem;
+        padding: 15px;
+        position: relative;
+        width: 100%;
+        text-align: center;
+        font-family: 'Dosis', sans-serif;
+}
+.AddStyleButton:hover{
+   color: whitesmoke;
+   background-color: orange;
+}
+

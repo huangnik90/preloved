@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import swal from 'sweetalert'
 import PageNotFound from './404';
+import '../support/product.css'
 import {connect} from 'react-redux'
 
 class ProductAddDescription extends React.Component{
@@ -31,7 +32,7 @@ class ProductAddDescription extends React.Component{
         
         axios.put(`http://localhost:2000/product/editproductdescription/${id_product}`,newData)
         .then((res)=>{
-            swal("ok",res.data,"success")
+            swal("Success",res.data,"success")
            
         })
         .catch((err)=>console.log(err))
@@ -79,8 +80,8 @@ class ProductAddDescription extends React.Component{
                                 <div className="col-9" style={{textAlign:'center'}}>
                                
                                 
-                                <button type="button" className="btn btn-warning" onClick={this.onBtnEditDescription} style={{width:"100%"}} >
-                                <i class="far fa-edit"></i>
+                                <button type="button" className="AddStyleButton"  onClick={this.onBtnEditDescription} style={{width:"100%"}} >
+                                Edit Description
                                 </button>
                                 
                                 </div>

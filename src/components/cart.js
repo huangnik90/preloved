@@ -22,6 +22,7 @@ import {Link} from 'react-router-dom'
 import PageNotFound from './404';
 import {cartLength} from '../1.actions'
 import './../support/cart.css'
+import CurrencyFormat from 'react-currency-format';
 
 const actionsStyles = theme => ({
   root: {
@@ -201,7 +202,7 @@ class CustomPaginationActionsTable extends React.Component {
             <TableCell align="center">{val.product_name}</TableCell>
             <TableCell align="center">Rp. {val.price - (val.price*val.discount/100)}</TableCell>
             <TableCell align="center">{val.cart_quantity}</TableCell>
-            <TableCell align="center"><img width="100px"src={`http://localhost:2000/${val.image}`}></img></TableCell>
+            <TableCell align="center"><img alt="gambar" width="100px"src={`http://localhost:2000/${val.image}`}></img></TableCell>
             {
               this.state.isEdit===true&& this.state.editIndex===index
               ? 
@@ -300,9 +301,10 @@ if(this.props.role===1 || this.props.role===2){
       </div>
       <div className="row">
           <div className="col-8 col-md-8">
-                
+         
                 <p className="totalHarga">
-               Total Harga : Rp. {this.getTotalHarga()}
+                Total Harga: 
+                <CurrencyFormat value={this.getTotalHarga()} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
                 </p>
           </div>
           <div className="col-4 col-md-4">

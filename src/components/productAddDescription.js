@@ -3,6 +3,7 @@ import axios from 'axios'
 import swal from 'sweetalert'
 import {Redirect} from 'react-router-dom'
 import PageNotFound from './404';
+import '../support/product.css'
 import {connect} from 'react-redux'
 
 class ProductAddDescription extends React.Component{
@@ -73,8 +74,8 @@ class ProductAddDescription extends React.Component{
                                         
                                                 <div className="col-9" style={{textAlign:'center'}}>
                                                 
-                                                <button type="button" className="btn btn-warning" onClick={this.onBtnSaveDescription} style={{width:"100%"}} ><i class="fas fa-plus"></i></button>
-                                                
+                                                <button type="button" className="AddStyleButton" onClick={this.onBtnSaveDescription} style={{width:"100%"}} ><i class="fas fa-plus"></i></button>
+                                                Add New Description
                                                 </div>
                                                     
                                             </div>

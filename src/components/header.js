@@ -50,10 +50,10 @@ class Header extends React.Component {
               <Nav navbar>
               {this.state.idUser}
                 <NavItem>
-                 <NavLink href="/login"> <i class="fas fa-sign-in-alt"></i> Login</NavLink>
+                 <NavLink href="/login"> <i className="fab fa-gratipay" style={{color:"orange"}}></i>Login</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="/register"><i class="far fa-address-card"></i> Register</NavLink>
+                  <NavLink href="/register"><i className="fab fa-gratipay" style={{color:"orange"}}></i>Register</NavLink>
                 </NavItem>
               </Nav>
             </Collapse>
@@ -86,20 +86,20 @@ class Header extends React.Component {
               <Nav navbar>
               {this.state.idUser}
               <NavItem>
-                 <NavLink href="/productadd">Add Product</NavLink>
+                 <NavLink href="/productadd"><i className="fab fa-gratipay" style={{color:"orange"}}></i>Add Product</NavLink>
                 </NavItem>
                 <NavItem>
-                 <NavLink href="/ProductManage"> Manage Product</NavLink>
+                 <NavLink href="/ProductManage"> <i className="fab fa-gratipay" style={{color:"orange"}}></i>Manage Product</NavLink>
                 </NavItem>
                 <NavItem>
-                 <NavLink href="/manageuser"> Manage User</NavLink>
+                 <NavLink href="/manageuser"> <i className="fab fa-gratipay" style={{color:"orange"}}></i>Manage User</NavLink>
                 </NavItem>
                 <NavItem>
-                 <NavLink href="/managecategory"> Manage Category</NavLink>
+                 <NavLink href="/managecategory"> <i className="fab fa-gratipay" style={{color:"orange"}}></i>Manage Category</NavLink>
                 </NavItem>
                
                 <NavItem>
-                  <NavLink onClick={this.btnSignOut} href="/">Exit <i class="fas fa-sign-out-alt"></i></NavLink>
+                  <NavLink onClick={this.btnSignOut} href="/"><i className="fab fa-gratipay" style={{color:"orange"}}></i>Sign Out</NavLink>
                 </NavItem>
               </Nav>
             </Collapse>
@@ -132,14 +132,14 @@ class Header extends React.Component {
               <Nav navbar>
               {this.state.idUser}
                 <NavItem>
-                 <NavLink href="/product">Check Collection <i class="far fa-gem"></i></NavLink>
+                 <NavLink href="/product"><i className="fab fa-gratipay" style={{color:"orange"}}></i>Our Collection</NavLink>
                 </NavItem>
                 <NavItem>
-                 <NavLink href="/cart">Transaction Detail <i class="fas fa-shopping-cart"></i> </NavLink>
+                 <NavLink href="/cart"><i className="fab fa-gratipay" style={{color:"orange"}}></i>Cart Detail </NavLink>
                 </NavItem>
                
                 <NavItem>
-                  <NavLink onClick={this.btnSignOut} href="/">Exit <i class="fas fa-sign-out-alt"></i> </NavLink>
+                  <NavLink onClick={this.btnSignOut} href="/"><i className="fab fa-gratipay" style={{color:"orange"}}></i>Sign Out  </NavLink>
                 </NavItem>
               </Nav>
             </Collapse>
