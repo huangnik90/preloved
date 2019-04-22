@@ -74,8 +74,8 @@ class ProductAddDescription extends React.Component{
                                         
                                                 <div className="col-9" style={{textAlign:'center'}}>
                                                 
-                                                <button type="button" className="AddStyleButton" onClick={this.onBtnSaveDescription} style={{width:"100%"}} ><i class="fas fa-plus"></i></button>
-                                                Add New Description
+                                                <button type="button" className="AddStyleButton" onClick={this.onBtnSaveDescription} style={{width:"100%"}} >Add New Description</button>
+                                                
                                                 </div>
                                                     
                                             </div>

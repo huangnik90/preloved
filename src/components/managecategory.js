@@ -63,19 +63,27 @@ class ManageCategory extends React.Component{
                     {this.state.isEdit===true&& this.state.editIndex===index? 
                         <td align="center">
                         <Button animated onClick={()=>this.onBtnEditSave(val.id)}>
-                        <i class="far fa-save"></i>
+                        <div className="CartBtnStyle">
+                            SAVE
+                        </div>
                         </Button>
                         <Button animated onClick={()=>this.onBtnCancel()}>
-                        <i class="fas fa-times"></i>
+                        <div className="CartBtnStyle cancel">
+                            CANCEL
+                        </div>
                         </Button>
                         </td>
                         :
                         <td align="center">
                         <Button animated onClick={()=>this.onBtnEdit(val,index)}>
-                        <i class="fas fa-pen-fancy"></i>
+                        <div className="CartBtnStyle">
+                            EDIT
+                        </div>
                         </Button>
                         <Button animated onClick={()=>this.onBtnDelete(val.id)}>
-                        <i class="far fa-trash-alt"></i>
+                        <div className="CartBtnStyle delete">
+                        DELETE
+                        </div>
                         </Button>
                         </td>
                     }

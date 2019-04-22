@@ -21,6 +21,7 @@ import {  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {Link} from 'react-router-dom'
 import PageNotFound from './404';
 import {connect} from 'react-redux'
+import './../support/productManage.css'
 
 const actionsStyles = theme => ({
   root: {
@@ -176,7 +177,7 @@ class CustomPaginationActionsTable extends React.Component {
   }
 
   onBtnEdit = (val,index)=>{
-    this.setState({isEdit:true,editIndex:index,modal:true,dataEdit:val})
+    this.setState({isEdit:true,editIndex:-1,modal:true,dataEdit:val})
   }
 
   cekVerifikasi = (numberawal)=>{
@@ -245,6 +246,21 @@ class CustomPaginationActionsTable extends React.Component {
     var searchProduct = this.refs.searchProduct.value
     this.setState({searchRows:searchProduct.toLowerCase()})
    }
+   checkQtyEdit = () =>{
+     if(this.refs.editQty.value<0){
+       this.refs.editQty.value=0
+     }
+   }
+
+   checkDiskonEdit = () =>{
+     var diskon = this.refs.editDiskon.value
+      if(diskon <0){
+        this.refs.editDiskon.value= 0
+      }
+      if(diskon >100){
+        this.refs.editDiskon.value= 100
+      }
+   }
 
   renderJSX = ()=>{
     var arrSearchAndFilter = this.state.rows.filter((val)=>{
@@ -269,10 +285,14 @@ class CustomPaginationActionsTable extends React.Component {
             {this.state.isEdit===true&& this.state.editIndex===index? 
             <TableCell align="center">
             <Button animated onClick={()=>this.onBtnEditSave(val.id)}>
-            <i class="far fa-save"></i>
+            <div className="CartBtnStyle">
+                SAVE
+            </div>
             </Button>
             <Button animated onClick={()=>this.onBtnCancel()}>
-            <i class="fas fa-times"></i>
+            <div className="CartBtnStyle cancel">
+                CANCEL
+            </div>
             </Button>
             </TableCell>
             :
@@ -280,27 +300,35 @@ class CustomPaginationActionsTable extends React.Component {
             
            
             <Button animated onClick={()=>this.onBtnEdit(val,index)}>
-            <i class="fas fa-pen-fancy"></i>
+            <div className="CartBtnStyle">
+                EDIT
+            </div>
             </Button>
             <Button animated onClick={()=>this.onBtnDelete(val.id)}>
-            <i class="far fa-trash-alt"></i>
+            <div className="CartBtnStyle delete" >
+                Delete
+            </div>
             </Button>
             </TableCell>
             }
             {
               val.grade ===null ?
               <TableCell align="center">
-             <Link to={`/productadddescription/${val.id}`}>
+             <Link style={{textDecoration:"none"}} to={`/productadddescription/${val.id}`}>
             <Button animated>
-            <i class="fas fa-plus"></i> 
+            <div className="CartBtnStyle">
+                ADD NEW
+            </div>
             </Button>
             </Link>
             </TableCell>
               :
             <TableCell align="center">
-             <Link to={`/producteditdescription/${val.id}`}>
+             <Link style={{textDecoration:"none"}}to={`/producteditdescription/${val.id}`}>
             <Button animated>
-            <i class="far fa-edit"></i>
+            <div className="CartBtnStyle">
+                EDIT
+            </div>
             </Button>
             </Link>
             </TableCell>
@@ -400,11 +428,11 @@ class CustomPaginationActionsTable extends React.Component {
                   <p>Name</p>  
                   <input type="text" ref="editNama" className="form-control" defaultValue={this.state.dataEdit.product_name}/>
                   <p>Price</p>   
-                  <input type="number" ref="editHarga"className="form-control" defaultValue={this.state.dataEdit.price}/>
+                  <input type="number" ref="editHarga" className="form-control" defaultValue={this.state.dataEdit.price}/>
                   <p>Jumlah Stock</p>  
-                  <input type="number" ref="editQty" className="form-control" defaultValue={this.state.dataEdit.quantity}/>
+                  <input type="number" ref="editQty" onChange={this.checkQtyEdit} min={0} className="form-control" defaultValue={this.state.dataEdit.quantity}/>
                   <p>Discount</p>   
-                  <input type="number" ref="editDiskon"className="form-control" defaultValue={this.state.dataEdit.discount}/>
+                  <input type="number" min={0} max={100} onChange={this.checkDiskonEdit} ref="editDiskon"className="form-control" defaultValue={this.state.dataEdit.discount}/>
                   <p>Category</p>   
                   
                   <select defaultValue={this.state.dataEdit.category_id} className="form-control"  ref="editCategory" style={{width:"100%"}} >

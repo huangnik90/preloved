@@ -219,19 +219,27 @@ class CustomPaginationActionsTable extends React.Component {
             {this.state.isEdit===true&& this.state.editIndex===index? 
             <TableCell align="center">
             <Button animated onClick={()=>this.onBtnEditSave(val.id,val.buyer_note)}>
-            <i class="far fa-save"></i>
+            <div className="CartBtnStyle">
+                SAVE
+              </div>
             </Button>
             <Button animated onClick={()=>this.onBtnCancel()}>
-            <i class="fas fa-times"></i>
+            <div className="CartBtnStyle cancel">
+                CANCEL
+              </div>
             </Button>
             </TableCell>
             :
               <TableCell align="center">
             <Button animated onClick={()=>this.onBtnEdit(val,index)}>
-            <i class="fas fa-pen-fancy"></i>
+            <div className="CartBtnStyle">
+                EDIT
+              </div>
             </Button>
             <Button animated onClick={()=>this.onBtnDelete(val.id,val.user_id,val.cart_quantity,val.product_id)}>
-            <i class="far fa-trash-alt"></i>
+              <div className="CartBtnStyle delete" >
+                Delete
+              </div>
             </Button>
             </TableCell>
             }
@@ -255,16 +263,15 @@ if(this.props.role===1 || this.props.role===2){
 
     </nav>
       <hr></hr>
-        <Table className={classes.table}>
-        <TableHead>
+        <Table className="table table-hover">
+        <TableHead className="thead-dark">
             <TableRow>
             <TableCell align="center">Nomor</TableCell>
-               
                 <TableCell align="center">Product Name</TableCell>
                 <TableCell align="center">Price (after discount)</TableCell>
                 <TableCell align="center">Total Purchase</TableCell>
                 <TableCell align="center">Image Product</TableCell>
-                <TableCell align="center">Pesen Pembeli</TableCell>
+                <TableCell align="center">Pesan untuk Penjual</TableCell>
                 <TableCell align="center">Action</TableCell>
             </TableRow>     
         </TableHead>
