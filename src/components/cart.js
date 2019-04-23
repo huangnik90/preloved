@@ -255,75 +255,111 @@ class CustomPaginationActionsTable extends React.Component {
     const { rows, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 if(this.props.role===1 || this.props.role===2){
-  return (
-    <Paper className={classes.root} style={{marginBottom:"50px"}}>
-      <div className={classes.tableWrapper}>
-      <nav className="navbar justify-content-center">
-      <h2>Detail Transaction</h2>
-
-    </nav>
-      <hr></hr>
-        <Table className="table table-hover">
-        <TableHead className="thead-dark">
-            <TableRow>
-            <TableCell align="center">Nomor</TableCell>
-                <TableCell align="center">Product Name</TableCell>
-                <TableCell align="center">Price (after discount)</TableCell>
-                <TableCell align="center">Total Purchase</TableCell>
-                <TableCell align="center">Image Product</TableCell>
-                <TableCell align="center">Pesan untuk Penjual</TableCell>
-                <TableCell align="center">Action</TableCell>
-            </TableRow>     
-        </TableHead>
-          <TableBody>
-
-          {this.renderJSX()}
-        
-           {emptyRows > 0 && (
-              <TableRow style={{ height: 48 * emptyRows }}>
-                <TableCell colSpan={6} />
+  if(this.state.rows.length){
+    return (
+      <Paper className={classes.root} style={{marginBottom:"50px"}}>
+        <div className={classes.tableWrapper}>
+        <nav className="navbar justify-content-center">
+        <h2>Detail Transaction</h2>
+  
+      </nav>
+        <hr></hr>
+          <Table className="table table-hover">
+          <TableHead className="thead-dark">
+              <TableRow>
+              <TableCell align="center">Nomor</TableCell>
+                  <TableCell align="center">Product Name</TableCell>
+                  <TableCell align="center">Price (after discount)</TableCell>
+                  <TableCell align="center">Total Purchase</TableCell>
+                  <TableCell align="center">Image Product</TableCell>
+                  <TableCell align="center">Pesan untuk Penjual</TableCell>
+                  <TableCell align="center">Action</TableCell>
+              </TableRow>     
+          </TableHead>
+            <TableBody>
+  
+            {this.renderJSX()}
+          
+             {emptyRows > 0 && (
+                <TableRow style={{ height: 48 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  colSpan={3}
+                  count={rows.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    native: true,
+                  }}
+                  onChangePage={this.handleChangePage}
+                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                  ActionsComponent={TablePaginationActionsWrapped}
+                />
               </TableRow>
-            )}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
-                colSpan={3}
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  native: true,
-                }}
-                onChangePage={this.handleChangePage}
-                onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActionsWrapped}
-              />
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </div>
-      <div className="row">
-          <div className="col-8 col-md-8">
-         
-                <p className="totalHarga">
-                Total Harga: 
-                <CurrencyFormat value={this.getTotalHarga()} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
-                </p>
-          </div>
-          <div className="col-4 col-md-4">
-          <Link to="/product">
-             <input type="button" className="shoppingAgain" value="Back Shopping"></input>
-          </Link>     
-          <Link to="/cekout">
-             <input type="button" className="checkOut" value="Check Out"></input>
-          </Link>  
-          </div>
-      </div>
-    </Paper>
-    
-  );
+            </TableFooter>
+          </Table>
+        </div>
+        <div className="row">
+            <div className="col-8 col-md-8">
+           
+                  <p className="totalHarga">
+                  Total Harga: 
+                  <CurrencyFormat value={this.getTotalHarga()} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
+                  </p>
+            </div>
+            <div className="col-4 col-md-4">
+            <Link to="/product">
+               <input type="button" className="shoppingAgain" value="Back Shopping"></input>
+            </Link>     
+            <Link to="/payment">
+               <input type="button" className="checkOut" value="Payment"></input>
+            </Link>  
+            </div>
+        </div>
+      </Paper>
+      
+    );
+  }else{
+    return (
+      <Paper className={classes.root} style={{marginBottom:"50px"}}>
+        <div className={classes.tableWrapper}>
+        <nav className="navbar justify-content-center">
+        <h2>Detail Transaction</h2>
+  
+      </nav>
+        <hr></hr>
+        <div className="emptyCart">
+        There are no items in your cart.
+        </div>
+      
+        </div>
+        <div className="row">
+            <div className="col-8 col-md-8">
+           
+                  <p className="totalHarga">
+                  Total Harga: 
+                  <CurrencyFormat value={this.getTotalHarga()} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
+                  </p>
+            </div>
+            <div className="col-4 col-md-4">
+            <Link to="/product">
+               <input type="button" className="shoppingAgain" value="Back Shopping"></input>
+            </Link>     
+            <Link to="/cekout">
+               <input type="button" className="checkOut" value="Check Out"></input>
+            </Link>  
+            </div>
+        </div>
+      </Paper>
+    )
+  }
+
 }else{
   return <PageNotFound></PageNotFound>
 }

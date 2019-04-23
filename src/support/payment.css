@@ -1,0 +1,18 @@
+.paymentBody{
+    height: 600px;
+}
+.btnNikoStyle{
+    border: 1.2px solid #333333;
+    color: #333333;
+    font-size: 10px;
+    letter-spacing: 0.1rem;
+    padding: 15px;
+    position: relative;
+    width: 100px;
+    text-align: center;
+    font-family: 'Dosis', sans-serif;
+    position: relative;
+}
+.btnNikoStyle:hover{
+    background-color: orange;
+}

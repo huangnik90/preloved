@@ -117,7 +117,7 @@ class Header extends React.Component {
             <NavbarBrand href="/" className="mr-auto">
             <div className="mainLogo">
                 <img alt="Logo gambar"style={{float:"left",marginRight:"4.2px"}} width="25px" height="25px" src="https://pbs.twimg.com/profile_images/945929569156190208/VfDDyBm4_400x400.jpg"/>
-                <h1 style={{fontSize:"20px"}}> PRELOVED</h1> 
+                <h1 style={{fontSize:"20px",color:"black"}}> PRELOVED</h1> 
             </div>
             <div className="navbar2" style={{style:"pointer"}}>
                 <Link to="/cart" style={{color:"inherit",textDecoration:"none"}}>

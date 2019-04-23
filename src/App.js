@@ -22,6 +22,7 @@ import ProductManage from './components/productManage'
 import ManageCategory from './components/managecategory'
 import ProductAddDescription from './components/productAddDescription'
 import ProductEditDescription from './components/productEditDescription'
+import Payment from './components/payment'
 //IMPORT SESUATU BIAR CANTIK
 import {keepLogin,cookieChecked,cartLength} from './1.actions'
 import Loader from 'react-loader-spinner'
@@ -48,22 +49,20 @@ class App extends Component {
           <ScrollTop>
              <Header/>
              <Switch>
-            
-             <Route path='/productmanage' component={ProductManage}></Route>
-             <Route path='/productadd' component={ProductAdd}></Route>
-              <Route path="/product" component={Product}></Route>
-              <Route path="/managecategory" component={ManageCategory}></Route>
-              <Route path="/productadddescription/:id" component={ProductAddDescription}></Route>
-              <Route path="/producteditdescription/:id" component={ProductEditDescription}></Route>
-                 <Route path='/cart' component={Cart} ></Route>
-                 <Route path="/productdetail/:id" component={Productdetail}></Route>
-                 <Route path='/' component={Home} exact></Route>
-                 <Route path='/login' component={Login}></Route>
-                 <Route path='/register' component={Register}></Route>
-                 <Route path='/manageuser' component={ManageUser}></Route>
-                 <Route path='*' component={PageNotFound} />
-                
-
+                    <Route path='/payment' component={Payment}></Route>
+                    <Route path='/productmanage' component={ProductManage}></Route>
+                    <Route path='/productadd' component={ProductAdd}></Route>
+                    <Route path="/product" component={Product}></Route>
+                    <Route path="/managecategory" component={ManageCategory}></Route>
+                    <Route path="/productadddescription/:id" component={ProductAddDescription}></Route>
+                    <Route path="/producteditdescription/:id" component={ProductEditDescription}></Route>
+                    <Route path='/cart' component={Cart} ></Route>
+                    <Route path="/productdetail/:id" component={Productdetail}></Route>
+                    <Route path='/' component={Home} exact></Route>
+                    <Route path='/login' component={Login}></Route>
+                    <Route path='/register' component={Register}></Route>
+                    <Route path='/manageuser' component={ManageUser}></Route>
+                    <Route path='*' component={PageNotFound} />
              </Switch>
                  
              <Footer/>

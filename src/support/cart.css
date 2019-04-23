@@ -41,6 +41,15 @@
     text-align: center;
     font-family: 'Dosis', sans-serif;
 }
+.emptyCart{
+    font-family: 'Dosis', sans-serif;
+    height: 200px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    padding-top: 80px;
+    font-size: 18px;
+}
 
 .checkOut:hover{
     background-color: orange;
