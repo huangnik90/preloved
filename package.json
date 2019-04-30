@@ -19,6 +19,7 @@
     "query-string": "^6.2.0",
     "react": "^16.7.0",
     "react-burger-menu": "^2.6.5",
+    "react-countdown-now": "^2.1.0",
     "react-currency-format": "^1.0.0",
     "react-dom": "^16.7.0",
     "react-image-magnify": "^2.7.4",

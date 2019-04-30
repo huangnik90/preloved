@@ -10,6 +10,7 @@ class ProductAddDescription extends React.Component{
     componentDidMount(){
         this.getAllDescription()
     }
+    
     getAllDescription = () =>{
         var id = this.props.match.params.id
         
@@ -72,6 +73,7 @@ class ProductAddDescription extends React.Component{
                                 <label className="col-sm-3 col-form-label">Deskripsi Product</label>
                                 <div className="col-sm-9">
                                 <textarea defaultValue={val.description} rows="10" ref="deskripsi" className="form-control"  placeholder="Description" required autoFocus/>
+                               
                                 </div>
                             </div>
                             <div className="form-group row">

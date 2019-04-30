@@ -30,3 +30,18 @@
   position: absolute;
   
 }
+
+.fadeOut{
+  opacity:0;
+  width:0;
+  height:0;
+  transition: width 2.5s 2.5s, height 2.5s 2.5s, opacity 2.5s;
+
+}
+.fadeIn{
+  opacity:1;
+  width:100px;
+  height:100px;
+  transition: width 0.5s, height 0.5s, opacity 0.5s 0.5s;
+
+}

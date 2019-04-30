@@ -168,7 +168,7 @@ class CustomPaginationActionsTable extends React.Component {
   onBtnCancel=()=>{
     this.setState({isEdit:false})
   }  
-
+  
   onBtnEditSave = (id)=>{
     var buyer_note = this.refs.editExtra_node.value
     axios.put('http://localhost:2000/cart/editcartbyid?id='+id+'&buyer_note='+buyer_note)
@@ -190,7 +190,54 @@ class CustomPaginationActionsTable extends React.Component {
      return harga
   }
 
-  
+  btnCheckOut = ()=>{
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+    var yyyy = today.getFullYear();
+
+    today = yyyy + '-' + mm + '-' + dd;
+    for(var i=0; i < this.state.rows.length;i++){
+      var newData={
+        id_user:this.props.id,
+        id_product:this.state.rows[i].product_id,
+        quantity_pembelian:this.state.rows[i].cart_quantity,
+        harga:this.state.rows[i].price,
+        tanggal_pembelian:today
+      }
+
+       axios.post(`http://localhost:2000/cart/checkout?id=${this.props.id}`,newData)
+       .then((res)=>{
+         
+          swal("Preloved Success",res.data,"success")
+          this.getAllCart()
+          this.props.cartLength(this.props.id)
+       })
+       .catch((err)=>console.log(err))
+
+       axios.delete(`http://localhost:2000/checkout/cancelcheckout?id=${this.props.id}`)
+       .then((res2)=>{
+        
+       })
+       .catch((err)=>console.log(err))
+
+      //  axios.delete(`http://localhost:2000/cart/autocancel?quantity=${this.state.rows[i].cart_quantity}&idProduct=${this.state.rows[i].product_id}&id=${this.props.id}`)
+      //  .then((res)=>{
+      //   swal('Expire',res.data,'error')
+      //  })
+      //  .catch((err)=>console.log(err))
+
+
+      }
+      
+  }
+  cancelEvent =()=>{
+    axios.delete(`http://localhost:2000/checkout/cancelevent?id=${this.props.id}`)
+    .then((res)=>{
+      swal("success",res.data,"success")
+    })
+    .catch((err)=>console.log(err))
+  }
 
   renderJSX = ()=>{
     var jsx = this.state.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
@@ -314,12 +361,12 @@ if(this.props.role===1 || this.props.role===2){
                   </p>
             </div>
             <div className="col-4 col-md-4">
-            <Link to="/product">
-               <input type="button" className="shoppingAgain" value="Back Shopping"></input>
-            </Link>     
-            <Link to="/payment">
-               <input type="button" className="checkOut" value="Payment"></input>
-            </Link>  
+                  <Link to="/product">
+                  <input type="button" className="shoppingAgain" value="Back Shopping"></input>
+                  </Link>     
+                  <Link to='/payment'>
+                  <input type="button" onClick={this.btnCheckOut} className="checkOut" value="Payment"></input>
+                  </Link>
             </div>
         </div>
       </Paper>
@@ -349,11 +396,9 @@ if(this.props.role===1 || this.props.role===2){
             </div>
             <div className="col-4 col-md-4">
             <Link to="/product">
-               <input type="button" className="shoppingAgain" value="Back Shopping"></input>
+               <input type="button" style={{width:"100%"}} className="shoppingAgain" value="Back Shopping"></input>
             </Link>     
-            <Link to="/cekout">
-               <input type="button" className="checkOut" value="Check Out"></input>
-            </Link>  
+            
             </div>
         </div>
       </Paper>

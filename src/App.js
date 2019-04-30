@@ -23,6 +23,8 @@ import ManageCategory from './components/managecategory'
 import ProductAddDescription from './components/productAddDescription'
 import ProductEditDescription from './components/productEditDescription'
 import Payment from './components/payment'
+import Thanos from './components/thanos'
+import ManagePayment from './components/managepayment'
 //IMPORT SESUATU BIAR CANTIK
 import {keepLogin,cookieChecked,cartLength} from './1.actions'
 import Loader from 'react-loader-spinner'
@@ -32,10 +34,10 @@ import './App.css';
 var kookie = new Coookie ()
 class App extends Component {
   componentDidMount(){
-    var usernameCookie = kookie.get('userData')
-    if (usernameCookie!== undefined){
-      this.props.keepLogin(usernameCookie)
-      this.props.cartLength(usernameCookie)
+    var idUser = kookie.get('userData')
+    if (idUser!== undefined){
+      this.props.keepLogin(idUser)
+      this.props.cartLength(idUser)
     }else{
       this.props.cookieChecked()
     }
@@ -49,7 +51,9 @@ class App extends Component {
           <ScrollTop>
              <Header/>
              <Switch>
+                  <Route path='/thanos' component={Thanos}></Route>
                     <Route path='/payment' component={Payment}></Route>
+                    <Route path='/managepayment' component={ManagePayment}></Route>
                     <Route path='/productmanage' component={ProductManage}></Route>
                     <Route path='/productadd' component={ProductAdd}></Route>
                     <Route path="/product" component={Product}></Route>
