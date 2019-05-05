@@ -116,7 +116,7 @@ const styles = theme => ({
 
 class CustomPaginationActionsTable extends React.Component {
   state = {
-    rows: [], searchRows:'',
+    rows: [], searchRows:'',gambar:[],
     page: 0,
     rowsPerPage: 5,
     isEdit: false,
@@ -133,11 +133,12 @@ class CustomPaginationActionsTable extends React.Component {
   };
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
   componentDidMount(){
-    this.getPaymentProof()
+    this.getAllPendingPaymentDetail()
+    this.getSingleImageUpload()
   }
   
-  getPaymentProof = ()=>{
-      axios.get(`http://localhost:2000/payment/cekpayment/${this.props.match.params.no_invoice}`)
+  getAllPendingPaymentDetail = ()=>{
+      axios.get(`http://localhost:2000/payment/getpaymentstatusdetail0/${this.props.match.params.no_invoice}`)
       .then((res)=>{
           
           this.setState({rows:res.data})
@@ -147,6 +148,18 @@ class CustomPaginationActionsTable extends React.Component {
           console.log(err)
       })
       
+
+  }
+  getSingleImageUpload=()=>{
+    axios.get(`http://localhost:2000/payment/cekgambarpayment/${this.props.match.params.no_invoice}`)
+    .then((res)=>{
+        
+        this.setState({gambar:res.data})
+       
+    })
+    .catch((err)=>{
+        console.log(err)
+    })
 
   }
   getTotalHarga = ()=>{
@@ -171,13 +184,19 @@ class CustomPaginationActionsTable extends React.Component {
     
    
   }
+  renderGambarJSX = ()=>{
+    
+    var jsx = this.state.gambar.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+    .map((val,index)=>{
+        return (
+            <img width="100%"src={`http://localhost:2000/${val.gambarupload}`} alt="upload gambar"></img>
+        )
+    })
+     return jsx;
+  }
 
   renderJSX = ()=>{
-    // var arrSearchAndFilter = this.state.rows.filter((val)=>{
-    //   return val.no_invoice.toLowerCase().includes(this.state.searchRows)
-    //   //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
-    // })
-    
+      
     var jsx = this.state.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
     .map((val,index)=>{
         return (
@@ -199,7 +218,7 @@ class CustomPaginationActionsTable extends React.Component {
     
   render() {
     if(this.state.diclik){
-      return <Redirect to="/paymentuser"></Redirect>
+      return <Redirect to="/managepayment"></Redirect>
     }
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;
@@ -213,7 +232,17 @@ if(this.props.role){
       
     </nav>
       <hr></hr>
-      <Table className="table table-hover">
+      <div className="row">
+            <div className="col-md-4 col-4">
+            <h2>Payment Proof </h2>
+                                <hr/>
+                {this.renderGambarJSX()}
+            </div>
+     
+            <div className="col-md-8 col-8">
+            <h2>Purchase Detail </h2>
+                                <hr/>
+            <Table className="table table-hover">
           <TableHead className="thead-dark">
             <TableRow>
                 <TableCell align="center">Nomor</TableCell>
@@ -227,7 +256,6 @@ if(this.props.role){
           <TableBody>
 
           {this.renderJSX()}
-        
            {emptyRows > 0 && (
               <TableRow style={{ height: 48 * emptyRows }}>
                 <TableCell colSpan={6} />
@@ -252,6 +280,9 @@ if(this.props.role){
             </TableRow>
           </TableFooter>
         </Table>
+            </div>
+      </div>
+     
 
 
        
@@ -266,7 +297,7 @@ if(this.props.role){
                   </p>
             </div>
             <div className="col-4 col-md-4">
-            <Link to="/paymentuser">
+            <Link to="/managepayment">
                <input type="button" style={{width:"50%"}} className="shoppingAgain" value="Back"></input>
             </Link>     
             <input onClick={this.cancelOrder} type="button" style={{width:"50%"}} className="shoppingAgain cancel" value="Cancel Order"></input>
