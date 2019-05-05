@@ -220,11 +220,7 @@ class CustomPaginationActionsTable extends React.Component {
         date_purchase:dateNow,
         no_invoice:invoiceNumber
       }
-       axios.post("http://localhost:2000/checkout/addpaymentdetail",formData)
-        .then((res)=>{
-            console.log(res)         
-          })
-       .catch((err)=>console.log(err))
+      
        axios.post(`http://localhost:2000/cart/checkout?id=${this.props.id}`,newData)
        .then((res)=>{
           swal("Preloved Success",res.data,"success")
@@ -232,12 +228,12 @@ class CustomPaginationActionsTable extends React.Component {
           this.setState({udahdiklik : true})
        })
        .catch((err)=>console.log(err))
-       
-
-    
-
-
     }
+    axios.post("http://localhost:2000/checkout/addpaymentdetail",formData)
+    .then((res)=>{
+        console.log(res)         
+      })
+   .catch((err)=>console.log(err))
       
   }
   cancelEvent =()=>{

@@ -171,6 +171,7 @@ class CustomPaginationActionsTable extends React.Component {
         return (
             <TableRow>
             <TableCell align="center">{index+1}</TableCell>
+            <TableCell align="center">{val.tanggal_pembelian}</TableCell>
             <TableCell align="center">{val.no_invoice}</TableCell>
             <TableCell align="center">{val.jumlah_item}</TableCell>
             <TableCell align="center">{val.total}</TableCell>
@@ -221,6 +222,7 @@ if(this.props.role && this.state.rows.length>0){
           <TableHead className="thead-dark">
             <TableRow>
             <TableCell align="center">Nomor</TableCell>
+            <TableCell align="center">Tanggal Pembelian</TableCell>
                 <TableCell align="center">Nomor Invoice</TableCell>
                 <TableCell align="center">Jumlah Pembelian</TableCell>
                 <TableCell align="center">Total Pembayaran</TableCell>
