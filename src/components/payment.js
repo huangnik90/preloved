@@ -2,82 +2,37 @@ import React from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import CurrencyFormat from 'react-currency-format';
-import {Link} from 'react-router-dom'
+import {Link,Redirect} from 'react-router-dom'
 import './../support/payment.css'
 import swal from 'sweetalert'
-//import Countdown from 'react-countdown-now';
+import Moment from 'moment'
+import Countdown from 'react-countdown-now';
 
 class Payment extends React.Component{
-    state ={rows:[],grandTotal:0,selectedFile:null}
+    state ={tanggal:this.props.match.params.no_invoice,rows:[],grandTotal:0,selectedFile:null,diclick:false, gambar:'https://uploads-cdn.thgblogs.com/wp-content/uploads/sites/12/2018/10/16084909/1080x530-262215503-jb-preloved-nostrings-ad-5-700x344.png'}
     componentDidMount(){
-        this.getAllCheckOut()
-      
-    
+        this.getData()
     }
-      
-    getAllCheckOut = ()=>{
-          axios.get("http://localhost:2000/checkout/getallcheckout?id="+this.props.id)
-          .then((res)=>{
-              this.setState({rows:res.data})
-          })
-          .catch((err)=>{
-              console.log(err)
-          })
-      }
+
+    getData =()=>{
+        axios.get(`http://localhost:2000/payment/getpaymentstatusdetail0/${this.props.match.params.no_invoice}`)
+        .then((res)=>{
+            this.setState({rows:res.data})
+        })
+        .catch((err)=>console.log(err))
+    }
     getTotalHarga = ()=>{
         var harga=0
          for (var i=0;i<this.state.rows.length;i++){
-            harga += parseInt((this.state.rows[i].harga - (this.state.rows[i].harga *this.state.rows[i].discount/100))*this.state.rows[i].quantity_pembelian)
+            harga += parseInt(this.state.rows[i].harga*this.state.rows[i].quantity_pembelian)
          }
          return harga
       }
 
-      checkOut = ()=>{
-          var idUser = this.props.id
-          var address1 = this.refs.address1.value
-          var address2 = this.refs.address2.value
-          var phonenumber = this.refs.phonenumber.value  
-            var today = new Date();
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0'); 
-            var yyyy = today.getFullYear();
-
-          today = yyyy + '-' + mm + '-' + dd;
-          var total_belanja = this.getTotalHarga()
-        
-          if(isNaN(phonenumber)){
-            swal("Error","Input kosong/ Nomor telp anda salah","error")
-          }else if(address1&&address2&&phonenumber&&idUser){
-                var newData ={
-                    user_id:idUser,
-                    address1,
-                    address2,
-                    phonenumber,
-                    checkout_date:today,
-                    total_belanja
-                }
-
-                axios.post(`http://localhost:2000/user/adduserdetail/${idUser}`,newData)
-                .then((res)=>{
-                   
-                    swal("Berhasil",res.data,"success") 
-                    this.refs.address1.value=""
-                    this.refs.address2.value=""
-                    this.refs.phonenumber.value=""
-
-                })
-                .catch((err)=>console.log(err))
-              
-
-            }else{
-                swal("Error","Data Kosong","error")
-            }
-      }
-
-      resetCheckOut=()=>{
+    resetCheckOut=()=>{
         swal("Error","Data Kosong","error")
       }
-      onChangeHandler = (event)=>{
+    onChangeHandler = (event)=>{
         //untuk mendapatkan file image
         this.setState({selectedFile:event.target.files[0]})
     }
@@ -85,71 +40,120 @@ class Payment extends React.Component{
         return  this.state.selectedFile ? this.state.selectedFile.name :"Upload Payment Proof"
     }
 
-
+    UploadPayment=()=>{ 
+        if(this.state.selectedFile){
+            var dateNow = Moment().format('YYYY-MM-D hh:mm:ss')
+            
+            var data = {
+                    date_payment:dateNow, 
+                    no_invoice:this.props.match.params.no_invoice
+                }
       
+                      var formData = new FormData()
+                          formData.append("image",this.state.selectedFile,this.state.selectedFile.name)
+                          formData.append('data',JSON.stringify(data))
+                      axios.put("http://localhost:2000/checkout/addpaymentproof",formData)
+                           .then((res)=>{
+                                       console.log(res.data)
+                                       swal("Ok",res.data,"success")  
+                                       this.setState({diclick:true})
+                                   })
+                          .catch((err)=>console.log(err))
+                    
+                                   
+        }else{
+            var tanggal = Moment(Moment()).add(1,'d').format('D / MMMM / YYYY')
+            swal("Error",`Bukti pembayaran masih kosong, ${tanggal} adalah batas terakhir pembayaran`,"error")
+        }
+   
+    }
+    Cancel=()=>{
+        // if(this.state.uploadPayment){
+            
+        // }
+        // for (var i=0;i<this.state.rows.length;i++){
+        //     axios.put(`http://localhost:2000/payment/cancelorder?no_invoice=${this.state.rows[i].no_invoice}&quantity=${this.state.rows[i].quantity_pembelian}&product_id=${this.state.rows[i].id_product}`)
+        //     .then((res)=>{
+        //         swal("success",res.data,"success")
+        //         this.setState({diclick:true})      
+        //     })
+        //     .catch((err)=>console.log(err))
+        //   }
+    }
 
     render(){
-        return(
-            <div className="container paymentBody">
-      
-                <div className="row mt-3">
-                
-                    <div className="col-md-6 col-6">
-                         <p>Total yang harus di transfer </p> 
-                    </div>
-                    <div className="col-md-1">
-                    <p>
-                    <CurrencyFormat value={this.getTotalHarga()} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
-                    </p>
-                    </div>
-                </div>
-                <hr></hr>
-                    <div className="row">
-                      
-                        <div className="col-6 col-md-6">
-                            <h2>Payment Method</h2>
-                            <hr/>
-                            <table className="table table-hover">
-                                <tr>
-                                    <td>Bank Name</td>
-                                    <td>Bank Account Number</td>
-                                </tr>
-                                <tr>
-                                    <td align="center"><img width="200px"  src="https://1.bp.blogspot.com/-QP4vt4BcT6E/WgO4eSbEKoI/AAAAAAAAEoY/QpI27S8JkN402sNJvw6QnOxX0s6Q_ub2QCLcBGAs/s320/mandiri.jpg" alt="logo mandiri"></img></td>
-                                    <td><br></br>
-                                    <br></br>148 00 7000 2111 - Preloved<br></br>
-                                    148 00 9002 4300 - Preloved</td>
-                                </tr>
-                               
-                                <tr>
-                                    <td align="center"><img width="200px" src="https://upload.wikimedia.org/wikipedia/id/thumb/e/e0/BCA_logo.svg/1280px-BCA_logo.svg.png"alt="logo bca"></img></td>
-                                    <td><br></br>79257409 - Preloved</td>
-                                </tr>
-                                
-                            </table>
-                        </div>
-                        <div className="col-6 col-md-6">
-                        <h2>Upload Payment</h2>
-                        <hr/>
+        if(this.state.diclick){
+            return <Redirect to='/'/>
+        }
+       
+            return(
+                <div className="container paymentBody">
+                        <div className="row">
+                            <div className="col-md-12 col-12">
                             
-                            <input className="form-control border-warning" type="button" onClick={()=>this.refs.input.click()} value={this.valueHandler()}></input>
-                            <input ref="input" style={{display:"none"}} type="file" onChange={this.onChangeHandler}></input>
+                            <Countdown autoStart="false" onComplete={this.Cancel}  date={parseInt(this.props.match.params.no_invoice)+4026946}>
+                           
+                            </Countdown>
+                            </div>
+                        </div>
+                    
+                        <div className="row">
+                                
+                            <div className="col-md-6 col-6">
+                            <h2>Total yang harus di transfer </h2>
+                                <hr/>
+                            
+                                <h2>
+                                <CurrencyFormat value={this.getTotalHarga()} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
+                                </h2>
+                                        <img width="100%" src={this.state.gambar} alt="gambar upload"></img>
+                                        
+                                        <input className="form-control border-warning" type="button" onClick={()=>this.refs.input.click()} value={this.valueHandler()}></input>
+                                        <input ref="input" style={{display:"none"}} type="file" onChange={this.onChangeHandler}></input>
+                                     
+    
+                            </div>
+                            <div className="col-5 col-md-5">
+                                <h2>Payment Method</h2>
+                                <hr/>
+                                <table className="table table-hover">
+                                    <tr>
+                                        <td>Bank Name</td>
+                                        <td>Bank Account Number</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center"><img width="200px"  src="https://1.bp.blogspot.com/-QP4vt4BcT6E/WgO4eSbEKoI/AAAAAAAAEoY/QpI27S8JkN402sNJvw6QnOxX0s6Q_ub2QCLcBGAs/s320/mandiri.jpg" alt="logo mandiri"></img></td>
+                                        <td><br></br>
+                                        <br></br>148 00 7000 2111 - Preloved<br></br>
+                                        148 00 9002 4300 - Preloved</td>
+                                    </tr>
+                                   
+                                    <tr>
+                                        <td align="center"><img width="200px" src="https://upload.wikimedia.org/wikipedia/id/thumb/e/e0/BCA_logo.svg/1280px-BCA_logo.svg.png"alt="logo bca"></img></td>
+                                        <td><br></br>79257409 - Preloved</td>
+                                    </tr>
+                                    
+                                    
+                                </table>
+                            </div>
+            
+                        </div>
+                    <hr></hr>
+                    <div className="row">
+                        <div style ={{position:"absolute",right:"0px"}} className="col-5 col-md-5">
+                        <Link to="/product">
+                        <input type="button" style={{marginRight:"2px"}} className="shoppingAgain" value="Back to Shopping"></input>
+                        </Link>     
+                        
+                        <input type="button" onClick={this.UploadPayment} className="shoppingAgain" value="I Have already Paid"></input>
+                     
                         </div>
                     </div>
-                <hr></hr>
-                <div className="row">
-                    <div style ={{position:"absolute",right:"0px"}} className="col-5 col-md-5">
-                    <Link to="/cart">
-                    <input type="button" style={{marginRight:"2px"}} className="shoppingAgain" value="Back to Cart"></input>
-                    </Link>     
-                    
-                    <input type="button" onClick={this.checkOut} className="shoppingAgain" value="Check Out"></input>
-                     
-                    </div>
+    
                 </div>
-
-            </div>
-        )
+            )
+        
+       
     }
 }
 

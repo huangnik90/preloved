@@ -17,12 +17,13 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import axios from 'axios'
 import swal from 'sweetalert'
 import Button from '@material-ui/core/Button';
-import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {connect } from 'react-redux'
+import {Link,Redirect} from 'react-router-dom'
 import PageNotFound from './404';
 import {cartLength} from '../1.actions'
 import './../support/cart.css'
 import CurrencyFormat from 'react-currency-format';
+import Moment from 'moment'
 
 const actionsStyles = theme => ({
   root: {
@@ -53,6 +54,7 @@ class TablePaginationActions extends React.Component {
   };
 
   render() {
+    
     const { classes, count, page, rowsPerPage, theme } = this.props;
 
     return (
@@ -122,7 +124,8 @@ class CustomPaginationActionsTable extends React.Component {
     page: 0,
     rowsPerPage: 5,
     isEdit: false,
-    editIndex:Number
+    editIndex:Number,
+    udahdiklik : false
   };
 
   handleChangePage = (event, page) => {
@@ -189,46 +192,52 @@ class CustomPaginationActionsTable extends React.Component {
    
      return harga
   }
-
+  getAllCheckOut = ()=>{
+    axios.get("http://localhost:2000/checkout/getallcheckout?id="+this.props.id)
+    .then((res)=>{
+        this.setState({rows:res.data})
+    })
+    .catch((err)=>{
+        console.log(err)
+    })
+}
   btnCheckOut = ()=>{
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); 
-    var yyyy = today.getFullYear();
-
-    today = yyyy + '-' + mm + '-' + dd;
+    var dateNow = Moment().format('YYYY-MM-D hh:mm:ss')
+    var invoiceNumber = Date.now()
+    
     for(var i=0; i < this.state.rows.length;i++){
       var newData={
         id_user:this.props.id,
         id_product:this.state.rows[i].product_id,
         quantity_pembelian:this.state.rows[i].cart_quantity,
-        harga:this.state.rows[i].price,
-        tanggal_pembelian:today
+        harga:(this.state.rows[i].price-(this.state.rows[i].price*this.state.rows[i].discount/100)),
+        tanggal_pembelian:dateNow,
+        no_invoice:invoiceNumber
       }
-
+      
+      var formData = {
+        id_user:this.props.id,
+        date_purchase:dateNow,
+        no_invoice:invoiceNumber
+      }
+       axios.post("http://localhost:2000/checkout/addpaymentdetail",formData)
+        .then((res)=>{
+            console.log(res)         
+          })
+       .catch((err)=>console.log(err))
        axios.post(`http://localhost:2000/cart/checkout?id=${this.props.id}`,newData)
        .then((res)=>{
-         
           swal("Preloved Success",res.data,"success")
-          this.getAllCart()
           this.props.cartLength(this.props.id)
+          this.setState({udahdiklik : true})
        })
        .catch((err)=>console.log(err))
+       
 
-       axios.delete(`http://localhost:2000/checkout/cancelcheckout?id=${this.props.id}`)
-       .then((res2)=>{
-        
-       })
-       .catch((err)=>console.log(err))
-
-      //  axios.delete(`http://localhost:2000/cart/autocancel?quantity=${this.state.rows[i].cart_quantity}&idProduct=${this.state.rows[i].product_id}&id=${this.props.id}`)
-      //  .then((res)=>{
-      //   swal('Expire',res.data,'error')
-      //  })
-      //  .catch((err)=>console.log(err))
+    
 
 
-      }
+    }
       
   }
   cancelEvent =()=>{
@@ -298,6 +307,9 @@ class CustomPaginationActionsTable extends React.Component {
   }
     
   render() {
+    if(this.state.udahdiklik){
+      return <Redirect to='/paymentuser'/>
+  }
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -364,9 +376,8 @@ if(this.props.role===1 || this.props.role===2){
                   <Link to="/product">
                   <input type="button" className="shoppingAgain" value="Back Shopping"></input>
                   </Link>     
-                  <Link to='/payment'>
                   <input type="button" onClick={this.btnCheckOut} className="checkOut" value="Payment"></input>
-                  </Link>
+                  
             </div>
         </div>
       </Paper>

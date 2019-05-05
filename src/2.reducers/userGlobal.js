@@ -18,7 +18,7 @@ export default (state = INITIAL_STATE, action)=>{
         case "RESET_USER":
             return{...INITIAL_STATE,cookie:true}
         case "LOGIN_SUCCESS":
-            return{...INITIAL_STATE,verif:action.payload[0].verif,id:action.payload[0].id,role:action.payload[0].role,cookie:true}
+            return{...INITIAL_STATE,username:action.payload[0].username,verif:action.payload[0].verif,id:action.payload[0].id,role:action.payload[0].role,cookie:true}
         case "REGISTER_SUCCESS":
             return{...INITIAL_STATE,cookie:true}
         case "VERIFIKASI_DOLO":

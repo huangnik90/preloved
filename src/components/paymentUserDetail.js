@@ -15,10 +15,11 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import axios from 'axios'
-import swal from 'sweetalert'
-import Button from '@material-ui/core/Button';
+import CurrencyFormat from 'react-currency-format';
 import {connect} from 'react-redux'
 import PageNotFound from './404';
+import {Link,Redirect} from 'react-router-dom'
+import swal from 'sweetalert'
 
 const actionsStyles = theme => ({
   root: {
@@ -47,6 +48,7 @@ class TablePaginationActions extends React.Component {
       Math.max(0, Math.ceil(this.props.count / this.props.rowsPerPage) - 1),
     );
   };
+  
 
   render() {
     const { classes, count, page, rowsPerPage, theme } = this.props;
@@ -118,7 +120,8 @@ class CustomPaginationActionsTable extends React.Component {
     page: 0,
     rowsPerPage: 5,
     isEdit: false,
-    editIndex:Number
+    editIndex:Number,
+    rowsdetail:[],diclik:false
   };
 
   handleChangePage = (event, page) => {
@@ -130,109 +133,63 @@ class CustomPaginationActionsTable extends React.Component {
   };
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
   componentDidMount(){
-    this.getAllUser()
+    this.getAllPendingPaymentDetail()
   }
   
-  getAllUser = ()=>{
-      axios.get("http://localhost:2000/payment/getallpaymentdata")
+  getAllPendingPaymentDetail = ()=>{
+      axios.get(`http://localhost:2000/payment/getpaymentstatusdetail0/${this.props.match.params.no_invoice}`)
       .then((res)=>{
+          
           this.setState({rows:res.data})
+          console.log(this.state.rows)
       })
       .catch((err)=>{
           console.log(err)
       })
-  }
+      
 
-  onBtnSearch = ()=>{
-    var searching = this.refs.search.value
-    this.setState({searchRows:searching.toLowerCase()})
   }
-  onBtnDelete = (id)=>{
-      axios.delete("http://localhost:2000/user/deleteuserbyid",{params:{id:id}})
+  getTotalHarga = ()=>{
+    var harga=0
+    
+     for (var i=0;i<this.state.rows.length;i++){
+        harga += parseInt((this.state.rows[i].harga *this.state.rows[i].quantity_pembelian))
+     }
+   
+     return harga
+  }
+  cancelOrder=()=>{
+    
+    for (var i=0;i<this.state.rows.length;i++){
+      axios.put(`http://localhost:2000/payment/cancelorder?no_invoice=${this.state.rows[i].no_invoice}&quantity=${this.state.rows[i].quantity_pembelian}&product_id=${this.state.rows[i].id_product}`)
       .then((res)=>{
-        console.log(res.data)
-        this.getAllUser()
+          swal("Cancel Order",res.data,"info")
+          this.setState({diclik:true})      
       })
       .catch((err)=>console.log(err))
+    }
+    
+   
   }
-
-  onBtnEdit = (id,index)=>{
-    this.setState({isEdit:true,editIndex:index})
-  }
-
-  onBtnCancel=()=>{
-    this.setState({isEdit:false})
-  }  
-
-  onBtnEditSave = (id)=>{
-    var nilaiverifikasi = this.refs.verifikasi.value
-    axios.get("http://localhost:2000/user/editverifikasiuser?",{params:{id:id,verif:nilaiverifikasi}})
-    .then((res)=>{
-      console.log(res)
-      swal("OK","Sudah terupdate","success")
-      this.getAllUser()
-      this.setState({isEdit:false})
-    })
-    .catch((err)=>console.log(err))
-  }
-
-  
 
   renderJSX = ()=>{
-    var arrSearchAndFilter = this.state.rows.filter((val)=>{
-      return val.username.toLowerCase().includes(this.state.searchRows)
-      //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
-    })
+    // var arrSearchAndFilter = this.state.rows.filter((val)=>{
+    //   return val.no_invoice.toLowerCase().includes(this.state.searchRows)
+    //   //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
+    // })
     
-    var jsx = arrSearchAndFilter.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+    var jsx = this.state.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
     .map((val,index)=>{
         return (
-            <TableRow>
+            <TableRow >
             <TableCell align="center">{index+1}</TableCell>
-            <TableCell align="center">{val.id}</TableCell>
-            <TableCell align="center">{val.username}</TableCell>
-            <TableCell align="left">{val.email}</TableCell>
-            {
-              this.state.isEdit===true&& this.state.editIndex===index
-              ? 
-              <TableCell align="center">
-              <select defaultValue={val.verif} className="form-control"  ref="verifikasi" style={{width:"100%"}} >
-                     <option>--- SELECT ACTION ---</option>
-                     <option value="0">Tidak Aktif</option>
-                     <option value="1">Aktif</option>
-                  </select>
-              {/* <input type="number" defaultValue={val.verif} onChange={()=>this.cekVerifikasi(val.verif)} className="form-control" ref="verifikasi" min={0} max={1}></input> */}
-              </TableCell>
-              :
-              <TableCell align="center">{val.verif === 1 ? 'Aktif' : 'Tidak Aktif'}</TableCell>
-            }
-            {this.state.isEdit===true&& this.state.editIndex===index? 
+            <TableCell align="center">{val.tanggal_pembelian}</TableCell>
+            <TableCell align="center">{val.product_name}</TableCell>
+            <TableCell align="center">{val.harga}</TableCell>
+            <TableCell align="center">{val.quantity_pembelian}</TableCell>
             <TableCell align="center">
-            <Button animated onClick={()=>this.onBtnEditSave(val.id)}>
-            <div className="CartBtnStyle">
-                SAVE
-              </div>
-            </Button>
-            <Button animated onClick={()=>this.onBtnCancel()}>
-            <div className="CartBtnStyle cancel">
-                CANCEL
-              </div>
-            </Button>
+            <img width="100px"src={`http://localhost:2000/${val.image}`} alt="gambar"></img>
             </TableCell>
-            :
-              <TableCell align="center">
-            <Button animated onClick={()=>this.onBtnEdit(val,index)}>
-            <div className="CartBtnStyle">
-                EDIT
-              </div>
-            </Button>
-            <Button animated onClick={()=>this.onBtnDelete(val.id)}>
-            <div className="CartBtnStyle delete">
-               DELETE
-              </div>
-            </Button>
-            </TableCell>
-            }
             
         </TableRow>
         )
@@ -241,30 +198,30 @@ class CustomPaginationActionsTable extends React.Component {
   }
     
   render() {
+    if(this.state.diclik){
+      return <Redirect to="/paymentuser"></Redirect>
+    }
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-if(this.props.role===1){
+if(this.props.role){
   return (
     <Paper className={classes.root} style={{marginBottom:"50px"}}>
       <div className={classes.tableWrapper}>
       <nav className="navbar justify-content-between">
-      <h1>Manage Payment</h1>
-      <form className="form-inline">
-        <input className="form-control mr-sm-2" ref="search" onChange={this.onBtnSearch} type="search" placeholder="Find username.." />
-      </form>
+      <h2>PL-{this.props.match.params.no_invoice} | {this.props.username}</h2>
+      
     </nav>
       <hr></hr>
-        <Table className={classes.table}>
-        <TableHead>
+      <Table className="table table-hover">
+          <TableHead className="thead-dark">
             <TableRow>
-            <TableCell align="center">Nomor</TableCell>
-                <TableCell align="center">Invoice Number</TableCell>
-                <TableCell align="center">Username</TableCell>
+                <TableCell align="center">Nomor</TableCell>
                 <TableCell align="center">Tanggal Pembelian</TableCell>
-                <TableCell align="center"> </TableCell>
-                <TableCell align="center">Bukti Pembayaran</TableCell>
-                <TableCell align="center">Status</TableCell>
+                <TableCell align="center">Nama Product</TableCell>
+                <TableCell align="center">Harga</TableCell>
+                <TableCell align="center">Total Pembelian</TableCell>
+                <TableCell align="center">Gambar Product</TableCell>
             </TableRow>     
         </TableHead>
           <TableBody>
@@ -295,8 +252,29 @@ if(this.props.role===1){
             </TableRow>
           </TableFooter>
         </Table>
+
+
+       
         
       </div>
+      <div className="row">
+            <div className="col-8 col-md-8">
+           
+                  <p className="totalHarga">
+                  Total Harga: 
+                  <CurrencyFormat value={this.getTotalHarga()} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
+                  </p>
+            </div>
+            <div className="col-4 col-md-4">
+            <Link to="/paymentuser">
+               <input type="button" style={{width:"50%"}} className="shoppingAgain" value="Back"></input>
+            </Link>     
+            <input onClick={this.cancelOrder} type="button" style={{width:"50%"}} className="shoppingAgain cancel" value="Cancel Order"></input>
+            </div>
+         
+        </div>
+
+
     </Paper>
     
   );
@@ -312,8 +290,9 @@ CustomPaginationActionsTable.propTypes = {
 };
 const mapStateToProp = (state)=>{
   return{
-     
-      role: state.user.role
+      username:state.user.username,
+      role: state.user.role,
+      id:state.user.id
      
   }
   

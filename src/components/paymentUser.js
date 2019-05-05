@@ -15,10 +15,12 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import axios from 'axios'
-import swal from 'sweetalert'
+
 import Button from '@material-ui/core/Button';
 import {connect} from 'react-redux'
-import PageNotFound from './404';
+
+import {  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 const actionsStyles = theme => ({
   root: {
@@ -118,7 +120,8 @@ class CustomPaginationActionsTable extends React.Component {
     page: 0,
     rowsPerPage: 5,
     isEdit: false,
-    editIndex:Number
+    editIndex:Number,
+    modal:false,rowsdetail:[]
   };
 
   handleChangePage = (event, page) => {
@@ -130,17 +133,19 @@ class CustomPaginationActionsTable extends React.Component {
   };
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
   componentDidMount(){
-    this.getAllUser()
+    this.getAllPendingPayment()
   }
   
-  getAllUser = ()=>{
-      axios.get("http://localhost:2000/payment/getallpaymentdata")
+  getAllPendingPayment = ()=>{
+      axios.get(`http://localhost:2000/payment/getpaymentstatus0/${this.props.id}`)
       .then((res)=>{
           this.setState({rows:res.data})
       })
       .catch((err)=>{
           console.log(err)
       })
+      
+
   }
 
   onBtnSearch = ()=>{
@@ -148,91 +153,47 @@ class CustomPaginationActionsTable extends React.Component {
     this.setState({searchRows:searching.toLowerCase()})
   }
   onBtnDelete = (id)=>{
-      axios.delete("http://localhost:2000/user/deleteuserbyid",{params:{id:id}})
-      .then((res)=>{
-        console.log(res.data)
-        this.getAllUser()
-      })
-      .catch((err)=>console.log(err))
-  }
-
-  onBtnEdit = (id,index)=>{
-    this.setState({isEdit:true,editIndex:index})
-  }
-
-  onBtnCancel=()=>{
-    this.setState({isEdit:false})
-  }  
-
-  onBtnEditSave = (id)=>{
-    var nilaiverifikasi = this.refs.verifikasi.value
-    axios.get("http://localhost:2000/user/editverifikasiuser?",{params:{id:id,verif:nilaiverifikasi}})
-    .then((res)=>{
-      console.log(res)
-      swal("OK","Sudah terupdate","success")
-      this.getAllUser()
-      this.setState({isEdit:false})
-    })
-    .catch((err)=>console.log(err))
+      
   }
 
   
 
+  
+
   renderJSX = ()=>{
-    var arrSearchAndFilter = this.state.rows.filter((val)=>{
-      return val.username.toLowerCase().includes(this.state.searchRows)
-      //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
-    })
+    // var arrSearchAndFilter = this.state.rows.filter((val)=>{
+    //   return val.no_invoice.toLowerCase().includes(this.state.searchRows)
+    //   //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
+    // })
     
-    var jsx = arrSearchAndFilter.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+    var jsx = this.state.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
     .map((val,index)=>{
         return (
             <TableRow>
             <TableCell align="center">{index+1}</TableCell>
-            <TableCell align="center">{val.id}</TableCell>
-            <TableCell align="center">{val.username}</TableCell>
-            <TableCell align="left">{val.email}</TableCell>
-            {
-              this.state.isEdit===true&& this.state.editIndex===index
-              ? 
-              <TableCell align="center">
-              <select defaultValue={val.verif} className="form-control"  ref="verifikasi" style={{width:"100%"}} >
-                     <option>--- SELECT ACTION ---</option>
-                     <option value="0">Tidak Aktif</option>
-                     <option value="1">Aktif</option>
-                  </select>
-              {/* <input type="number" defaultValue={val.verif} onChange={()=>this.cekVerifikasi(val.verif)} className="form-control" ref="verifikasi" min={0} max={1}></input> */}
-              </TableCell>
-              :
-              <TableCell align="center">{val.verif === 1 ? 'Aktif' : 'Tidak Aktif'}</TableCell>
-            }
-            {this.state.isEdit===true&& this.state.editIndex===index? 
+            <TableCell align="center">{val.no_invoice}</TableCell>
+            <TableCell align="center">{val.jumlah_item}</TableCell>
+            <TableCell align="center">{val.total}</TableCell>
             <TableCell align="center">
-            <Button animated onClick={()=>this.onBtnEditSave(val.id)}>
+            <Button animated>
+            <Link style={{textDecoration:'none'}} to={`/paymentuserdetail/${val.no_invoice}`}>
             <div className="CartBtnStyle">
-                SAVE
-              </div>
-            </Button>
-            <Button animated onClick={()=>this.onBtnCancel()}>
-            <div className="CartBtnStyle cancel">
-                CANCEL
-              </div>
+                Detail
+            </div>
+            </Link>
             </Button>
             </TableCell>
-            :
               <TableCell align="center">
-            <Button animated onClick={()=>this.onBtnEdit(val,index)}>
-            <div className="CartBtnStyle">
-                EDIT
+            <Button animated>
+            <Link style={{textDecoration:'none'}} to={`/payment/${val.no_invoice}`}>
+                <div className="CartBtnStyle">
+                UPLOAD
               </div>
+            </Link>
             </Button>
-            <Button animated onClick={()=>this.onBtnDelete(val.id)}>
-            <div className="CartBtnStyle delete">
-               DELETE
-              </div>
-            </Button>
+          
             </TableCell>
-            }
+            
             
         </TableRow>
         )
@@ -244,27 +205,27 @@ class CustomPaginationActionsTable extends React.Component {
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-if(this.props.role===1){
+  
+if(this.props.role && this.state.rows.length>0){
   return (
     <Paper className={classes.root} style={{marginBottom:"50px"}}>
       <div className={classes.tableWrapper}>
       <nav className="navbar justify-content-between">
-      <h1>Manage Payment</h1>
+      <h1>Pending Payment - {this.props.username}</h1>
       <form className="form-inline">
         <input className="form-control mr-sm-2" ref="search" onChange={this.onBtnSearch} type="search" placeholder="Find username.." />
       </form>
     </nav>
       <hr></hr>
-        <Table className={classes.table}>
-        <TableHead>
+      <Table className="table table-hover">
+          <TableHead className="thead-dark">
             <TableRow>
             <TableCell align="center">Nomor</TableCell>
-                <TableCell align="center">Invoice Number</TableCell>
-                <TableCell align="center">Username</TableCell>
-                <TableCell align="center">Tanggal Pembelian</TableCell>
-                <TableCell align="center"> </TableCell>
-                <TableCell align="center">Bukti Pembayaran</TableCell>
-                <TableCell align="center">Status</TableCell>
+                <TableCell align="center">Nomor Invoice</TableCell>
+                <TableCell align="center">Jumlah Pembelian</TableCell>
+                <TableCell align="center">Total Pembayaran</TableCell>
+                <TableCell align="center">Cek Detail</TableCell>
+                <TableCell align="center">Action</TableCell>
             </TableRow>     
         </TableHead>
           <TableBody>
@@ -295,13 +256,70 @@ if(this.props.role===1){
             </TableRow>
           </TableFooter>
         </Table>
+
+
+        <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+            <ModalHeader toggle={()=>this.setState({modal:false})}> </ModalHeader>
+            <ModalBody>
+
+            <Table className="table table-hover">
+          <TableHead className="thead-dark">
+            <TableRow>
+            <TableCell align="center">Nomor</TableCell>
+                <TableCell align="center">Nomor Invoice</TableCell>
+                <TableCell align="center">Jumlah Pembelian</TableCell>
+                <TableCell align="center">Total Pembayaran</TableCell>
+                <TableCell align="center">Cek Detail</TableCell>
+                <TableCell align="center">Action</TableCell>
+            </TableRow>     
+        </TableHead>
+          <TableBody>
+
+          {this.renderJSX()}
+        
+          </TableBody>
+          </Table>
+                
+              
+            </ModalBody>
+            <ModalFooter>
+                
+              <Button color="secondary" onClick={()=>this.setState({modal:false})}>Back</Button>
+            </ModalFooter>
+          </Modal>
         
       </div>
     </Paper>
     
   );
 }else{
-  return <PageNotFound></PageNotFound>
+  return (
+    <Paper className={classes.root} style={{marginBottom:"50px"}}>
+      <div className={classes.tableWrapper}>
+      <nav className="navbar justify-content-center">
+      <h2>Detail Transaction</h2>
+
+    </nav>
+      <hr></hr>
+      <div className="emptyCart">
+      There are no Pending Payment
+      </div>
+    
+      </div>
+      <div className="row">
+          <div className="col-9 col-md-9">
+         
+                
+          </div>
+          <div className="col-3 col-md-3">
+          <Link to="/product">
+             <input type="button" style={{width:"100%"}} className="shoppingAgain" value="Back Shopping"></input>
+          </Link>     
+          
+          </div>
+      </div>
+    </Paper>
+  )
 }
     
   }
@@ -312,8 +330,9 @@ CustomPaginationActionsTable.propTypes = {
 };
 const mapStateToProp = (state)=>{
   return{
-     
-      role: state.user.role
+      username:state.user.username,
+      role: state.user.role,
+      id:state.user.id
      
   }
   
