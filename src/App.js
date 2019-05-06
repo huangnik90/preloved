@@ -27,6 +27,7 @@ import PaymentUser from './components/paymentUser'
 import PaymentUserDetail from './components/paymentUserDetail'
 import ManagePayment from './components/managepayment'
 import ManagePaymentUser from './components/managepaymentUser'
+import PaymentHistory from './components/paymenthistory'
 //IMPORT SESUATU BIAR CANTIK
 import {keepLogin,cookieChecked,cartLength} from './1.actions'
 import Loader from 'react-loader-spinner'
@@ -53,6 +54,7 @@ class App extends Component {
           <ScrollTop>
              <Header/>
              <Switch> 
+                    <Route path='/paymenthistory' component={PaymentHistory}> </Route>
                     <Route path='/managepaymentuser/:no_invoice' component={ManagePaymentUser}></Route>
                     <Route path='/paymentuserdetail/:no_invoice' component={PaymentUserDetail}></Route>
                     <Route path='/paymentuser' component={PaymentUser}></Route>

@@ -144,6 +144,9 @@ class Header extends React.Component {
                  <NavLink href="/paymentuser"><i className="fab fa-gratipay" style={{color:"orange"}}></i>Payment </NavLink>
                 </NavItem>
                 <NavItem>
+                 <NavLink href="/paymenthistory"><i className="fab fa-gratipay" style={{color:"orange"}}></i>History Payment </NavLink>
+                </NavItem>
+                <NavItem>
                   <NavLink onClick={this.btnSignOut} href="/"><i className="fab fa-gratipay" style={{color:"orange"}}></i>Sign Out  </NavLink>
                 </NavItem>
               </Nav>

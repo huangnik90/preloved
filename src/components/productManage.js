@@ -276,8 +276,8 @@ class CustomPaginationActionsTable extends React.Component {
             <TableCell align="left">{val.product_name}</TableCell>
             <TableCell align="center">Rp. {val.price}</TableCell>
             <TableCell align="center">{val.discount}</TableCell>
-            <TableCell align="center">{val.category_id}</TableCell>
             <TableCell align="center">{val.grade}</TableCell>
+            <TableCell align="center">{val.quantity}</TableCell>
             <TableCell align="center">
                <img width="100px"src={`http://localhost:2000/${val.image}`} alt="gambar"></img>
             </TableCell>
@@ -374,8 +374,8 @@ class CustomPaginationActionsTable extends React.Component {
                     <TableCell align="center">Product Name</TableCell>
                     <TableCell align="center">Product Price</TableCell>
                     <TableCell align="center">Discount</TableCell>
-                    <TableCell align="center">Category</TableCell>
                     <TableCell align="center">Grade</TableCell>
+                    <TableCell align="center">Stock</TableCell>
                     <TableCell align="center">Image</TableCell>
                     <TableCell align="center">Product Action</TableCell>
                     <TableCell align="center">Description Action</TableCell>

@@ -131,11 +131,11 @@ class CustomPaginationActionsTable extends React.Component {
   };
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
   componentDidMount(){
-    this.getAllPaymentData()
+    this.getHistory()
   }
   
-  getAllPaymentData = ()=>{
-      axios.get("http://localhost:2000/payment/getallpaymentdata")
+  getHistory = ()=>{
+      axios.get(`http://localhost:2000/payment/history/${this.props.id}`)
       .then((res)=>{
           this.setState({rows:res.data})
       })
@@ -180,32 +180,26 @@ class CustomPaginationActionsTable extends React.Component {
   
 
   renderJSX = ()=>{
-    var arrSearchAndFilter = this.state.rows.filter((val)=>{
-      return val.username.toLowerCase().includes(this.state.searchRows)
-      //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
-    })
+    // var arrSearchAndFilter = this.state.rows.filter((val)=>{
+    //   return val.no_invoice.toLowerCase().includes(this.state.searchRows)
+    //   //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
+    // })
     
-    var jsx = arrSearchAndFilter.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+    var jsx = this.state.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
     .map((val,index)=>{
         return (
             <TableRow>
             <TableCell align="center">{index+1}</TableCell>
-            <TableCell align="center">{val.no_invoice}</TableCell>
-            <TableCell align="center">{val.username}</TableCell>
-            <TableCell align="center">{val.email}</TableCell>
-            <TableCell align="center">{val.jumlah_item}</TableCell>
-            <TableCell align="center">{val.total}</TableCell>
+            <TableCell align="center">PL-{val.no_invoice}</TableCell>
+            <TableCell align="center">{val.tanggal_pembelian}</TableCell>
+            <TableCell align="center">{val.product_name}</TableCell>
+            <TableCell align="center">{val.quantity_pembelian}</TableCell>
+            <TableCell align="center">{val.harga_diskon}</TableCell>
+            <TableCell align="center"><img alt="gambar" width="100px"src={`http://localhost:2000/${val.image}`}></img>
+            </TableCell>
             <TableCell align="center">{
               val.status_pembayaran ===1 ? <p style={{color:"blue"}}>Pending</p>:<p style={{color:"green"}}>Paid</p>
-              }</TableCell>
-            <Button animated>
-            <Link style={{textDecoration:'none'}} to={`/managepaymentuser/${val.no_invoice}`}>
-            <div className="CartBtnStyle">
-                Detail
-            </div>
-            </Link>
-            </Button>
-            
+              }</TableCell> 
         </TableRow>
         )
     })
@@ -216,14 +210,14 @@ class CustomPaginationActionsTable extends React.Component {
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-if(this.props.role===1){
+if(this.props.role===2){
   if(this.state.rows.length){
     return (
     
       <Paper className={classes.root} style={{marginBottom:"50px"}}>
         <div className={classes.tableWrapper}>
         <nav className="navbar justify-content-between">
-        <h1>Manage Payment</h1>
+        <h1>History Payment - {this.props.username}</h1>
         <form className="form-inline">
           <input className="form-control mr-sm-2" ref="search" onChange={this.onBtnSearch} type="search" placeholder="Find username.." />
         </form>
@@ -234,12 +228,13 @@ if(this.props.role===1){
               <TableRow>
               <TableCell align="center">Nomor</TableCell>
                   <TableCell align="center">Invoice Number</TableCell>
-                  <TableCell align="center">Username</TableCell>
-                  <TableCell align="center">Email</TableCell>
-                  <TableCell align="center">Jumlah Barang</TableCell>
-                  <TableCell align="center">Total Harga Belanja</TableCell>
+                  <TableCell align="center">Tanggal Pembelian</TableCell>
+                  <TableCell align="center">Nama Product</TableCell>
+                  <TableCell align="center">Jumlah Pembelian</TableCell>
+                  <TableCell align="center">Harga Pembelian</TableCell>
+                  <TableCell align="center">Gambar Product</TableCell>
                   <TableCell align="center">Status</TableCell>
-                  <TableCell align="center">Action</TableCell>
+                  
               </TableRow>     
           </TableHead>
             <TableBody>
@@ -317,8 +312,9 @@ CustomPaginationActionsTable.propTypes = {
 };
 const mapStateToProp = (state)=>{
   return{
-     
-      role: state.user.role
+      id:state.user.id,
+      role: state.user.role,
+      username:state.user.username
      
   }
   

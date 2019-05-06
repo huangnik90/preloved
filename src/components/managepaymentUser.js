@@ -162,15 +162,7 @@ class CustomPaginationActionsTable extends React.Component {
     })
 
   }
-  getTotalHarga = ()=>{
-    var harga=0
-    
-     for (var i=0;i<this.state.rows.length;i++){
-        harga += parseInt((this.state.rows[i].harga *this.state.rows[i].quantity_pembelian))
-     }
-   
-     return harga
-  }
+  
   cancelOrder=()=>{
     
     for (var i=0;i<this.state.rows.length;i++){
@@ -215,6 +207,30 @@ class CustomPaginationActionsTable extends React.Component {
     })
      return jsx;
   }
+  approvePayment=()=>{
+        axios.put(`http://localhost:2000/payment/approveorder/${this.props.match.params.no_invoice}`)
+        .then((res)=>{
+            swal("Ok",res.data,"success")
+            this.setState({diclik:true})
+        })
+        .catch((err)=>console.log(err))
+  }
+  getTotalHarga = ()=>{
+    var harga=0
+    
+     for (var i=0;i<this.state.rows.length;i++){
+        harga += parseInt((this.state.rows[i].harga *this.state.rows[i].quantity_pembelian))
+     }
+   
+     return harga
+  }
+  renderBtnJsx = ()=>{
+    var number=0
+    for (var i =0;i<this.state.rows.length;i++){
+      number = this.state.rows[i].status_pembayaran
+    }
+    return  number
+  }
     
   render() {
     if(this.state.diclik){
@@ -228,14 +244,14 @@ if(this.props.role){
     <Paper className={classes.root} style={{marginBottom:"50px"}}>
       <div className={classes.tableWrapper}>
       <nav className="navbar justify-content-between">
-      <h2>PL-{this.props.match.params.no_invoice} | {this.props.username}</h2>
+      <h2>PL-{this.props.match.params.no_invoice}</h2>
       
     </nav>
       <hr></hr>
       <div className="row">
             <div className="col-md-4 col-4">
             <h2>Payment Proof </h2>
-                                <hr/>
+             <hr/>
                 {this.renderGambarJSX()}
             </div>
      
@@ -297,10 +313,26 @@ if(this.props.role){
                   </p>
             </div>
             <div className="col-4 col-md-4">
+            {this.renderBtnJsx()===2?
+            <div>
+                <Link to="/managepayment">
+                <input type="button" style={{width:"50%"}} className="shoppingAgain" value="Back"></input>
+                </Link>  
+                <input onClick={this.cancelOrder} type="button" style={{width:"50%"}} className="shoppingAgain cancel" value="Cancel"></input>
+            </div>
+          :
+          <div>
             <Link to="/managepayment">
-               <input type="button" style={{width:"50%"}} className="shoppingAgain" value="Back"></input>
+               <input type="button" style={{width:"30%"}} className="shoppingAgain" value="Back"></input>
             </Link>     
-            <input onClick={this.cancelOrder} type="button" style={{width:"50%"}} className="shoppingAgain cancel" value="Cancel Order"></input>
+
+            <input type="button" style={{width:"30%"}} className="shoppingAgain" onClick={this.approvePayment} value="Approve"></input>
+            <input onClick={this.cancelOrder} type="button" style={{width:"30%"}} className="shoppingAgain cancel" value="Cancel"></input>
+          </div>
+          
+          }
+           
+           
             </div>
          
         </div>
