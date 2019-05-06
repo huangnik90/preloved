@@ -16,7 +16,6 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import axios from 'axios'
 import swal from 'sweetalert'
-import Button from '@material-ui/core/Button';
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import PageNotFound from './404';
@@ -180,12 +179,13 @@ class CustomPaginationActionsTable extends React.Component {
   
 
   renderJSX = ()=>{
-    // var arrSearchAndFilter = this.state.rows.filter((val)=>{
-    //   return val.no_invoice.toLowerCase().includes(this.state.searchRows)
-    //   //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
-    // })
+    var arrSearchAndFilter = this.state.rows.filter((val)=>{
+       return val.product_name.toLowerCase().includes(this.state.searchRows)
+      
+      //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
+    })
     
-    var jsx = this.state.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+    var jsx = arrSearchAndFilter.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
     .map((val,index)=>{
         return (
             <TableRow>
@@ -219,7 +219,7 @@ if(this.props.role===2){
         <nav className="navbar justify-content-between">
         <h1>History Payment - {this.props.username}</h1>
         <form className="form-inline">
-          <input className="form-control mr-sm-2" ref="search" onChange={this.onBtnSearch} type="search" placeholder="Find username.." />
+          <input className="form-control mr-sm-2" ref="search" onChange={this.onBtnSearch} type="search" placeholder="INVOICE NUMBER.." />
         </form>
       </nav>
         <hr></hr>

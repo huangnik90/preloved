@@ -180,9 +180,17 @@ class CustomPaginationActionsTable extends React.Component {
     
     var jsx = this.state.gambar.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
     .map((val,index)=>{
+      if(val.gambarupload){
         return (
-            <img width="100%"src={`http://localhost:2000/${val.gambarupload}`} alt="upload gambar"></img>
+          <img width="100%"src={`http://localhost:2000/${val.gambarupload}`} alt="upload gambar"></img>
+      )
+      }else{
+        return(
+          <div style={{margin:"0 auto",border:"1px solid black",paddingTop:"150px",textAlign:"center",height:"300px"}}>
+          GAMBAR PAYMENT NOT FOUND</div>
         )
+      }
+       
     })
      return jsx;
   }

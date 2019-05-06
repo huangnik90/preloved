@@ -68,31 +68,33 @@ class Payment extends React.Component{
    
     }
     Cancel=()=>{
-        // if(this.state.uploadPayment){
-            
-        // }
-        // for (var i=0;i<this.state.rows.length;i++){
-        //     axios.put(`http://localhost:2000/payment/cancelorder?no_invoice=${this.state.rows[i].no_invoice}&quantity=${this.state.rows[i].quantity_pembelian}&product_id=${this.state.rows[i].id_product}`)
-        //     .then((res)=>{
-        //         swal("success",res.data,"success")
-        //         this.setState({diclick:true})      
-        //     })
-        //     .catch((err)=>console.log(err))
-        //   }
+
+       if(this.state.rows[0].status_pembayaran===0){
+        for (var i=0;i<this.state.rows.length;i++){
+            axios.put(`http://localhost:2000/payment/cancelorder?no_invoice=${this.state.rows[i].no_invoice}&quantity=${this.state.rows[i].quantity_pembelian}&product_id=${this.state.rows[i].id_product}`)
+            .then((res)=>{
+                swal("success",res.data,"success")
+                this.setState({diclick:true})      
+            })
+            .catch((err)=>console.log(err))
+          }
+       }else{
+           
+       }
+    
     }
 
     render(){
         if(this.state.diclick){
             return <Redirect to='/'/>
         }
-       
             return(
                 <div className="container paymentBody">
                         <div className="row">
                             <div className="col-md-12 col-12">
-                            
-                            <Countdown autoStart="false" onComplete={this.Cancel}  date={parseInt(this.props.match.params.no_invoice)+4026946}>
                            
+                            <Countdown autoStart="false" onComplete={this.Cancel}  date={ parseInt(this.props.match.params.no_invoice)+250000}>
+                            
                             </Countdown>
                             </div>
                         </div>
