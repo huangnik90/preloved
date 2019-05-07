@@ -15,7 +15,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import axios from 'axios'
-
+import CurrencyFormat from 'react-currency-format';
 import Button from '@material-ui/core/Button';
 import {connect} from 'react-redux'
 
@@ -173,7 +173,9 @@ class CustomPaginationActionsTable extends React.Component {
             <TableCell align="center">{index+1}</TableCell>
             <TableCell align="center">{val.no_invoice}</TableCell>
             <TableCell align="center">{val.jumlah_item}</TableCell>
-            <TableCell align="center">{val.total}</TableCell>
+            <TableCell align="center">
+            <CurrencyFormat value={val.total} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
+            </TableCell>
             <TableCell align="center">
             <Button animated>
             <Link style={{textDecoration:'none'}} to={`/paymentuserdetail/${val.no_invoice}`}>

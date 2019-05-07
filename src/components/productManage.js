@@ -22,6 +22,8 @@ import {Link} from 'react-router-dom'
 import PageNotFound from './404';
 import {connect} from 'react-redux'
 import './../support/productManage.css'
+import CurrencyFormat from 'react-currency-format'
+import QueryString from 'query-string'
 
 const actionsStyles = theme => ({
   root: {
@@ -50,6 +52,9 @@ class TablePaginationActions extends React.Component {
       Math.max(0, Math.ceil(this.props.count / this.props.rowsPerPage) - 1),
     );
   };
+
+  
+
 
   render() {
     const { classes, count, page, rowsPerPage, theme } = this.props;
@@ -137,9 +142,44 @@ class CustomPaginationActionsTable extends React.Component {
   componentDidMount(){
     this.getAllProduct()
     this.getAllCategory()
-   
+    this.getDataUrl()
   }
+  getDataUrl = ()=>{
+    if(this.props.location.search){
+      var obj = QueryString.parse(this.props.location.search)
+      if(obj.query){
+        this.setState({searchRows:obj.query})
+      }if(obj.categoryProduct){
+        this.setState({filterCategory:obj.categoryProduct})
+      }
+    }
+  }
+  pushUrl = ()=>{
+    var newLink ='/ProductManage/search'
+    var params =[]
+    //categoryDropdown,search
+    if(this.refs.searchProduct.value){
+        params.push({
+            params:'query',
+            value:this.refs.searchProduct.value
+        })
+    }
+    if(this.refs.categorySearch.value){
+        params.push({
+            params:'categoryProduct',
+            value:this.refs.categorySearch.value
+        })
+    }
 
+    for (var i=0;i<params.length;i++){
+        if(i===0){
+            newLink += '?'+params[i].params+ '='+ params[i].value
+        }else{
+            newLink += '&'+params[i].params+ '='+ params[i].value
+        }
+    }
+    this.props.history.push(newLink)
+}
   getAllCategory =()=>{
     axios.get("http://localhost:2000/category/getallcategory")
     .then((res)=>{
@@ -244,6 +284,7 @@ class CustomPaginationActionsTable extends React.Component {
   }
   onBtnSearch = ()=>{
     var searchProduct = this.refs.searchProduct.value
+    this.pushUrl()
     this.setState({searchRows:searchProduct.toLowerCase()})
    }
    checkQtyEdit = () =>{
@@ -274,7 +315,10 @@ class CustomPaginationActionsTable extends React.Component {
             <TableRow>
             <TableCell align="center">{index+1}</TableCell>
             <TableCell align="left">{val.product_name}</TableCell>
-            <TableCell align="center">Rp. {val.price}</TableCell>
+            <TableCell align="center"> 
+            <CurrencyFormat value={val.price} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
+            
+            </TableCell>
             <TableCell align="center">{val.discount}</TableCell>
             <TableCell align="center">{val.grade}</TableCell>
             <TableCell align="center">{val.quantity}</TableCell>
@@ -358,11 +402,15 @@ class CustomPaginationActionsTable extends React.Component {
           <nav className="navbar justify-content-between">
           <h1>Manage Product</h1>
           <form className="form-inline">
-          <select onChange={()=>this.setState({filterCategory:this.refs.categorySearch.value})} ref="categorySearch" className="form-control mr-2">
+          <select onChange={()=>{
+            this.pushUrl()
+            this.setState({filterCategory:this.refs.categorySearch.value})
+          }} ref="categorySearch" className="form-control mr-2">
                                         <option value={5}>--- SELECT CATEGORY ---</option>
                                         {this.renderCategoryJSX()}
           </select>
-            <input className="form-control mr-sm-2" ref="searchProduct" type="search" onChange={this.onBtnSearch} placeholder="Find Product.." aria-label="Search" />
+            <input className="form-control mr-sm-2" ref="searchProduct" type="search" placeholder="Find Product.." aria-label="Search" />
+            <input type="button" value="Search" onClick={this.onBtnSearch} className="btn btn-warning"/>
 
           </form>
         </nav>

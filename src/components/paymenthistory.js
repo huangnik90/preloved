@@ -19,6 +19,9 @@ import swal from 'sweetalert'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import PageNotFound from './404';
+import QueryString from 'query-string'
+import CurrencyFormat from 'react-currency-format';
+
 
 const actionsStyles = theme => ({
   root: {
@@ -132,7 +135,35 @@ class CustomPaginationActionsTable extends React.Component {
   componentDidMount(){
     this.getHistory()
   }
-  
+  getDataUrl = ()=>{
+    if(this.props.location.search){
+      var obj = QueryString.parse(this.props.location.search)
+      if(obj.query){
+        this.setState({searchRows:obj.query})
+      }
+    }
+  }
+  pushUrl = ()=>{
+    var newLink ='/paymenthistory/search'
+    var params =[]
+    //categoryDropdown,search
+    if(this.refs.search.value){
+        params.push({
+            params:'query',
+            value:this.refs.search.value
+        })
+    }
+    
+
+    for (var i=0;i<params.length;i++){
+        if(i===0){
+            newLink += '?'+params[i].params+ '='+ params[i].value
+        }else{
+            newLink += '&'+params[i].params+ '='+ params[i].value
+        }
+    }
+    this.props.history.push(newLink)
+}
   getHistory = ()=>{
       axios.get(`http://localhost:2000/payment/history/${this.props.id}`)
       .then((res)=>{
@@ -145,6 +176,7 @@ class CustomPaginationActionsTable extends React.Component {
 
   onBtnSearch = ()=>{
     var searching = this.refs.search.value
+    this.pushUrl()
     this.setState({searchRows:searching.toLowerCase()})
   }
   onBtnDelete = (id)=>{
@@ -193,7 +225,9 @@ class CustomPaginationActionsTable extends React.Component {
             <TableCell align="center">{val.tanggal_pembelian}</TableCell>
             <TableCell align="center">{val.product_name}</TableCell>
             <TableCell align="center">{val.quantity_pembelian}</TableCell>
-            <TableCell align="center">{val.harga_diskon}</TableCell>
+            <TableCell align="center">
+            <CurrencyFormat value={val.harga_diskon*val.quantity_pembelian} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
+            </TableCell>
             <TableCell align="center"><img alt="gambar" width="100px"src={`http://localhost:2000/${val.image}`}></img>
             </TableCell>
             <TableCell align="center">{
@@ -218,7 +252,10 @@ if(this.props.role===2){
         <nav className="navbar justify-content-between">
         <h1>History Payment - {this.props.username}</h1>
         <form className="form-inline">
-          <input className="form-control mr-sm-2" ref="search" onChange={this.onBtnSearch} type="search" placeholder="INVOICE NUMBER.." />
+          <input className="form-control mr-sm-2" ref="search" type="search" placeholder="INVOICE NUMBER.." />
+          
+                <input type="button" value="Search" onClick={this.onBtnSearch} className="btn btn-warning"/>
+                
         </form>
       </nav>
         <hr></hr>
@@ -230,7 +267,7 @@ if(this.props.role===2){
                   <TableCell align="center">Tanggal Pembelian</TableCell>
                   <TableCell align="center">Nama Product</TableCell>
                   <TableCell align="center">Jumlah Pembelian</TableCell>
-                  <TableCell align="center">Harga Pembelian</TableCell>
+                  <TableCell align="center">Total Harga</TableCell>
                   <TableCell align="center">Gambar Product</TableCell>
                   <TableCell align="center">Status</TableCell>
                   

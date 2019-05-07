@@ -21,6 +21,7 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import PageNotFound from './404';
 import './../support/adminpayment.css'
+import CurrencyFormat from 'react-currency-format';
 
 const actionsStyles = theme => ({
   root: {
@@ -195,7 +196,10 @@ class CustomPaginationActionsTable extends React.Component {
             <TableCell align="center">{val.username}</TableCell>
             <TableCell align="center">{val.email}</TableCell>
             <TableCell align="center">{val.jumlah_item}</TableCell>
-            <TableCell align="center">{val.total}</TableCell>
+            <TableCell align="center">
+            <CurrencyFormat value={val.total} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
+            
+            </TableCell>
             <TableCell align="center">{
               val.status_pembayaran ===0 ? <p style={{color:"red"}}>Not yet paid</p>:val.status_pembayaran===1? <p style={{color:"blue"}}>Pending</p>:<p style={{color:"green"}}>Paid</p>
               }</TableCell>

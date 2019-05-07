@@ -194,7 +194,7 @@ pushUrl = ()=>{
                              </div>
                              <div className="col-6 col-md-6">
                              <div className="addcart">
-                                 <p  onClick={()=>this.addCart(val.id)}>BUY</p>
+                                 <p  onClick={()=>this.addCart(val.id)}>Buy</p>
                              </div>
                              </div>
                         </div>
