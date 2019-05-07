@@ -4,7 +4,8 @@ import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } f
 import '../support/header.css'
 import {connect} from 'react-redux'
 import kookie from 'universal-cookie'
-import {resetUser,cartLength} from '../1.actions'
+import {resetUser,cartLength,notificationLength} from '../1.actions'
+import Axios from 'axios';
 
 var kokie = new kookie()
 
@@ -28,18 +29,24 @@ class Header extends React.Component {
     this.props.resetUser()
     
   }
+  notificationReset=()=>{
+      Axios.put('http://localhost:2000/payment/setnotification')
+      .then((res)=>{
+        this.props.notificationLength()
+      })
+      .catch((err)=>console.log(err))
+  }
   
 
   render() {
     if (this.props.idUser ===0 && this.props.role===0){
       return (
         <div>
-          
           <Navbar color="faded" light>
             <NavbarBrand href="/" className="mr-auto">
             <div className="mainLogo">
                 <img alt="Logo gambar"style={{float:"left",marginRight:"4.2px"}} width="25px" height="25px" src="https://pbs.twimg.com/profile_images/945929569156190208/VfDDyBm4_400x400.jpg"/>
-                <h1 style={{fontSize:"20px"}}> PRELOVED</h1> 
+                <h1 style={{fontSize:"20px"}}>PRELOVED</h1> 
             </div>
             <div className="navbar2" style={{style:"pointer"}}>
             <h1 className="notification"> {this.props.cart} </h1><i class="fas fa-shopping-basket"></i>
@@ -73,14 +80,19 @@ class Header extends React.Component {
                 <img alt="Logo gambar"style={{float:"left",marginRight:"4.2px"}} width="25px" height="25px" src="https://pbs.twimg.com/profile_images/945929569156190208/VfDDyBm4_400x400.jpg"/>
                 <h1 style={{fontSize:"20px"}}> PRELOVED</h1> 
             </div>
-            <div className="navbar2" style={{style:"pointer"}}>
-                <Link to="/cart" style={{color:"inherit",textDecoration:"none"}}>
-                <h1 className="notification"> {this.props.cart}  </h1><i class="fas fa-shopping-basket"></i>
+            <div className="navbar2">
+                <Link to="/managepayment" style={{color:"inherit",textDecoration:"none"}}>
+                  <h1 className="notification2"> {this.props.notif}</h1><i onClick={this.notificationReset} class="far fa-bell"></i>
+                </Link> 
+               
+            </div>
+            <div className="navbar3">
+            <Link to="/cart" style={{color:"inherit",textDecoration:"none"}}>
+                  <h1 className="notification"> {this.props.cart} </h1><i class="fas fa-shopping-basket"></i>
                 </Link> 
             </div>
             </NavbarBrand>
               
-            
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse isOpen={!this.state.collapsed} navbar>
               <Nav navbar>
@@ -100,7 +112,6 @@ class Header extends React.Component {
                 <NavItem>
                  <NavLink href="/managepayment"> <i className="fab fa-gratipay" style={{color:"orange"}}></i>Manage Payment</NavLink>
                 </NavItem>
-          
                 <NavItem>
                   <NavLink onClick={this.btnSignOut} href="/"><i className="fab fa-gratipay" style={{color:"orange"}}></i>Sign Out</NavLink>
                 </NavItem>
@@ -167,8 +178,9 @@ const mapStateToProp = (state)=>{
       idUser : state.user.id,
       role: state.user.role,
       verif: state.user.verif,
-      cart :state.cart.cartLength
+      cart :state.cart.cartLength,
+      notif:state.notif.notif
   }
   
 }
-export default connect(mapStateToProp,{resetUser,cartLength}) (Header);
+export default connect(mapStateToProp,{resetUser,cartLength,notificationLength}) (Header);

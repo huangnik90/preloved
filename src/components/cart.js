@@ -20,7 +20,7 @@ import Button from '@material-ui/core/Button';
 import {connect } from 'react-redux'
 import {Link,Redirect} from 'react-router-dom'
 import PageNotFound from './404';
-import {cartLength} from '../1.actions'
+import {cartLength, notificationLength} from '../1.actions'
 import './../support/cart.css'
 import CurrencyFormat from 'react-currency-format';
 import Moment from 'moment'
@@ -225,6 +225,7 @@ class CustomPaginationActionsTable extends React.Component {
        .then((res)=>{
           swal("Preloved Success",res.data,"success")
           this.props.cartLength(this.props.id)
+          this.props.notificationLength()
           this.setState({udahdiklik : true})
        })
        .catch((err)=>console.log(err))
@@ -431,4 +432,4 @@ const mapStateToProp = (state)=>{
   }
   
 }
-export default connect (mapStateToProp,{cartLength})(withStyles(styles)(CustomPaginationActionsTable)) ;
+export default connect (mapStateToProp,{cartLength,notificationLength})(withStyles(styles)(CustomPaginationActionsTable)) ;

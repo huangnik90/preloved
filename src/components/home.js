@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom'
 import Slider from "react-slick";
 import Axios from 'axios';
 import Testimoni from './testimoni'
-import {cartLength} from './../1.actions'
+import {cartLength,notificationLength} from './../1.actions'
 import {connect} from 'react-redux'
 
 class Home extends React.Component{
@@ -14,9 +14,13 @@ class Home extends React.Component{
     componentDidMount(){
       this.getLatestProduct()
       this.getCart()
+      this.getNotification()
     }
     getCart=()=>{
         return this.props.cartLength(this.props.id) 
+    }
+    getNotification =()=>{
+      return this.props.notificationLength()
     }
     getLatestProduct = ()=>{
       Axios.get(`http://localhost:2000/product/getlatestproduct`)
@@ -126,4 +130,4 @@ const mapStateToProp = (state)=>{
   }    
 }
 
-export default connect(mapStateToProp,{cartLength})(Home);
+export default connect(mapStateToProp,{cartLength,notificationLength})(Home);

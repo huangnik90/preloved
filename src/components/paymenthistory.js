@@ -180,8 +180,7 @@ class CustomPaginationActionsTable extends React.Component {
 
   renderJSX = ()=>{
     var arrSearchAndFilter = this.state.rows.filter((val)=>{
-       return val.product_name.toLowerCase().includes(this.state.searchRows)
-      
+       return val.no_invoice.toString().toLowerCase().includes(this.state.searchRows)
       //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
     })
     

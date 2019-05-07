@@ -29,7 +29,7 @@ import ManagePayment from './components/managepayment'
 import ManagePaymentUser from './components/managepaymentUser'
 import PaymentHistory from './components/paymenthistory'
 //IMPORT SESUATU BIAR CANTIK
-import {keepLogin,cookieChecked,cartLength} from './1.actions'
+import {keepLogin,cookieChecked,cartLength,notificationLength} from './1.actions'
 import Loader from 'react-loader-spinner'
 
 
@@ -41,6 +41,7 @@ class App extends Component {
     if (idUser!== undefined){
       this.props.keepLogin(idUser)
       this.props.cartLength(idUser)
+      this.props.notificationLength()
     }else{
       this.props.cookieChecked()
     }
@@ -97,4 +98,4 @@ const mapStateToProps = (state)=>{
 
   }
 }
-export default withRouter(connect(mapStateToProps,{keepLogin,cookieChecked,cartLength}) (App));
+export default withRouter(connect(mapStateToProps,{notificationLength,keepLogin,cookieChecked,cartLength}) (App));

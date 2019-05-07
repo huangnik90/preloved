@@ -1,11 +1,11 @@
 import axios from "axios";
 
-export const cartLength = (iduser)=>{
+export const notificationLength = ()=>{
     return(dispatch)=>{
-        axios.get("http://localhost:2000/cart/getcartlength?id="+iduser)
+        axios.get("http://localhost:2000/payment/notification")
         .then((res)=>{
             dispatch({
-                type:"CART_LENGTH",
+                type:"NOTIFICATION",
                 payload:res.data.length
             })
         })
