@@ -18,6 +18,7 @@ import axios from 'axios'
 import swal from 'sweetalert'
 import Button from '@material-ui/core/Button';
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
 import PageNotFound from './404';
 
 const actionsStyles = theme => ({
@@ -294,6 +295,18 @@ if(this.props.role===1){
             </TableRow>
           </TableFooter>
         </Table>
+        <div className="row">
+            <div className="col-8 col-md-8">
+           
+                 
+            </div>
+            <div className="col-4 col-md-4">
+            <Link to="/">
+               <input type="button" style={{width:"100%"}} className="shoppingAgain" value="Back"></input>
+            </Link>     
+            
+            </div>
+        </div>
         
       </div>
     </Paper>

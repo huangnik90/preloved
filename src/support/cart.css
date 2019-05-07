@@ -1,5 +1,5 @@
 .shoppingAgain {
-    border: 2.8px solid #333333;
+    border: 1.5px solid #333333;
     color: #333333;
     font-size: 15px;
     letter-spacing: 0.1rem;
@@ -9,10 +9,10 @@
     height: 80px;
     text-align: center;
     font-family: 'Dosis', sans-serif;
-   float: left;
+    float: left;
 }
 .totalHarga {
-    border: 2.8px solid #333333;
+    border: 1.5px solid #333333;
     color: #333333;
     font-size: 15px;
     letter-spacing: 0.1rem;

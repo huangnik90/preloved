@@ -20,6 +20,7 @@ import Button from '@material-ui/core/Button';
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import PageNotFound from './404';
+import './../support/adminpayment.css'
 
 const actionsStyles = theme => ({
   root: {
@@ -197,7 +198,6 @@ class CustomPaginationActionsTable extends React.Component {
             <TableCell align="center">{val.total}</TableCell>
             <TableCell align="center">{
               val.status_pembayaran ===0 ? <p style={{color:"red"}}>Not yet paid</p>:val.status_pembayaran===1? <p style={{color:"blue"}}>Pending</p>:<p style={{color:"green"}}>Paid</p>
-
               }</TableCell>
             <Button animated>
             <Link style={{textDecoration:'none'}} to={`/managepaymentuser/${val.no_invoice}`}>
@@ -268,10 +268,22 @@ if(this.props.role===1){
                   onChangeRowsPerPage={this.handleChangeRowsPerPage}
                   ActionsComponent={TablePaginationActionsWrapped}
                 />
+                
               </TableRow>
             </TableFooter>
           </Table>
-          
+          <div className="row">
+            <div className="col-8 col-md-8">
+           
+                 
+            </div>
+            <div className="col-4 col-md-4">
+            <Link to="/">
+               <input type="button" style={{width:"100%"}} className="shoppingAgain" value="Back"></input>
+            </Link>     
+            
+            </div>
+        </div>
         </div>
       </Paper>
       
