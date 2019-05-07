@@ -39,9 +39,9 @@ width: 120px;
     font-size: 15px;
     position: absolute;
     right: 120px;
-    top: 8px;
+    top: 10px;
     text-align: center;
-    border-radius: 20px;
+
 }
 .fa-bell{
     position: absolute;

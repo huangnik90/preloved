@@ -186,8 +186,12 @@ class CustomPaginationActionsTable extends React.Component {
       )
       }else{
         return(
-          <div style={{margin:"0 auto",border:"1px solid black",paddingTop:"150px",textAlign:"center",height:"300px"}}>
-          GAMBAR PAYMENT NOT FOUND</div>
+          <div style={{margin:"0 auto",border:"1px solid black",paddingTop:"210px",textAlign:"center",height:"450px"}}>
+          
+
+          <i class="fas fa-question"></i> 
+          
+          </div>
         )
       }
        

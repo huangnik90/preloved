@@ -186,15 +186,23 @@ pushUrl = ()=>{
                         }
                         <div className="card-body">
                         
-                        <div className="kategori">
+                        <div className="row">
+                             <div className="col-6 col-md-6">
+                             <div className="kategori">
                         <p>Grade: {val.grade}</p>
                         </div> 
+                             </div>
+                             <div className="col-6 col-md-6">
+                             <div className="addcart">
+                                 <p  onClick={()=>this.addCart(val.id)}>BUY</p>
+                             </div>
+                             </div>
+                        </div>
+                        
                         <div className="quantity">
                         <p>Available: {val.quantity} Unit(s)</p>
                         </div> 
-                        <div className="addcart">
-                              <i onClick={()=>this.addCart(val.id)} class="fas fa-shopping-basket"></i>
-                        </div>
+                      
                             <p className="card-text">{val.desc}</p>
                         {  
                              val.discount>0?
@@ -203,7 +211,9 @@ pushUrl = ()=>{
                             <p className="card-text" style={{marginLeft:"5px",display:"inline",color:"black",fontWeight:"500"}}>Rp. {val.price - (val.price*val.discount/100)}</p>
                             <hr/>
                             <div>
-                             <h3>{val.product_name}</h3>
+                             <h5>{val.product_name}</h5>
+                             <hr></hr>
+                             
                             </div>
                         </div>
         
