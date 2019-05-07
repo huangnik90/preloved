@@ -1,5 +1,8 @@
 import React from 'react'
 import './../../src/support/testimony.css'
+import Image1 from './../support/img/p1.png' 
+import Image2 from './../support/img/p2.png'
+import Image3 from './../support/img/p3.png'
 
 class Testimoni extends React.Component{
     render(){
@@ -9,8 +12,8 @@ class Testimoni extends React.Component{
         <div class="row">
           <div class="col">
             <div class="testimonial">
-              <img src="https://images.unsplash.com/photo-1547637916-48ceb6f8d505?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=330&q=80" alt=""/>
-              <div class="name">Audrey</div>
+              <img src={Image1} alt=""/>
+              <div class="name">Mike Thomson</div>
               <div class="stars">
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
@@ -29,8 +32,8 @@ class Testimoni extends React.Component{
 
           <div class="col">
             <div class="testimonial">
-              <img src="https://images.pexels.com/photos/1391498/pexels-photo-1391498.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt=""/>
-              <div class="name">Ling</div>
+              <img src={Image2} alt=""/>
+              <div class="name">Audrey</div>
               <div class="stars">
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
@@ -47,7 +50,7 @@ class Testimoni extends React.Component{
 
           <div class="col">
             <div class="testimonial">
-              <img src="https://images.unsplash.com/photo-1551310343-e6ff4e4cb2de?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80" alt=""/>
+              <img src={Image3} alt=""/>
               <div class="name">Michelle Jordey</div>
               <div class="stars">
                 <i class="fas fa-star"></i>

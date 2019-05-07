@@ -28,8 +28,9 @@
     padding: 30px;
   }
   .testimonial img{
-    width: 100%;
+    width: 60%;
     transition: transform .9s;
+    border-radius: 500px;
   }
   .testimonial img:hover{
     transform: scale(1.2);

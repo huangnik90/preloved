@@ -1,6 +1,5 @@
 .mainLogo{
 float: left;
-border-right: 2px solid black;
 width: 120px;
 
 }
@@ -30,28 +29,28 @@ width: 120px;
 .notification{
     font-size: 15px;
     position: absolute;
-    left: 168px;
-    top: 6px;
+    right: 95px;
+    top: 8px;
     text-align: center;
-    border-radius: 20px;
+    
 }
 .notification2{
     font-size: 15px;
     position: absolute;
-    right: 120px;
-    top: 10px;
+    right: 135px;
+    top:8px;
     text-align: center;
 
 }
 .fa-bell{
     position: absolute;
     top:20px;
-    right:100px;
+    right:140px;
 }
 .fa-shopping-basket{
     position: absolute;
-    top:15px;
-    left:145px;
+    top:20px;
+    right:100px;
 }
 .fab .fa-gratipay{
     color: orange;
