@@ -253,7 +253,10 @@ class CustomPaginationActionsTable extends React.Component {
             <TableCell align="center">{index+1}</TableCell>
            
             <TableCell align="center">{val.product_name}</TableCell>
-            <TableCell align="center">Rp. {val.price - (val.price*val.discount/100)}</TableCell>
+            <TableCell align="center">
+            <CurrencyFormat value={val.price - (val.price*val.discount/100)} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
+            
+            </TableCell>
             <TableCell align="center">{val.cart_quantity}</TableCell>
             <TableCell align="center"><img alt="gambar" width="100px"src={`http://localhost:2000/${val.image}`}></img></TableCell>
             {
@@ -286,12 +289,12 @@ class CustomPaginationActionsTable extends React.Component {
               <TableCell align="center">
             <Button animated onClick={()=>this.onBtnEdit(val,index)}>
             <div className="CartBtnStyle">
-                EDIT
+                EXTRA NOTE
               </div>
             </Button>
             <Button animated onClick={()=>this.onBtnDelete(val.id,val.user_id,val.cart_quantity,val.product_id)}>
               <div className="CartBtnStyle delete" >
-                Delete
+                Delete 
               </div>
             </Button>
             </TableCell>
@@ -328,7 +331,7 @@ if(this.props.role===1 || this.props.role===2){
                   <TableCell align="center">Price (after discount)</TableCell>
                   <TableCell align="center">Total Purchase</TableCell>
                   <TableCell align="center">Image Product</TableCell>
-                  <TableCell align="center">Pesan untuk Penjual</TableCell>
+                  <TableCell align="center">Extra Note</TableCell>
                   <TableCell align="center">Action</TableCell>
               </TableRow>     
           </TableHead>

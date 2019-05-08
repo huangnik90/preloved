@@ -198,7 +198,7 @@ class CustomPaginationActionsTable extends React.Component {
         return (
             <TableRow>
             <TableCell align="center">{index+1}</TableCell>
-            <TableCell align="center">{val.no_invoice}</TableCell>
+            <TableCell align="center">PL-{val.no_invoice}</TableCell>
             <TableCell align="center">{val.username}</TableCell>
             <TableCell align="center">{val.email}</TableCell>
             <TableCell align="center">{val.jumlah_item}</TableCell>
@@ -206,9 +206,12 @@ class CustomPaginationActionsTable extends React.Component {
             <CurrencyFormat value={val.total} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
             
             </TableCell>
-            <TableCell align="center">{
-              val.status_pembayaran ===0 ? <p style={{color:"red"}}>Not yet paid</p>:val.status_pembayaran===1? <p style={{color:"blue"}}>Pending</p>:<p style={{color:"green"}}>Paid</p>
-              }</TableCell>
+            <TableCell align="center">
+            {
+              parseInt(val.status_pembayaran) ===0 ? <p style={{color:"red"}}>Not yet paid</p>:parseInt(val.status_pembayaran)===1? <p style={{color:"blue"}}>Pending</p>:<p style={{color:"green"}}>Paid</p>
+              }
+           
+           </TableCell>
             <Button animated>
             <Link style={{textDecoration:'none'}} to={`/managepaymentuser/${val.no_invoice}`}>
             <div className="CartBtnStyle">
@@ -277,7 +280,7 @@ if(this.props.role===1){
         <nav className="navbar justify-content-between">
         <h1>Manage Payment</h1>
         <form className="form-inline">
-        <div>
+        <div style={{marginRight:"10px"}}>
                         <select ref="statusPayment" onChange={this.statusPaymentSearch} className="form-control">
                         <option value={4}>--STATUS PAYMENT--</option>
                         <option value={0}>NOT YET PAID</option>

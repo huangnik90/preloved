@@ -91,11 +91,12 @@ class Payment extends React.Component{
             return(
                 <div className="container paymentBody">
                         <div className="row">
-                            <div className="col-md-12 col-12">
-                           
+                            <div className="col-md-12 col-12" style={{color:"orange",fontFamily:"Dosis",textAlign:"center",fontSize:"40px"}}>
+
                             <Countdown onComplete={()=>this.Cancel()}  date={ parseInt(this.props.match.params.no_invoice)+250000}>
                             
                             </Countdown>
+                            <hr></hr>
                             </div>
                         </div>
                     
@@ -106,7 +107,10 @@ class Payment extends React.Component{
                                 <hr/>
                             
                                 <h2>
+                                <center>
                                 <CurrencyFormat value={this.getTotalHarga()} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
+
+                                </center>
                                 </h2>
                                         <img width="100%" src={this.state.gambar} alt="gambar upload"></img>
                                         
