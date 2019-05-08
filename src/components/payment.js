@@ -93,7 +93,7 @@ class Payment extends React.Component{
                         <div className="row">
                             <div className="col-md-12 col-12">
                            
-                            <Countdown autoStart="false" onComplete={this.Cancel}  date={ parseInt(this.props.match.params.no_invoice)+250000}>
+                            <Countdown onComplete={()=>this.Cancel()}  date={ parseInt(this.props.match.params.no_invoice)+250000}>
                             
                             </Countdown>
                             </div>

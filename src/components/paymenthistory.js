@@ -21,7 +21,7 @@ import {Link} from 'react-router-dom'
 import PageNotFound from './404';
 import QueryString from 'query-string'
 import CurrencyFormat from 'react-currency-format';
-
+import DatePicker from 'react-date-picker'
 
 const actionsStyles = theme => ({
   root: {
@@ -121,8 +121,9 @@ class CustomPaginationActionsTable extends React.Component {
     page: 0,
     rowsPerPage: 10,
     isEdit: false,
-    editIndex:Number
+    editIndex:Number,date: new Date()
   };
+  onChange = (date) => this.setState({ date })
 
   handleChangePage = (event, page) => {
     this.setState({ page });
@@ -212,7 +213,8 @@ class CustomPaginationActionsTable extends React.Component {
 
   renderJSX = ()=>{
     var arrSearchAndFilter = this.state.rows.filter((val)=>{
-       return val.no_invoice.toString().toLowerCase().includes(this.state.searchRows)
+       return val.no_invoice.toString().toLowerCase().includes(this.state.searchRows) 
+      //  && (val.tanggal_pembelian.includes(this.state.date))
       //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
     })
     
@@ -252,9 +254,14 @@ if(this.props.role===2){
         <nav className="navbar justify-content-between">
         <h1>History Payment - {this.props.username}</h1>
         <form className="form-inline">
-          <input className="form-control mr-sm-2" ref="search" type="search" placeholder="INVOICE NUMBER.." />
-          
-                <input type="button" value="Search" onClick={this.onBtnSearch} className="btn btn-warning"/>
+       
+        <DatePicker
+          format="y-MM-d"
+          onChange={this.onChange}
+          value={this.state.date} className="form-control"/>
+      
+          <input className="form-control mr-sm-2" ref="search" type="search" placeholder="INVOICE NUMBER.." /> 
+          <input type="button" value="Search" onClick={this.onBtnSearch} className="btn btn-warning"/>
                 
         </form>
       </nav>

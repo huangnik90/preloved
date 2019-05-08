@@ -18,7 +18,7 @@ import axios from 'axios'
 import CurrencyFormat from 'react-currency-format';
 import Button from '@material-ui/core/Button';
 import {connect} from 'react-redux'
-
+import QueryString from 'query-string'
 import {  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
@@ -134,6 +134,7 @@ class CustomPaginationActionsTable extends React.Component {
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
   componentDidMount(){
     this.getAllPendingPayment()
+    this.getDataUrl()
   }
   
   getAllPendingPayment = ()=>{
@@ -149,29 +150,55 @@ class CustomPaginationActionsTable extends React.Component {
   }
 
   onBtnSearch = ()=>{
+    
     var searching = this.refs.search.value
+    this.pushUrl()
     this.setState({searchRows:searching.toLowerCase()})
   }
   onBtnDelete = (id)=>{
       
   }
-
-  
-
-  
-
-  renderJSX = ()=>{
-    // var arrSearchAndFilter = this.state.rows.filter((val)=>{
-    //   return val.no_invoice.toLowerCase().includes(this.state.searchRows)
-    //   //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
-    // })
+  getDataUrl = ()=>{
+    if(this.props.location.search){
+      var obj = QueryString.parse(this.props.location.search)
+      if(obj.query){
+        this.setState({searchRows:obj.query})
+      }
+    }
+  }
+  pushUrl = ()=>{
+    var newLink ='/paymentuser/search'
+    var params =[]
+    //categoryDropdown,search
+    if(this.refs.search.value){
+        params.push({
+            params:'query',
+            value:this.refs.search.value
+        })
+    }
     
-    var jsx = this.state.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+
+    for (var i=0;i<params.length;i++){
+        if(i===0){
+            newLink += '?'+params[i].params+ '='+ params[i].value
+        }else{
+            newLink += '&'+params[i].params+ '='+ params[i].value
+        }
+    }
+    this.props.history.push(newLink)
+}
+  renderJSX = ()=>{
+    var arrSearchAndFilter = this.state.rows.filter((val)=>{
+      return val.no_invoice.toString().includes(this.state.searchRows)
+      //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
+    })
+    
+    var jsx = arrSearchAndFilter.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
     .map((val,index)=>{
         return (
             <TableRow>
             <TableCell align="center">{index+1}</TableCell>
-            <TableCell align="center">{val.no_invoice}</TableCell>
+            <TableCell align="center">PL-{val.no_invoice}</TableCell>
             <TableCell align="center">{val.jumlah_item}</TableCell>
             <TableCell align="center">
             <CurrencyFormat value={val.total} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
@@ -215,7 +242,7 @@ if(this.props.role && this.state.rows.length>0){
       <nav className="navbar justify-content-between">
       <h1>Pending Payment - {this.props.username}</h1>
       <form className="form-inline">
-        <input className="form-control mr-sm-2" ref="search" onChange={this.onBtnSearch} type="search" placeholder="Find username.." />
+        <input className="form-control mr-sm-2" ref="search" onChange={this.onBtnSearch} type="search" placeholder="NO INVOICE..." />
       </form>
     </nav>
       <hr></hr>
@@ -227,6 +254,7 @@ if(this.props.role && this.state.rows.length>0){
                 <TableCell align="center">Nomor Invoice</TableCell>
                 <TableCell align="center">Jumlah Pembelian</TableCell>
                 <TableCell align="center">Total Pembayaran</TableCell>
+    
                 <TableCell align="center">Cek Detail</TableCell>
                 <TableCell align="center">Action</TableCell>
             </TableRow>     

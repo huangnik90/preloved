@@ -20,6 +20,8 @@ import Button from '@material-ui/core/Button';
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import PageNotFound from './404';
+import QueryString from 'query-string'
+
 
 const actionsStyles = theme => ({
   root: {
@@ -132,8 +134,38 @@ class CustomPaginationActionsTable extends React.Component {
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
   componentDidMount(){
     this.getAllUser()
+    this.getDataUrl()
   }
-  
+  getDataUrl = ()=>{
+    if(this.props.location.search){
+      var obj = QueryString.parse(this.props.location.search)
+      if(obj.query){
+        this.setState({searchRows:obj.query})
+      }
+    }
+  }
+  pushUrl = ()=>{
+    var newLink ='/manageuser/search'
+    var params =[]
+    //categoryDropdown,search
+    if(this.refs.search.value){
+        params.push({
+            params:'query',
+            value:this.refs.search.value
+        })
+    }
+    
+
+    for (var i=0;i<params.length;i++){
+        if(i===0){
+            newLink += '?'+params[i].params+ '='+ params[i].value
+        }else{
+            newLink += '&'+params[i].params+ '='+ params[i].value
+        }
+    }
+    this.props.history.push(newLink)
+}
+
   getAllUser = ()=>{
       axios.get("http://localhost:2000/user/getalluser")
       .then((res)=>{
@@ -146,6 +178,7 @@ class CustomPaginationActionsTable extends React.Component {
 
   onBtnSearch = ()=>{
     var searching = this.refs.search.value
+    this.pushUrl()
     this.setState({searchRows:searching.toLowerCase()})
   }
   onBtnDelete = (id)=>{

@@ -22,6 +22,8 @@ import {Link} from 'react-router-dom'
 import PageNotFound from './404';
 import './../support/adminpayment.css'
 import CurrencyFormat from 'react-currency-format';
+import QueryString from 'query-string'
+
 
 const actionsStyles = theme => ({
   root: {
@@ -121,7 +123,7 @@ class CustomPaginationActionsTable extends React.Component {
     page: 0,
     rowsPerPage: 10,
     isEdit: false,
-    editIndex:Number
+    editIndex:Number,filterStatusPembayaran:4
   };
 
   handleChangePage = (event, page) => {
@@ -134,6 +136,7 @@ class CustomPaginationActionsTable extends React.Component {
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
   componentDidMount(){
     this.getAllPaymentData()
+    this.getDataUrl()
   }
   
   getAllPaymentData = ()=>{
@@ -148,8 +151,10 @@ class CustomPaginationActionsTable extends React.Component {
 
   onBtnSearch = ()=>{
     var searching = this.refs.search.value
+    this.pushUrl()
     this.setState({searchRows:searching.toLowerCase()})
   }
+  
   onBtnDelete = (id)=>{
       axios.delete("http://localhost:2000/user/deleteuserbyid",{params:{id:id}})
       .then((res)=>{
@@ -158,7 +163,7 @@ class CustomPaginationActionsTable extends React.Component {
       })
       .catch((err)=>console.log(err))
   }
-
+  
   onBtnEdit = (id,index)=>{
     this.setState({isEdit:true,editIndex:index})
   }
@@ -183,7 +188,8 @@ class CustomPaginationActionsTable extends React.Component {
 
   renderJSX = ()=>{
     var arrSearchAndFilter = this.state.rows.filter((val)=>{
-      return val.username.toLowerCase().includes(this.state.searchRows)
+      return val.username.toLowerCase().includes(this.state.searchRows) 
+      && (parseInt(val.status_pembayaran) === parseInt(this.state.filterStatusPembayaran)||this.state.filterStatusPembayaran>3) 
       //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
     })
     
@@ -216,6 +222,47 @@ class CustomPaginationActionsTable extends React.Component {
     })
      return jsx;
   }
+  statusPaymentSearch = ()=>{
+    this.pushUrl()
+    this.setState({filterStatusPembayaran:this.refs.statusPayment.value})
+  }
+  pushUrl = ()=>{
+    var newLink ='/managepayment/search'
+    var params =[]
+    //categoryDropdown,search
+    if(this.refs.search.value){
+        params.push({
+            params:'query',
+            value:this.refs.search.value
+        })
+    }
+    if(this.refs.statusPayment.value){
+        params.push({
+            params:'statusPembayaran',
+            value:this.refs.statusPayment.value
+        })
+    }
+
+    for (var i=0;i<params.length;i++){
+        if(i===0){
+            newLink += '?'+params[i].params+ '='+ params[i].value
+        }else{
+            newLink += '&'+params[i].params+ '='+ params[i].value
+        }
+    }
+    this.props.history.push(newLink)
+}
+
+getDataUrl = ()=>{
+  if(this.props.location.search){
+    var obj = QueryString.parse(this.props.location.search)
+    if(obj.query){
+      this.setState({searchRows:obj.query})
+    }if(obj.categoryProduct){
+      this.setState({filterStatusPembayaran:obj.categoryProduct})
+    }
+  }
+}
     
   render() {
     const { classes } = this.props;
@@ -230,6 +277,15 @@ if(this.props.role===1){
         <nav className="navbar justify-content-between">
         <h1>Manage Payment</h1>
         <form className="form-inline">
+        <div>
+                        <select ref="statusPayment" onChange={this.statusPaymentSearch} className="form-control">
+                        <option value={4}>--STATUS PAYMENT--</option>
+                        <option value={0}>NOT YET PAID</option>
+                        <option value={1}>PENDING</option>
+                        <option value={2}>PAID</option>
+
+                        </select>
+                </div>
           <input className="form-control mr-sm-2" ref="search" onChange={this.onBtnSearch} type="search" placeholder="Find username.." />
         </form>
       </nav>
