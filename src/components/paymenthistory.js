@@ -177,6 +177,7 @@ class CustomPaginationActionsTable extends React.Component {
     this.props.history.push(newLink)
 }
   getHistory = ()=>{
+    
       axios.get(`http://localhost:2000/payment/history/${this.props.id}`)
       .then((res)=>{
           this.setState({rows:res.data})
@@ -256,6 +257,7 @@ class CustomPaginationActionsTable extends React.Component {
   }
 
   filterBulan=()=>{
+    this.pushUrl()
     var number 
     if (this.refs.bulan.value<9){
       number = "0"+this.refs.bulan.value
@@ -290,7 +292,7 @@ if(this.props.role===2){
           onChange={this.onChange}
           value={this.state.date} className="form-control"/>
 
-          <select className="form-control" ref="bulan" onChange={this.filterBulan}>
+          <select style={{marginLeft:"10px",marginRight:"10px"}} className="form-control" ref="bulan" onChange={this.filterBulan}>
               <option>---FILTER BULAN---</option>
               <option value={1}>January</option>
               <option value={2}>Febuary</option>

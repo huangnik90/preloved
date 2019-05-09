@@ -97,3 +97,19 @@
    color: whitesmoke;
    background-color: orange;
 }
+.onSale{
+    border: 1px solid orange;
+    width: 120px;
+    justify-content: center;
+    border-radius:10px;
+    margin: 0 auto;
+}
+.onSale Link{
+    text-decoration: none;
+    color:white;
+}
+.onSale:hover{
+    background-color: orange;
+    border-radius:10px;
+    color:white;
+}

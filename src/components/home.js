@@ -8,6 +8,7 @@ import Axios from 'axios';
 import Testimoni from './testimoni'
 import {cartLength,notificationLength} from './../1.actions'
 import {connect} from 'react-redux'
+import ProductOnSale from './productOnsale'
 
 class Home extends React.Component{
     state = {productTerbaru:[]}
@@ -107,7 +108,14 @@ class Home extends React.Component{
                    
 
                 </div>
+                <div className="text-center">
+                <h3>Preloved ON SALE</h3>
+                <hr/>
+                  <ProductOnSale></ProductOnSale>
+                </div>
+                
                 <div class="text-center">
+                <hr></hr>
                 <h3 style={{marginTop:"10px"}}>Testimonials</h3>
                  <hr/>
                  <Testimoni/>
