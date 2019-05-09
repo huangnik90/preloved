@@ -23,6 +23,7 @@ import QueryString from 'query-string'
 import CurrencyFormat from 'react-currency-format';
 import DatePicker from 'react-date-picker'
 
+
 const actionsStyles = theme => ({
   root: {
     flexShrink: 0,
@@ -123,7 +124,12 @@ class CustomPaginationActionsTable extends React.Component {
     isEdit: false,
     editIndex:Number,date: new Date()
   };
-  onChange = (date) => this.setState({ date })
+  onChange = (date) => {
+    this.setState({ date })
+    this.pushUrl()
+  }
+ 
+
 
   handleChangePage = (event, page) => {
     this.setState({ page });
@@ -153,6 +159,11 @@ class CustomPaginationActionsTable extends React.Component {
             params:'query',
             value:this.refs.search.value
         })
+    }if(this.state.date){
+      params.push({
+            params:'date',
+            value:this.state.date
+      })
     }
     
 
@@ -212,8 +223,11 @@ class CustomPaginationActionsTable extends React.Component {
   
 
   renderJSX = ()=>{
+    var format = this.state.date.getFullYear() +"-0"+(this.state.date.getMonth()+1) +"-"+this.state.date.getDate()
+    var ganti = format.toString()
     var arrSearchAndFilter = this.state.rows.filter((val)=>{
-       return val.no_invoice.toString().toLowerCase().includes(this.state.searchRows) 
+       return val.no_invoice.toString().toLowerCase().includes(this.state.searchRows) &&
+       (val.tanggal_pembelian.split(" ",1).includes(ganti)) 
       //  && (val.tanggal_pembelian.includes(this.state.date))
       //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
     })
@@ -240,13 +254,29 @@ class CustomPaginationActionsTable extends React.Component {
     })
      return jsx;
   }
-    
+
+  filterBulan=()=>{
+    var number 
+    if (this.refs.bulan.value<9){
+      number = "0"+this.refs.bulan.value
+    }else{
+      number = this.refs.bulan.value
+    }
+    axios.get(`http://localhost:2000/payment/historymonth?bulan=${number}&id=${this.props.id}`)
+    .then((res)=>{
+          this.setState({rows:res.data})
+      })
+      .catch((err)=>{
+          console.log(err)
+      })
+  }
+ 
   render() {
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 if(this.props.role===2){
-  if(this.state.rows.length){
+ 
     return (
     
       <Paper className={classes.root} style={{marginBottom:"50px"}}>
@@ -259,7 +289,22 @@ if(this.props.role===2){
           format="y-MM-d"
           onChange={this.onChange}
           value={this.state.date} className="form-control"/>
-      
+
+          <select className="form-control" ref="bulan" onChange={this.filterBulan}>
+              <option>---FILTER BULAN---</option>
+              <option value={1}>January</option>
+              <option value={2}>Febuary</option>
+              <option value={3}>Maret</option>
+              <option value={4}>April</option>
+              <option value={5}>May</option>
+              <option value={6}>Juni</option>
+              <option value={7}>July</option>
+              <option value={8}>Agustus</option>
+              <option value={9}>September</option>
+              <option value={10}>Oktober</option>
+              <option value={11}>November</option>
+              <option value={12}>Desember</option>
+          </select>
           <input className="form-control mr-sm-2" ref="search" type="search" placeholder="INVOICE NUMBER.." /> 
           <input type="button" value="Search" onClick={this.onBtnSearch} className="btn btn-warning"/>
                 
@@ -313,35 +358,7 @@ if(this.props.role===2){
       </Paper>
       
     )
-  }else{
-    return(
-      <Paper className={classes.root} style={{marginBottom:"50px"}}>
-        <div className={classes.tableWrapper}>
-        <nav className="navbar justify-content-center">
-        <h2>Manage Payment</h2>
-  
-      </nav>
-        <hr></hr>
-        <div className="emptyCart">
-        There are no payment at the moment.
-        </div>
-      
-        </div>
-        <div className="row">
-            <div className="col-8 col-md-8">
-           
-                 
-            </div>
-            <div className="col-4 col-md-4">
-            <Link to="/">
-               <input type="button" style={{width:"100%"}} className="shoppingAgain" value="Back"></input>
-            </Link>     
-            
-            </div>
-        </div>
-      </Paper>
-    )
-  }
+ 
 
 }else{
   return <PageNotFound></PageNotFound>

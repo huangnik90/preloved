@@ -94,8 +94,9 @@ class Payment extends React.Component{
                             <div className="col-md-12 col-12" style={{color:"orange",fontFamily:"Dosis",textAlign:"center",fontSize:"40px"}}>
 
                             <Countdown onComplete={()=>this.Cancel()}  date={ parseInt(this.props.match.params.no_invoice)+250000}>
-                            
+                                
                             </Countdown>
+                     
                             <hr></hr>
                             </div>
                         </div>
