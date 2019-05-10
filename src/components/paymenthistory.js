@@ -294,7 +294,10 @@ if(this.props.role===2){
           clearIcon={this.state.first}
           className="form-control"
         />
-          <input type="button" value="Clear Tanggal" onClick={()=>this.setState({first:false})} className="btn btn-warning ml-2"/>
+          <input type="button" value="Clear Tanggal" onClick={()=>{
+            this.pushUrl()
+            this.setState({first:true})
+          }} className="btn btn-warning ml-2"/>
           
 
           <select style={{marginLeft:"10px",marginRight:"10px"}} className="form-control" ref="bulan" onChange={this.filterBulan}>
