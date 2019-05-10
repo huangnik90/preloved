@@ -289,8 +289,8 @@ if(this.props.role===1){
       </form>
     </nav>
       <hr></hr>
-        <Table className={classes.table}>
-        <TableHead>
+      <Table className="table table-hover">
+          <TableHead className="thead-dark">
             <TableRow>
             <TableCell align="center">Nomor</TableCell>
                 <TableCell align="center">User ID</TableCell>

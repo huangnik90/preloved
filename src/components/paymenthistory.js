@@ -17,7 +17,6 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import axios from 'axios'
 import swal from 'sweetalert'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 import PageNotFound from './404';
 import QueryString from 'query-string'
 import CurrencyFormat from 'react-currency-format';
@@ -122,10 +121,10 @@ class CustomPaginationActionsTable extends React.Component {
     page: 0,
     rowsPerPage: 10,
     isEdit: false,
-    editIndex:Number,date: new Date()
+    editIndex:Number,date: new Date(), first : true
   };
   onChange = (date) => {
-    this.setState({ date })
+    this.setState({ date , first :false})
     this.pushUrl()
   }
  
@@ -225,10 +224,11 @@ class CustomPaginationActionsTable extends React.Component {
 
   renderJSX = ()=>{
     var format = this.state.date.getFullYear() +"-0"+(this.state.date.getMonth()+1) +"-"+this.state.date.getDate()
-    var ganti = format.toString()
+    var ganti = this.state.first ? "" : format.toString()
+    //2019-05-13
     var arrSearchAndFilter = this.state.rows.filter((val)=>{
-       return val.no_invoice.toString().toLowerCase().includes(this.state.searchRows) &&
-       (val.tanggal_pembelian.split(" ",1).includes(ganti)) 
+       return val.no_invoice.toString().toLowerCase().includes(this.state.searchRows) 
+       && (val.tanggal_pembelian.split(" ",1).join('').includes(ganti)) 
       //  && (val.tanggal_pembelian.includes(this.state.date))
       //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
     })
@@ -286,11 +286,16 @@ if(this.props.role===2){
         <nav className="navbar justify-content-between">
         <h1>History Payment - {this.props.username}</h1>
         <form className="form-inline">
-       
+
         <DatePicker
           format="y-MM-d"
           onChange={this.onChange}
-          value={this.state.date} className="form-control"/>
+          value={this.state.date}
+          clearIcon={this.state.first}
+          className="form-control"
+        />
+          <input type="button" value="Clear Tanggal" onClick={()=>this.setState({first:false})} className="btn btn-warning ml-2"/>
+          
 
           <select style={{marginLeft:"10px",marginRight:"10px"}} className="form-control" ref="bulan" onChange={this.filterBulan}>
               <option>---FILTER BULAN---</option>
@@ -324,7 +329,6 @@ if(this.props.role===2){
                   <TableCell align="center">Total Harga</TableCell>
                   <TableCell align="center">Gambar Product</TableCell>
                   <TableCell align="center">Status</TableCell>
-                  
               </TableRow>     
           </TableHead>
             <TableBody>

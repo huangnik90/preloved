@@ -415,8 +415,8 @@ class CustomPaginationActionsTable extends React.Component {
           </form>
         </nav>
           <hr></hr>
-            <Table className={classes.table}>
-            <TableHead>
+          <Table className="table table-hover">
+          <TableHead className="thead-dark">
                 <TableRow>
                 <TableCell align="center">No</TableCell>
                     <TableCell align="center">Product Name</TableCell>

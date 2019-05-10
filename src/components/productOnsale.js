@@ -7,7 +7,6 @@ import {cartLength} from '../1.actions'
 import '../support/product.css'
 import CurrencyFormat from 'react-currency-format';
 
-
 class ProductOnsale extends React.Component{
     state={data:[]}
     componentDidMount(){
@@ -118,7 +117,7 @@ class ProductOnsale extends React.Component{
                                  </div>
                                  <div className="col-6 col-md-6">
                                  <div className="addcart">
-                                     <p  onClick={()=>this.addCart(val.id)}>Buy</p>
+                                     <p  onClick={()=>this.addCart(val.id)}>BUY <i class="fas fa-shopping-cart"></i></p>
                                  </div>
                                  </div>
                             </div>
@@ -135,7 +134,7 @@ class ProductOnsale extends React.Component{
                                 
                                 </p>:null
                             }
-                                <p className="card-text" style={{marginLeft:"5px",display:"inline",color:"black",fontWeight:"600",fontSize:"26px"}}>
+                                <p className="card-text" style={{marginLeft:"5px",display:"inline",color:"black",fontWeight:"599",fontSize:"26px"}}>
             <CurrencyFormat value={val.price - (val.price*val.discount/100)} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
                                 
                                 </p>
@@ -160,7 +159,7 @@ class ProductOnsale extends React.Component{
     render(){
         return(<div className="container">
                     
-                     
+                   
                         <div className="row justify-content-center">
                                   {this.renderJsx()}
                         </div>
@@ -171,7 +170,7 @@ class ProductOnsale extends React.Component{
                        
                         
                     </div>
-                    <div className="onSale"> 
+                    <div className="onSale "> 
                     <Link to="/product" style={{textDecoration:"none",color:'grey'}}>
                     SHOP NOW
                     </Link>

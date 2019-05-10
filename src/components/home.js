@@ -108,8 +108,9 @@ class Home extends React.Component{
                    
 
                 </div>
-                <div className="text-center">
-                <h3>Preloved ON SALE</h3>
+                <div className="text-center form-inline justify-content-center">
+                <h3>Preloved ON SALE</h3> 
+                      
                 <hr/>
                   <ProductOnSale></ProductOnSale>
                 </div>
