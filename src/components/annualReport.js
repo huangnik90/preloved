@@ -11,6 +11,8 @@ import TableRow from '@material-ui/core/TableRow';
 import CurrencyFormat from 'react-currency-format';
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
+import {Link} from 'react-router-dom'
+
 
 class AnnualReport extends React.Component{
     state={data:[]}
@@ -65,20 +67,25 @@ class AnnualReport extends React.Component{
         return jsx
     }
      print=()=> {
+        //this.setState({width:"580px",height:"892px"})
 		const filename  = `Preloved AnnualReport Y:${this.refs.tahun.value} M:${this.refs.bulan.value}.pdf`;
 
 		html2canvas(document.querySelector('#nodeToRenderAsPDF')).then(canvas => {
-			let pdf = new jsPDF();
-			pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298);
+            let pdf = new jsPDF();
+            var width = pdf.internal.pageSize.getWidth();
+            var height = pdf.internal.pageSize.getHeight();
+			pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, width, height);
             pdf.save(filename);
             
+            
 		});
-	}
+    }
+    
 
     render(){
         if(this.props.role===1){
             return(
-                <div className="container" id="nodeToRenderAsPDF">
+                <div className="container" >
                     <div className="row">
                         <div className="col-md-6 col-6 form-inline">
                         <h3>Annual Report</h3>
@@ -105,9 +112,10 @@ class AnnualReport extends React.Component{
                         </div>
                     </div>
                     <hr></hr>
-                    <div className="row">
-                    <div className="col-md-12 col-12">
-                    <Table className="table table-hover">
+                    <center>
+
+                    <div id="nodeToRenderAsPDF">
+                    <Table  className="table table-hover " style={{height:this.state.height,width:this.state.width}}>
                     <TableHead className="thead-dark">
                         <TableRow>
                         <TableCell align="center">Nomor</TableCell>
@@ -125,21 +133,27 @@ class AnnualReport extends React.Component{
                             </TableBody>
                             </Table>
 
+                    <p className="totalHarga">
+                    Total Harga: 
+                    <CurrencyFormat value={this.getTotalHarga()} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
+                    </p>
                     </div>
-                    <div className="row">
-            
-           
-                  <p className="totalHarga">
-                  Total Harga: 
-                  <CurrencyFormat value={this.getTotalHarga()} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
-                  </p>
-         
-            
-                <input  type="button" style={{width:"100%"}} className="shoppingAgain" onClick={this.print} value="DOWNLOAD REPORT PDF"></input>
-            
-                 </div>
+                    </center>
 
-                    </div>     
+                   
+
+                    <div className="row">
+                        <div className="col-md-6 col-6">
+                        <input  type="button" style={{width:"100%"}} className="shoppingAgain" onClick={this.print} value="DOWNLOAD PDF"></input>
+                        </div>
+                        <div className="col-md-6 col-6">
+                        <Link to="/">
+                        <input type="button" style={{width:"100%"}} className="shoppingAgain" value="Main Page"></input>
+                        </Link>  
+                        </div>  
+                    </div>
+                
+                
                 </div>
             )
 

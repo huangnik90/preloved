@@ -261,8 +261,8 @@ getDataUrl = ()=>{
     var obj = QueryString.parse(this.props.location.search)
     if(obj.query){
       this.setState({searchRows:obj.query})
-    }if(obj.categoryProduct){
-      this.setState({filterStatusPembayaran:obj.categoryProduct})
+    }if(obj.statusPembayaran){
+      this.setState({filterStatusPembayaran:obj.statusPembayaran})
     }
   }
 }
