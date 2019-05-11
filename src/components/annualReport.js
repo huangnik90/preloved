@@ -153,7 +153,7 @@ class AnnualReport extends React.Component{
                         </div>  
                     </div>
                 
-                
+                <hr></hr>
                 </div>
             )
 

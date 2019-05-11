@@ -129,15 +129,15 @@ class ProductAdd extends React.Component{
                                 </div>
                                 <div className="form-group row">
                                     <label className="col-sm-3 col-form-label">Gambar Product</label>
-                                    <div className="col-sm-9">
-                                    <input className="form-control btn-success" type="button" onClick={()=>this.refs.input.click()} value={this.valueHandler()}></input>
+                                    <div className="col-sm-9 form-inline">
+                                    <input className="AddStyleButton" type="button" onClick={()=>this.refs.input.click()} value={this.valueHandler()}></input>
                                     <input ref="input" style={{display:"none"}} type="file" onChange={this.onChangeHandler}></input>
                                     </div>
                                 </div>
                                 <div className="form-group row">
                                 <div className="col-3"/>
                             
-                                    <div className="col-9" style={{textAlign:'center'}}>
+                                    <div className="col-12" style={{textAlign:'center'}}>
                            
                                     <button type="button" className="AddStyleButton" onClick={this.btnAdd}>Add New Product</button>
                                    
