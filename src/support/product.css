@@ -1,14 +1,20 @@
 .diskon{
     position: absolute;
-    right: 0px;
-    top:0px;
-    width: 70px;
-    height: 30px;
+    padding-top: 10px;
+    left: 20px;
+    top:10px;
+    width: 60px;
+    height: 60px;
+    border-radius: 60px; 
     background-color:orange;
     color: white;
     text-align: center;
-    font-weight: 400;
-    font-size: 20px;
+    font-size: 23px;
+    cursor: pointer;
+}
+.diskon:hover{
+    transition: transform .2s;
+    transform: scale(1.2);
 }
 
 

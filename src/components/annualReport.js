@@ -12,12 +12,18 @@ import CurrencyFormat from 'react-currency-format';
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 import {Link} from 'react-router-dom'
+import QueryString from 'query-string'
 
 
 class AnnualReport extends React.Component{
-    state={data:[]}
+    state={data:[],filterTahun:null,filterBulan:null}
+    componentDidMount(){
+        this.getDataUrl()
+    }
         
     getDataReport=()=>{ 
+        this.pushUrl()
+
        if(!isNaN(this.refs.tahun.value)){
             var number
             if (this.refs.bulan.value<9){
@@ -28,7 +34,9 @@ class AnnualReport extends React.Component{
 
             Axios.get(`http://localhost:2000/payment/report?year=${this.refs.tahun.value}&month=${number}`)
                 .then((res)=>{
+                 
                     this.setState({data:res.data})
+                    
                 })
                 .catch((err)=>console.log(err))
                 
@@ -36,6 +44,43 @@ class AnnualReport extends React.Component{
                 swal("Error","Must Number","error")
             }
     }
+    getDataUrl = ()=>{
+        if(this.props.location.search){
+          var obj = QueryString.parse(this.props.location.search)
+          if(obj.tahun){
+            this.setState({filterTahun:obj.query})
+          }if(obj.bulan){
+              this.setState({filterBulan:obj.bulan})
+          }
+        }
+      }
+    pushUrl = ()=>{
+        var newLink ='/report/search'
+        var params =[]
+       
+        if(this.refs.tahun.value){
+            params.push({
+                params:'tahun',
+                value:this.refs.tahun.value
+            })
+        }if(this.refs.bulan.value){
+          params.push({
+                params:'bulan',
+                value:this.refs.bulan.value
+          })
+    }
+        
+    
+        for (var i=0;i<params.length;i++){
+            if(i===0){
+                newLink += '?'+params[i].params+ '='+ params[i].value
+            }else{
+                newLink += '&'+params[i].params+ '='+ params[i].value
+            }
+        }
+        this.props.history.push(newLink)
+    }
+    
     getTotalHarga = ()=>{
         var harga=0
         
@@ -44,8 +89,10 @@ class AnnualReport extends React.Component{
          }
        
          return harga
-      }
+    }
+    
     renderJsx =()=>{
+        
         var jsx = this.state.data.map((val,index)=>{
             return(
                 <TableRow>
@@ -68,7 +115,7 @@ class AnnualReport extends React.Component{
     }
      print=()=> {
         //this.setState({width:"580px",height:"892px"})
-		const filename  = `Preloved AnnualReport Y:${this.refs.tahun.value} M:${this.refs.bulan.value}.pdf`;
+		const filename  = `Preloved AnnualReport Month:${this.refs.bulan.value}/ Year:${this.refs.tahun.value}.pdf`;
 
 		html2canvas(document.querySelector('#nodeToRenderAsPDF')).then(canvas => {
             let pdf = new jsPDF();
@@ -78,7 +125,10 @@ class AnnualReport extends React.Component{
             pdf.save(filename);
             
             
-		});
+        });
+        
+         
+        
     }
     
 
@@ -92,10 +142,10 @@ class AnnualReport extends React.Component{
                         </div>
                         <div className="col-md-6 col-6 form-inline">
                             <select className="form-control " ref="bulan" >
-                                <option>---FILTER BULAN---</option>
+                                <option value={0}>---FILTER BULAN---</option>
                                 <option value={1}>January</option>
                                 <option value={2}>Febuary</option>
-                                <option value={33}>Maret</option>
+                                <option value={3}>Maret</option>
                                 <option value={4}>April</option>
                                 <option value={5}>May</option>
                                 <option value={6}>Juni</option>
@@ -106,7 +156,7 @@ class AnnualReport extends React.Component{
                                 <option value={11}>November</option>
                                 <option value={12}>Desember</option>
                             </select>                           
-                            <input style={{marginLeft:20,marginRight:20}}type="text" className="form-control" defaultValue={2019} placeholder="Input Tahun" ref="tahun"></input>
+                            <input style={{marginLeft:5,marginRight:5}}type="text" className="form-control" defaultValue={2019} placeholder="Input Tahun" ref="tahun"></input>
                             <input type="button" className="btn btn-warning" value="Search" onClick={this.getDataReport}></input>
                        
                         </div>
@@ -134,7 +184,7 @@ class AnnualReport extends React.Component{
                             </Table>
 
                     <p className="totalHarga">
-                    Total Harga: 
+                    Total Pendapatan:
                     <CurrencyFormat value={this.getTotalHarga()} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
                     </p>
                     </div>

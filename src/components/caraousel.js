@@ -8,8 +8,13 @@ import {
 
 const items = [
   {
+    src:`https://localcdn.tinkerlust.com/media/wysiwyg/homepage_promo/0519/home-banner-dekstop/0519-W1-b-ramadhan.jpg`,
+    altText: 'HELLLLLLLLO',
+    caption: ''
+  },
+  {
     src: 'https://localcdn.tinkerlust.com/media/wysiwyg/homepage_promo/0319/home-banner-desktop/banner-april2019-5.jpg',
-    altText: '',
+    altText: 'HELLLLLLLLO',
     caption: ''
   },{
     src: ' https://localcdn.tinkerlust.com/media/wysiwyg/homepage_promo/0419/home-banner-desktop/banner-april2019-6-min.jpg',

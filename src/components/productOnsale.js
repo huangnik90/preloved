@@ -106,7 +106,7 @@ getProduct =()=>{
                     
                         <Link to={`/productdetail/${val.id}`}>
                         <img src={`http://localhost:2000/${val.image}`} className="card-img-top gambar" width="20%" alt="..." />
-                        </Link>
+                       
                         {
                             val.discount>0 ? 
                                 <div className="diskon">
@@ -115,6 +115,7 @@ getProduct =()=>{
                             </p>
                                 </div>:null
                         }
+                         </Link>
                         <div className="card-body">
                         
                         <div className="row">
@@ -164,7 +165,10 @@ getProduct =()=>{
                 <div className="row justify-content-center">
                 
                 {this.renderProductJsx()}
-            
+                <Link to="/product">
+                <input type="button" className="AddStyleButton mt-2" style={{border:"1px solid black"}} value="BROWSE MORE"/>
+                
+                </Link>
                 </div>
                 
                 
