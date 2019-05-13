@@ -7,7 +7,7 @@ import swal from 'sweetalert'
 import {cartLength} from '../1.actions'
 class ProductDetail extends React.Component{
     
-    state = {quantity:"",detailProduct:[]}
+    state = {quantity:"",detailProduct:[],number:1}
 
     componentDidMount(){
         this.getDetailProduct()
@@ -34,7 +34,8 @@ class ProductDetail extends React.Component{
         var id = this.props.id
         var buyer_note = this.refs.buyer_note.value
         var product_id = this.props.match.params.id
-        var cart_quantity = this.refs.quantity.value 
+       // var cart_quantity = this.refs.quantity.value
+        var cart_quantity = this.state.number
         var stockItem = this.state.detailProduct.quantity
       // alert("product ID: "+id +"\nproduct ID ambil dari state: " +product+"\nproduct ambil dr url: "+ product2 +"\nquantity: "+quantity)
        
@@ -108,14 +109,25 @@ class ProductDetail extends React.Component{
                     <div style={{fontSize:"14px",fontWeight:"700",marginTop:"10px"}} >
                                 Jumlah
                                 </div>
-                                <input type="number" ref="quantity" min={1} className="form-control" onChange={this.cekQuantity} defaultValue="1" style={{marginTop:"13px",width:"60px"}}></input>
-                    <div style={{color:"red",fontSize:"12px"}}> {this.state.quantity}</div>
+                                <i style={{color:"#FB9900"}} class="fas fa-minus-circle" onClick={()=>{
+                                    if(this.state.number<2){
+                                        this.setState({number:1})
+                                    }else{
+                                        this.setState({number:this.state.number-1})
+
+                                    }
+                                }}></i>
+                                <span style={{marginLeft:"20px",marginRight:"20px"}}>{this.state.number}</span>
+                                <i style={{color:"#FB9900"}} class="fas fa-plus-circle" onClick={()=>{this.setState({number:this.state.number+1})}}></i>
+                                
+                                {/* <input type="number" ref="quantity" min={1} className="form-control" onChange={this.cekQuantity} defaultValue="1" style={{marginTop:"13px",width:"60px"}}></input>
+                    <div style={{color:"red",fontSize:"12px"}}> {this.state.quantity}</div> */}
                                  <div style={{fontSize:"14px",fontWeight:"700",marginTop:"10px"}} >
                                 Catatan Untuk Penjual <i class="far fa-comments"></i> 
                                 </div>
                                 <input type="text" ref="buyer_note" placeholder="CONTOH: WARNA, UKURAN ATAU DESIGN" className="form-control" style={{marginTop:"13px"}}></input>
                     <br></br>
-                    
+                
                     {this.props.id !==0 ?
                      <input type="button" className="btn border-warning col-md-4" value="Masukan Keranjang" onClick={this.addCart}/>
                     :

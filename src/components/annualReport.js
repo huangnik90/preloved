@@ -16,60 +16,60 @@ import QueryString from 'query-string'
 
 
 class AnnualReport extends React.Component{
-    state={data:[],filterTahun:null,filterBulan:null}
+    state={data:[],searchBulan:0,searchTahun:0}
     componentDidMount(){
+        this.getAllData()
         this.getDataUrl()
+        //this.getDataReport()
+    }
+    getAllData=()=>{
+        Axios.get(`http://localhost:2000/payment/allreport`)
+        .then((res)=>{
+            this.setState({data:res.data})
+        })
+        .catch((err)=>console.log(err))
     }
         
-    getDataReport=()=>{ 
-        this.pushUrl()
-
-       if(!isNaN(this.refs.tahun.value)){
-            var number
-            if (this.refs.bulan.value<9){
-                number = "0"+this.refs.bulan.value
-            }else{
-                number = this.refs.bulan.value
-            }
-
-            Axios.get(`http://localhost:2000/payment/report?year=${this.refs.tahun.value}&month=${number}`)
-                .then((res)=>{
+    onBtnSearch=()=>{ 
                  
-                    this.setState({data:res.data})
+            if(!isNaN(this.refs.tahun.value)&& this.refs.tahun.value){
+                var number
+                if (this.refs.bulan.value<9){
+                    number = "0"+this.refs.bulan.value
+                }else{
+                    number = this.refs.bulan.value
+                }
+          
+                Axios.get(`http://localhost:2000/payment/report?year=${this.refs.tahun.value}&month=${number}`)
+                    .then((res)=>{           
+                        this.setState({data:res.data})
+                        this.pushUrl()
+                    })
+                    .catch((err)=>console.log(err))
                     
-                })
-                .catch((err)=>console.log(err))
-                
-            }else{
+                }
+        
+            else{
                 swal("Error","Must Number","error")
             }
     }
-    getDataUrl = ()=>{
-        if(this.props.location.search){
-          var obj = QueryString.parse(this.props.location.search)
-          if(obj.tahun){
-            this.setState({filterTahun:obj.query})
-          }if(obj.bulan){
-              this.setState({filterBulan:obj.bulan})
-          }
-        }
-      }
+
     pushUrl = ()=>{
         var newLink ='/report/search'
         var params =[]
-       
+        //categoryDropdown,search
+        if(this.refs.bulan.value){
+            params.push({
+                params:'query',
+                value:this.refs.bulan.value
+            })
+        }
         if(this.refs.tahun.value){
             params.push({
                 params:'tahun',
                 value:this.refs.tahun.value
             })
-        }if(this.refs.bulan.value){
-          params.push({
-                params:'bulan',
-                value:this.refs.bulan.value
-          })
-    }
-        
+        }
     
         for (var i=0;i<params.length;i++){
             if(i===0){
@@ -81,9 +81,20 @@ class AnnualReport extends React.Component{
         this.props.history.push(newLink)
     }
     
+    getDataUrl = ()=>{
+      if(this.props.location.search){
+        var obj = QueryString.parse(this.props.location.search)
+        if(obj.query){
+          this.setState({searchBulan:obj.query})
+        }if(obj.tahun){
+          this.setState({searchTahun:obj.tahun})
+        }
+      }
+    }
+   
+    
     getTotalHarga = ()=>{
         var harga=0
-        
          for (var i=0;i<this.state.data.length;i++){
             harga += parseInt(this.state.data[i].harga*this.state.data[i].quantity_pembelian)
          }
@@ -114,14 +125,15 @@ class AnnualReport extends React.Component{
         return jsx
     }
      print=()=> {
-        //this.setState({width:"580px",height:"892px"})
+        
 		const filename  = `Preloved AnnualReport Month:${this.refs.bulan.value}/ Year:${this.refs.tahun.value}.pdf`;
 
 		html2canvas(document.querySelector('#nodeToRenderAsPDF')).then(canvas => {
-            let pdf = new jsPDF();
+            let pdf = new jsPDF("l", "mm", "a4");
+            pdf.internal.scaleFactor = 2.25;
             var width = pdf.internal.pageSize.getWidth();
             var height = pdf.internal.pageSize.getHeight();
-			pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, width, height);
+			pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0,width-2,height-40);
             pdf.save(filename);
             
             
@@ -157,7 +169,7 @@ class AnnualReport extends React.Component{
                                 <option value={12}>Desember</option>
                             </select>                           
                             <input style={{marginLeft:5,marginRight:5}}type="text" className="form-control" defaultValue={2019} placeholder="Input Tahun" ref="tahun"></input>
-                            <input type="button" className="btn btn-warning" value="Search" onClick={this.getDataReport}></input>
+                            <input type="button" className="btn btn-warning" value="Search" onClick={this.onBtnSearch}></input>
                        
                         </div>
                     </div>

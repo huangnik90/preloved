@@ -146,6 +146,8 @@ class CustomPaginationActionsTable extends React.Component {
       var obj = QueryString.parse(this.props.location.search)
       if(obj.query){
         this.setState({searchRows:obj.query})
+      }if(obj.date){
+        this.setState({date:this.state.date})
       }
     }
   }
