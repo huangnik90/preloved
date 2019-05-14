@@ -21,11 +21,7 @@ const items = [
     altText: '',
     caption: ''
   },
-  {
-    src: 'https://localcdn.tinkerlust.com/media/wysiwyg/homepage_promo/0419/home-banner-desktop/mb-kartini-3_2.jpg',
-    altText: '',
-    caption: ''
-  },
+  
   {
     src: 'https://localcdn.tinkerlust.com/media/wysiwyg/homepage_promo/0319/home-banner-desktop/0319-W3-b-bloom.jpg',
     altText: '',

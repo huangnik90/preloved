@@ -255,28 +255,32 @@ class CustomPaginationActionsTable extends React.Component {
     var newData ={
       product_name,price,discount,category_id,quantity
     }
-
-    if(this.state.selectedFileEdit!==null){
-        var fd = new FormData()
-        fd.append('edit',this.state.selectedFileEdit)
-        fd.append('data',JSON.stringify(newData))
-        fd.append('imageBefore',this.state.dataEdit.image)
-        axios.put(`http://localhost:2000/product/editproductbyid/`+this.state.dataEdit.id,fd)
+if(quantity && discount && product_name && price && category_id){
+        if(this.state.selectedFileEdit!==null ){
+          var fd = new FormData()
+          fd.append('edit',this.state.selectedFileEdit)
+          fd.append('data',JSON.stringify(newData))
+          fd.append('imageBefore',this.state.dataEdit.image)
+          axios.put(`http://localhost:2000/product/editproductbyid/`+this.state.dataEdit.id,fd)
+          .then((res)=>{
+            swal("Edit Product",res.data,"success")
+            this.setState({modal:false,editIndex:-1})
+            this.getAllProduct()
+          })
+          .catch((err)=>console.log(err))
+      }else{
+        axios.put(`http://localhost:2000/product/editproductbyid/`+this.state.dataEdit.id,newData)
         .then((res)=>{
           swal("Edit Product",res.data,"success")
           this.setState({modal:false,editIndex:-1})
           this.getAllProduct()
         })
         .catch((err)=>console.log(err))
-    }else{
-      axios.put(`http://localhost:2000/product/editproductbyid/`+this.state.dataEdit.id,newData)
-      .then((res)=>{
-        swal("Edit Product",res.data,"success")
-        this.setState({modal:false,editIndex:-1})
-        this.getAllProduct()
-      })
-      .catch((err)=>console.log(err))
-    }
+      }
+}else{
+  swal("Error","data empty/Invalid","error")
+}
+   
     
 
 

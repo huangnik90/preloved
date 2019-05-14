@@ -20,7 +20,7 @@ class AnnualReport extends React.Component{
     componentDidMount(){
         this.getAllData()
         this.getDataUrl()
-        //this.getDataReport()
+        //this.getTotalHarga()
     }
     getAllData=()=>{
         Axios.get(`http://localhost:2000/payment/allreport`)
@@ -46,7 +46,7 @@ class AnnualReport extends React.Component{
                         this.pushUrl()
                     })
                     .catch((err)=>console.log(err))
-                    
+                    this.setState({searchBulan:number})
                 }
         
             else{
@@ -103,8 +103,12 @@ class AnnualReport extends React.Component{
     }
     
     renderJsx =()=>{
-        
-        var jsx = this.state.data.map((val,index)=>{
+        var filter= this.state.data.filter((val)=>{
+            return (
+                parseInt(val.tanggal_pembelian.split(" ")[0].split('-')[1])===parseInt(this.state.searchBulan) || this.state.searchBulan === 0
+            )
+        })
+        var jsx = filter.map((val,index)=>{
             return(
                 <TableRow>
                 <TableCell align="center">{index+1}</TableCell>

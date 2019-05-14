@@ -168,12 +168,16 @@ class CustomPaginationActionsTable extends React.Component {
     for (var i=0;i<this.state.rows.length;i++){
       axios.put(`http://localhost:2000/payment/cancelorder?no_invoice=${this.state.rows[i].no_invoice}&quantity=${this.state.rows[i].quantity_pembelian}&product_id=${this.state.rows[i].id_product}`)
       .then((res)=>{
+          this.setState({diclik:true})    
           swal("Cancel Order",res.data,"info")
-          this.setState({diclik:true})      
+
       })
       .catch((err)=>console.log(err))
     }
-    
+    axios.get(`http://localhost:2000/payment/sendemailcancel?no_invoice=${this.props.match.params.no_invoice}`)
+    .then((res)=>{
+    })
+    .catch((err)=>console.log(err))
    
   }
   renderGambarJSX = ()=>{

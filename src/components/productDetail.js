@@ -92,7 +92,7 @@ class ProductDetail extends React.Component{
                                 Jumlah
                                 </div>
                                
-                                <i style={{color:"#FB9900"}}  class="fas fa-minus-square" onClick={()=>{
+                                <i style={{color:"#FB9900"}}  class="fas fa-minus" onClick={()=>{
                                     if(this.state.number<2){
                                         this.setState({number:1})
                                     }else{
@@ -101,7 +101,7 @@ class ProductDetail extends React.Component{
                                     }
                                 }}></i>
                                 <span style={{marginLeft:"20px",marginRight:"20px"}}>{this.state.number}</span>
-                                <i style={{color:"#FB9900"}} class="fas fa-plus-square" onClick={()=>{this.setState({number:this.state.number+1})}}></i>
+                                <i style={{color:"#FB9900"}} class="fas fa-plus" onClick={()=>{this.setState({number:this.state.number+1})}}></i>
                                 
                                 {/* <input type="number" ref="quantity" min={1} className="form-control" onChange={this.cekQuantity} defaultValue="1" style={{marginTop:"13px",width:"60px"}}></input>
                     <div style={{color:"red",fontSize:"12px"}}> {this.state.quantity}</div> */}
