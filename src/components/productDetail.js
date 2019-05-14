@@ -5,6 +5,8 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import swal from 'sweetalert'
 import {cartLength} from '../1.actions'
+import '../support/product.css'
+
 class ProductDetail extends React.Component{
     
     state = {quantity:"",detailProduct:[],number:1}
@@ -70,6 +72,56 @@ class ProductDetail extends React.Component{
         return(
         <div className="container justify-content-sm-center ml-auto mr-auto mt-3">
             <div className="row">
+                
+                <div className="col-6 col-md-6">
+                    <h1>Product Detail #{id}:<br/>{product_name} </h1>
+                    <hr/>
+                    <p>
+                    {description}
+                    </p>
+                    <hr/>
+                    <ul className="ml-4">
+                        <li>Category: {category}</li>
+                        <li>Grade Quality: {grade}</li>
+                        <li>Price Item: Rp. {price} / {discount}% = Rp. {price-(price*discount/100)}</li>
+                        <li>Extra Note: {extra_note}</li>
+                        <li>Stock Item: {quantity}</li>
+                    </ul>
+                    <hr/>
+                    <div style={{fontSize:"14px",fontWeight:"700",marginTop:"10px"}} >
+                                Jumlah
+                                </div>
+                               
+                                <i style={{color:"#FB9900"}}  class="fas fa-minus-square" onClick={()=>{
+                                    if(this.state.number<2){
+                                        this.setState({number:1})
+                                    }else{
+                                        this.setState({number:this.state.number-1})
+
+                                    }
+                                }}></i>
+                                <span style={{marginLeft:"20px",marginRight:"20px"}}>{this.state.number}</span>
+                                <i style={{color:"#FB9900"}} class="fas fa-plus-square" onClick={()=>{this.setState({number:this.state.number+1})}}></i>
+                                
+                                {/* <input type="number" ref="quantity" min={1} className="form-control" onChange={this.cekQuantity} defaultValue="1" style={{marginTop:"13px",width:"60px"}}></input>
+                    <div style={{color:"red",fontSize:"12px"}}> {this.state.quantity}</div> */}
+                                 <div style={{fontSize:"14px",fontWeight:"700",marginTop:"10px"}} >
+                                Catatan Untuk Penjual <i class="far fa-comments"></i> 
+                                </div>
+                                <input type="text" ref="buyer_note" placeholder="CONTOH: WARNA, UKURAN ATAU DESIGN" className="form-control" style={{marginTop:"13px"}}></input>
+                    <br></br>
+                
+                    {this.props.id !==0 ?
+                     <input type="button" className="btn border-warning col-md-4" value="Masukan Keranjang" onClick={this.addCart}/>
+                    :
+                    <Link to="/login">
+                     <input disable type="button" className="btn border-success col-md-4" value="Redirect to Login"/> 
+                    </Link>
+                     
+                    }
+                   
+                    
+                </div>
                 <div className="col-6 col-md-6">
                 <ReactImageMagnify {...{
                         smallImage: {
@@ -89,54 +141,12 @@ class ProductDetail extends React.Component{
                         
                         
                     }} />
-
-                </div>
-                <div className="col-6 col-md-6">
-                    <h1>Product Detail #{id}:<br/>{product_name} </h1>
-                    <hr/>
-                    <p>
-                    {description}
-                    </p>
-                    <hr/>
-                    <ul className="ml-4">
-                        <li>Category: {category}</li>
-                        <li>Grade Quality: {grade}</li>
-                        <li>Price Item: Rp. {price} / {discount}% = Rp. {price-(price*discount/100)}</li>
-                        <li>Extra Note: {extra_note}</li>
-                        <li>Stock Item: {quantity}</li>
-                    </ul>
-                    <hr/>
-                    <div style={{fontSize:"14px",fontWeight:"700",marginTop:"10px"}} >
-                                Jumlah
-                                </div>
-                                <i style={{color:"#FB9900"}} class="fas fa-minus-circle" onClick={()=>{
-                                    if(this.state.number<2){
-                                        this.setState({number:1})
-                                    }else{
-                                        this.setState({number:this.state.number-1})
-
-                                    }
-                                }}></i>
-                                <span style={{marginLeft:"20px",marginRight:"20px"}}>{this.state.number}</span>
-                                <i style={{color:"#FB9900"}} class="fas fa-plus-circle" onClick={()=>{this.setState({number:this.state.number+1})}}></i>
-                                
-                                {/* <input type="number" ref="quantity" min={1} className="form-control" onChange={this.cekQuantity} defaultValue="1" style={{marginTop:"13px",width:"60px"}}></input>
-                    <div style={{color:"red",fontSize:"12px"}}> {this.state.quantity}</div> */}
-                                 <div style={{fontSize:"14px",fontWeight:"700",marginTop:"10px"}} >
-                                Catatan Untuk Penjual <i class="far fa-comments"></i> 
-                                </div>
-                                <input type="text" ref="buyer_note" placeholder="CONTOH: WARNA, UKURAN ATAU DESIGN" className="form-control" style={{marginTop:"13px"}}></input>
-                    <br></br>
-                
-                    {this.props.id !==0 ?
-                     <input type="button" className="btn border-warning col-md-4" value="Masukan Keranjang" onClick={this.addCart}/>
-                    :
-                    <Link to="/login">
-                     <input disable type="button" className="btn border-success col-md-4" value="Redirect to Login"/> 
-                    </Link>
-                     
-                    }
-                   
+                    {discount >0 ?<div className="diskon">
+                    <h3>
+                    {discount}%
+                    </h3>
+                    </div>:null}
+                    
                     
                 </div>
                 
