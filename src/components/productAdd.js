@@ -36,10 +36,12 @@ class ProductAdd extends React.Component{
     cekNumber = () =>{
         var qty = this.refs.quantity.value
         var diskon = this.refs.diskon.value
+        var price = this.refs.productharga.value
         if(qty){
-            if(qty <0 || diskon <0){
+            if(qty <0 || diskon <0 ||price<0){
                 swal("Input","Data tidak boleh minus","error")
                 this.refs.quantity.value=1
+                this.refs.productharga.value=0
             }
         }
     }
@@ -103,7 +105,7 @@ class ProductAdd extends React.Component{
                                 <div className="form-group row">
                                     <label className="col-sm-3 col-form-label">Harga Product</label>
                                     <div className="col-sm-9">
-                                    <input type="number" ref="productharga" className="form-control"  placeholder="Price (IDR)" required autoFocus/>
+                                    <input type="number" ref="productharga" className="form-control"   onChange={this.cekNumber} placeholder="Price (IDR)" required autoFocus/>
                                     </div>
                                 </div>
                                 <div className="form-group row">

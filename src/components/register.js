@@ -84,7 +84,7 @@ class Register extends React.Component{
                             <div className="form-group row">
                                 <label className="col-sm-3 col-form-label">Username</label>
                                 <div className="col-sm-9">
-                                <input type="text" ref="username" className="form-control" id="inputEmail" placeholder="Enter your first name..." required autoFocus/>
+                                <input type="text" ref="username" className="form-control" id="inputEmail" placeholder="Choose username" required autoFocus/>
                                 </div>
                             </div>
 

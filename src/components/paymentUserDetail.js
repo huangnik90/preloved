@@ -211,7 +211,8 @@ if(this.props.role){
     <Paper className={classes.root} style={{marginBottom:"50px"}}>
       <div className={classes.tableWrapper}>
       <nav className="navbar justify-content-between">
-      <h2>PL-{this.props.match.params.no_invoice} | {this.props.username}</h2>
+      <h3>PL-{this.props.match.params.no_invoice} - {this.props.username}</h3>
+      
       
     </nav>
       <hr></hr>

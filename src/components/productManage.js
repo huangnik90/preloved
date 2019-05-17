@@ -296,6 +296,11 @@ if(quantity && discount && product_name && price && category_id){
        this.refs.editQty.value=0
      }
    }
+   cekHarga =()=>{
+     if(this.refs.editHarga.value<0){
+       this.refs.editHarga.value=0
+     }
+   }
 
    checkDiskonEdit = () =>{
      var diskon = this.refs.editDiskon.value
@@ -480,7 +485,7 @@ if(quantity && discount && product_name && price && category_id){
                   <p>Name</p>  
                   <input type="text" ref="editNama" className="form-control" defaultValue={this.state.dataEdit.product_name}/>
                   <p>Price</p>   
-                  <input type="number" ref="editHarga" className="form-control" defaultValue={this.state.dataEdit.price}/>
+                  <input type="number" ref="editHarga" onChange={this.cekHarga} className="form-control" defaultValue={this.state.dataEdit.price}/>
                   <p>Jumlah Stock</p>  
                   <input type="number" ref="editQty" onChange={this.checkQtyEdit} min={0} className="form-control" defaultValue={this.state.dataEdit.quantity}/>
                   <p>Discount</p>   
