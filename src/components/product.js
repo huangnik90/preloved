@@ -105,14 +105,13 @@ pushUrl = ()=>{
             }
             axios.post(`http://localhost:2000/cart/addcart?id=${id}&productid=${idProduct}`,newData)
             .then((res)=>{
-                swal("Cart",res.data,"success")
                 this.props.cartLength(id)
                 this.getProduct()
+                swal("Cart",res.data,"success")
+
             })
             .catch((err)=>console.log(err))
         }else{
-           
-        
            swal({ title: "User Required",
             text: "Please Login or Register first",
             type: "success"}).then(okay => {
