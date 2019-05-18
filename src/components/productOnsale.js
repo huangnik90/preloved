@@ -165,11 +165,12 @@ getProduct =()=>{
                 <div className="row justify-content-center">
                 
                 {this.renderProductJsx()}
-                <Link to="/product">
-                <input type="button" className="AddStyleButton mt-2" style={{border:"1px solid black"}} value="BROWSE MORE"/>
                 
-                </Link>
+               
                 </div>
+                <Link to="/product">
+                <input type="button" className="AddStyleButton mt-2" style={{border:"1px solid black",width:"200px"}} value="BROWSE MORE"/>
+                </Link>
                 
                 
             </div>

@@ -95,40 +95,41 @@ class Home extends React.Component{
                 </Link>   
                 
                 <div class="latestProduct text-center" >
-                
+                <hr style={{border:"1px solid #FB9900"}}/>                                
                 <h3>Preloved New Items</h3>
-                <hr/>
-                <div style={{width:"95%",marginLeft:"25px",paddingLeft:"5px",paddingRight:"5px"}}>
-                <Slider {...settings}>
-                {this.productTerbaruJsx()}
-                 </Slider>
+                <hr style={{border:"1px solid #FB9900"}}/>                
+                
+                  <div style={{width:"95%",marginLeft:"25px",paddingLeft:"5px",paddingRight:"5px"}}>
+                  <Slider {...settings}>
+                  {this.productTerbaruJsx()}
+                  </Slider>
 
+                  </div>
                 </div>
                 
-                   
-
-                </div>
-                <div className="text-center form-inline justify-content-center">
+                <div className="text-center justify-content-center">
+                <hr style={{border:"1px solid #FB9900"}}/>                
                 <h3>Preloved ON SALE</h3> 
-                      
-                <hr/>
-                  <ProductOnSale></ProductOnSale>
-                </div>
+                <hr style={{border:"1px solid #FB9900"}}/>                
+                  <ProductOnSale/>
                 
-                <div class="text-center">
-                <hr></hr>
-                <h3 style={{marginTop:"10px"}}>Testimonials</h3>
-                 <hr/>
-                 <Testimoni/>
                 </div>
 
-
-                <div class="category text-center">
-                <hr/>
+              <div class="category text-center">
+                <hr style={{border:"1px solid #FB9900"}}/>
                 <h3>Category</h3>
-                <hr/>
+                <hr style={{border:"1px solid #FB9900"}}/>                                
                  <Category/>
                 </div>
+
+                
+                <div class="text-center">
+                <hr style={{border:"1px solid #FB9900"}}/>                
+                  <h3 style={{marginTop:"10px"}}>Testimonials</h3>
+                <hr style={{border:"1px solid #FB9900"}}/>                
+                 <Testimoni/>
+                </div>
+                <hr style={{border:"1px solid #FB9900"}}/>    
             </div>
         )
     }

@@ -57,8 +57,7 @@ class App extends Component {
           <ScrollTop>
              <Header/>
              <Switch> 
-             <Route path='/productonsale' component={ProductOnSale}> </Route>
-
+                    <Route path='/productonsale' component={ProductOnSale}> </Route>
                     <Route path='/paymenthistory' component={PaymentHistory}> </Route>
                     <Route path='/report' component={AnnualReport}> </Route>
                     <Route path='/managepaymentuser/:no_invoice' component={ManagePaymentUser}></Route>
@@ -89,7 +88,8 @@ class App extends Component {
      
          );
     }
-    return <div className="pagination-centered"><Loader
+    return <div className="pagination-centered justify-content-center">
+    <Loader
     type="Hearts"
     color="#FF0000"
     height="30"

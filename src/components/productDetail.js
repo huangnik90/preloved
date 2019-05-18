@@ -73,7 +73,7 @@ class ProductDetail extends React.Component{
         <div className="container justify-content-sm-center ml-auto mr-auto mt-3">
             <div className="row">
                 
-                <div className="col-6 col-md-6">
+                <div className="col-6 col-md-6" style={{border:"2px solid #FB9900", paddingBottom:"20px"}}>
                     <h1>Product Detail #{id}:<br/>{product_name} </h1>
                     <hr/>
                     <p>
@@ -122,7 +122,7 @@ class ProductDetail extends React.Component{
                    
                     
                 </div>
-                <div className="col-6 col-md-6">
+                <div className="col-6 col-md-6" style={{paddingTop:"40px"}}>
                 <ReactImageMagnify {...{
                         smallImage: {
                             alt: 'Wristwatch by Ted Baker London',
