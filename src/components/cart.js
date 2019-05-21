@@ -212,7 +212,8 @@ class CustomPaginationActionsTable extends React.Component {
         quantity_pembelian:this.state.rows[i].cart_quantity,
         harga:(this.state.rows[i].price-(this.state.rows[i].price*this.state.rows[i].discount/100)),
         tanggal_pembelian:dateNow,
-        no_invoice:invoiceNumber
+        no_invoice:invoiceNumber,
+        buyer_note:this.state.rows[i].buyer_note
       }
       
       var formData = {

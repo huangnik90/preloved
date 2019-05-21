@@ -322,7 +322,8 @@ if(this.props.role===2){
                 
         </form>
       </nav>
-        <hr></hr>
+    
+      
         <Table className="table table-hover">
             <TableHead className="thead-dark">
               <TableRow>

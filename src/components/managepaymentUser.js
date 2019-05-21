@@ -216,7 +216,7 @@ class CustomPaginationActionsTable extends React.Component {
             <CurrencyFormat value={val.harga} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
             </TableCell>
             <TableCell align="center">{val.quantity_pembelian}</TableCell>
-
+            <TableCell align="center">{val.buyer_note}</TableCell>
             <TableCell align="center">
             <img width="100px"src={`http://localhost:2000/${val.image}`} alt="gambar"></img>
             </TableCell>
@@ -285,6 +285,7 @@ if(this.props.role){
                 <TableCell align="center">Nama Product</TableCell>
                 <TableCell align="center">Harga</TableCell>
                 <TableCell align="center">Total Pembelian</TableCell>
+                <TableCell align="center">Buyer Note</TableCell>
                 <TableCell align="center">Gambar Product</TableCell>
             </TableRow>     
         </TableHead>

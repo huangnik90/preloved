@@ -6,6 +6,8 @@ import {Link} from 'react-router-dom'
 import swal from 'sweetalert'
 import {cartLength} from '../1.actions'
 import '../support/product.css'
+import CurrencyFormat from 'react-currency-format';
+
 
 class ProductDetail extends React.Component{
     
@@ -83,8 +85,10 @@ class ProductDetail extends React.Component{
                     <ul className="ml-4">
                         <li>Category: {category}</li>
                         <li>Grade Quality: {grade}</li>
-                        <li>Price Item: Rp. {price} / {discount}% = Rp. {price-(price*discount/100)}</li>
-                        <li>Extra Note: {extra_note}</li>
+                        <li>
+                        <CurrencyFormat value={price-(price*discount/100)}displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} /> (Price Item: Rp. {price} / {discount}% )
+                         </li>
+                        <li>Seller Note: {extra_note}</li>
                         <li>Stock Item: {quantity}</li>
                     </ul>
                     <hr/>
@@ -102,9 +106,6 @@ class ProductDetail extends React.Component{
                                 }}></i>
                                 <span style={{marginLeft:"20px",marginRight:"20px"}}>{this.state.number}</span>
                                 <i style={{color:"#FB9900"}} class="fas fa-plus" onClick={()=>{this.setState({number:this.state.number+1})}}></i>
-                                
-                                {/* <input type="number" ref="quantity" min={1} className="form-control" onChange={this.cekQuantity} defaultValue="1" style={{marginTop:"13px",width:"60px"}}></input>
-                    <div style={{color:"red",fontSize:"12px"}}> {this.state.quantity}</div> */}
                                  <div style={{fontSize:"14px",fontWeight:"700",marginTop:"10px"}} >
                                 Catatan Untuk Penjual <i class="far fa-comments"></i> 
                                 </div>

@@ -73,7 +73,7 @@ class Payment extends React.Component{
         for (var i=0;i<this.state.rows.length;i++){
             axios.put(`http://localhost:2000/payment/cancelorder?no_invoice=${this.state.rows[i].no_invoice}&quantity=${this.state.rows[i].quantity_pembelian}&product_id=${this.state.rows[i].id_product}`)
             .then((res)=>{
-                swal("success",res.data,"success")
+                swal("Important Message",res.data,"info")
                 this.setState({diclick:true})      
             })
             .catch((err)=>console.log(err))
@@ -97,7 +97,8 @@ class Payment extends React.Component{
                                 
                             </Countdown>
                      
-                            <hr></hr>
+                    <hr style={{border:"1px solid #FB9900"}}/>
+                          
                             </div>
                         </div>
                     
@@ -105,7 +106,8 @@ class Payment extends React.Component{
                                 
                             <div className="col-md-6 col-6">
                             <h2>Total yang harus di transfer </h2>
-                                <hr/>
+                <hr style={{border:"1px solid #FB9900"}}/>
+                            
                             
                                 <h2>
                                 <center>
@@ -122,8 +124,8 @@ class Payment extends React.Component{
                             </div>
                             <div className="col-5 col-md-5">
                                 <h2>Payment Method</h2>
-                                <hr/>
-                                <table className="table table-hover">
+                <hr style={{border:"1px solid #FB9900"}}/>                             
+                                <table className="table">
                                     <tr>
                                         <td>Bank Name</td>
                                         <td>Bank Account Number</td>
@@ -145,7 +147,7 @@ class Payment extends React.Component{
                             </div>
             
                         </div>
-                    <hr></hr>
+                        <hr style={{border:"1px solid #FB9900"}}/>               
                     <div className="row">
                         <div style ={{position:"absolute",right:"0px"}} className="col-5 col-md-5">
                         <Link to="/product">
