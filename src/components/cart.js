@@ -204,7 +204,7 @@ class CustomPaginationActionsTable extends React.Component {
   btnCheckOut = ()=>{
     var dateNow = Moment().format('YYYY-MM-D hh:mm:ss')
     var invoiceNumber = Date.now()
-    
+  
     for(var i=0; i < this.state.rows.length;i++){
       var newData={
         id_user:this.props.id,
@@ -215,14 +215,14 @@ class CustomPaginationActionsTable extends React.Component {
         no_invoice:invoiceNumber,
         buyer_note:this.state.rows[i].buyer_note
       }
-      
+  
       var formData = {
         id_user:this.props.id,
         date_purchase:dateNow,
         no_invoice:invoiceNumber
       }
       
-       axios.post(`http://localhost:2000/cart/checkout?id=${this.props.id}`,newData)
+       axios.post(`http://localhost:2000/cart/checkout?id=${this.props.id}`,{...newData})
        .then((res)=>{
           swal("Preloved Success",res.data,"success")
           this.props.cartLength(this.props.id)

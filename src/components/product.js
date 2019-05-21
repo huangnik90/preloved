@@ -8,7 +8,7 @@ import swal from 'sweetalert'
 import {cartLength} from '../1.actions'
 
 class Product extends React.Component{
-    state = {dataProduct:[],dataPerPage:12,searchData:'',dataCategory:[],filterCategory:0
+    state = {dataProduct:[],dataPerPage:12,searchData:'',dataCategory:[],filterCategory:0,filterGrade:''
 }
 
 componentDidMount(){
@@ -32,6 +32,9 @@ getDataUrl = ()=>{
         this.setState({searchData:obj.query})
       }if(obj.categoryProduct){
         this.setState({filterCategory:obj.categoryProduct})
+      }
+      if(obj.grade){
+        this.setState({filterGrade:obj.grade})
       }
     }
   }
@@ -65,6 +68,11 @@ categorySearch=()=>{
     var searchCategory = this.refs.categoryDropdown.value
     this.setState({filterCategory:searchCategory})
 }
+gradeSearch=()=>{
+    this.pushUrl()
+    var grade = this.refs.gradeDropdown.value
+    this.setState({filterGrade:grade})
+}
 
 pushUrl = ()=>{
     var newLink ='/product/search'
@@ -80,6 +88,12 @@ pushUrl = ()=>{
         params.push({
             params:'categoryProduct',
             value:this.refs.categoryDropdown.value
+        })
+    }
+    if(this.refs.gradeDropdown.value){
+        params.push({
+            params:'grade',
+            value:this.refs.gradeDropdown.value
         })
     }
 
@@ -127,7 +141,8 @@ pushUrl = ()=>{
     renderProductJsx = ()=>{
         var arrSearchAndFilter = this.state.dataProduct.filter((val) => {
             return val.product_name.toLowerCase().includes(this.state.searchData) 
-                    && (parseInt(val.category_id) === parseInt(this.state.filterCategory)||this.state.filterCategory<1)  
+                    && (parseInt(val.category_id) === parseInt(this.state.filterCategory)||this.state.filterCategory<1)  &&
+                    val.grade.toLowerCase().includes(this.state.filterGrade) 
         })
 
 
@@ -230,8 +245,16 @@ pushUrl = ()=>{
         return(
             <div className="container wrapProduct">
             <div className="row">
-                <div className="col-md-4 form-inline">
+                <div className="col-md-2 form-inline">
                     <h3 style={{marginTop:"10px"}}>Product List</h3>
+                </div>
+                <div className="col-md-2 " style={{marginTop:"10px"}}>
+                        <select ref="gradeDropdown" onChange={this.gradeSearch} className="form-control">
+                           <option value="">--Grade--</option>
+                           <option value="a">--A--</option>
+                           <option value="b">--B--</option>
+                           <option value="c">--C--</option>
+                        </select>
                 </div>
                 <div className="col-md-2 " style={{marginTop:"10px"}}>
                         <select ref="categoryDropdown" onChange={this.categorySearch} className="form-control">
