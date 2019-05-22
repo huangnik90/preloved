@@ -32,8 +32,7 @@ getDataUrl = ()=>{
         this.setState({searchData:obj.query})
       }if(obj.categoryProduct){
         this.setState({filterCategory:obj.categoryProduct})
-      }
-      if(obj.grade){
+      }if(obj.grade){
         this.setState({filterGrade:obj.grade})
       }
     }

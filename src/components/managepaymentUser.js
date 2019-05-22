@@ -147,8 +147,6 @@ class CustomPaginationActionsTable extends React.Component {
       .catch((err)=>{
           console.log(err)
       })
-      
-
   }
   getSingleImageUpload=()=>{
     axios.get(`http://localhost:2000/payment/cekgambarpayment/${this.props.match.params.no_invoice}`)
@@ -231,6 +229,13 @@ class CustomPaginationActionsTable extends React.Component {
         .then((res)=>{
             swal("Ok",res.data,"success")
             this.setState({diclik:true})
+        })
+        .catch((err)=>console.log(err))
+
+        axios.get(`http://localhost:2000/payment/emailapprove/${this.props.match.params.no_invoice}`)
+        .then((res2)=>{
+          swal("Ok",res2.data,"success")
+          
         })
         .catch((err)=>console.log(err))
   }
