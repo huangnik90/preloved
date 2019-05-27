@@ -5,6 +5,8 @@ import axios from 'axios'
 import {connect} from 'react-redux'
 import swal from 'sweetalert'
 import {cartLength} from '../1.actions'
+import CurrencyFormat from 'react-currency-format';
+
 
 class Product extends React.Component{
     state = {dataProduct:[],dataPerPage:12,searchData:'',dataCategory:[],filterCategory:0
@@ -138,9 +140,12 @@ getProduct =()=>{
                             <p className="card-text">{val.desc}</p>
                         {  
                              val.discount>0?
-                            <p className="card-text" style={{fontSize:"12px",display:"inline",textDecoration:"line-through",color:"red"}}>Rp. {val.price}</p>:null
+                            <p className="card-text" style={{fontSize:"12px",display:"inline",textDecoration:"line-through",color:"orange"}}>Rp. {val.price}</p>:null
                         }
-                            <p className="card-text" style={{marginLeft:"5px",display:"inline",color:"black",fontWeight:"500"}}>Rp. {val.price - (val.price*val.discount/100)}</p>
+                            <p className="card-text" style={{marginLeft:"5px",display:"inline",color:"black",fontWeight:"300",fontSize:"20px"}}>
+            <CurrencyFormat value={val.price - (val.price*val.discount/100)} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
+                            
+                            </p>
                             <hr/>
                             <div>
                              <h5>{val.product_name}</h5>
