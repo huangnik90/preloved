@@ -252,14 +252,14 @@ class CustomPaginationActionsTable extends React.Component {
         return (
             <TableRow>
             <TableCell align="center">{index+1}</TableCell>
-           
             <TableCell align="center">{val.product_name}</TableCell>
+            <TableCell align="center">{val.grade}</TableCell>
+            <TableCell align="center">{val.extra_note}</TableCell>
             <TableCell align="center">
             <CurrencyFormat value={val.price - (val.price*val.discount/100)} displayType={'text'} thousandSeparator={true} prefix={'Rp.'} renderText={value => <div>{value}</div>} />
             
             </TableCell>
             <TableCell align="center">{val.cart_quantity}</TableCell>
-            <TableCell align="center"><img alt="gambar" width="100px"src={`http://localhost:2000/${val.image}`}></img></TableCell>
             {
               this.state.isEdit===true&& this.state.editIndex===index
               ? 
@@ -272,6 +272,7 @@ class CustomPaginationActionsTable extends React.Component {
               :
               <TableCell align="center">{val.buyer_note}</TableCell>
             }
+            <TableCell align="center"><img alt="gambar" width="100px"src={`http://localhost:2000/${val.image}`}></img></TableCell>
             
             {this.state.isEdit===true&& this.state.editIndex===index? 
             <TableCell align="center">
@@ -329,10 +330,12 @@ if(this.props.role===1 || this.props.role===2){
               <TableRow>
               <TableCell align="center">Nomor</TableCell>
                   <TableCell align="center">Product Name</TableCell>
+                  <TableCell align="center">Grade</TableCell>
+                  <TableCell align="center">Seller Note</TableCell>
                   <TableCell align="center">Price (after discount)</TableCell>
                   <TableCell align="center">Total Purchase</TableCell>
+                  <TableCell align="center">Buyer Note</TableCell>
                   <TableCell align="center">Image Product</TableCell>
-                  <TableCell align="center">Extra Note</TableCell>
                   <TableCell align="center">Action</TableCell>
               </TableRow>     
           </TableHead>

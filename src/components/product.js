@@ -32,7 +32,8 @@ getDataUrl = ()=>{
         this.setState({searchData:obj.query})
       }if(obj.categoryProduct){
         this.setState({filterCategory:obj.categoryProduct})
-      }if(obj.grade){
+      }
+      if(obj.grade){
         this.setState({filterGrade:obj.grade})
       }
     }
@@ -140,8 +141,8 @@ pushUrl = ()=>{
     renderProductJsx = ()=>{
         var arrSearchAndFilter = this.state.dataProduct.filter((val) => {
             return val.product_name.toLowerCase().includes(this.state.searchData) 
-                    && (parseInt(val.category_id) === parseInt(this.state.filterCategory)||this.state.filterCategory<1)  &&
-                    val.grade.toLowerCase().includes(this.state.filterGrade) 
+                    && (parseInt(val.category_id) === parseInt(this.state.filterCategory)||this.state.filterCategory<1) 
+                    && val.grade?val.grade.toLowerCase().includes(this.state.filterGrade):null
         })
 
 
@@ -250,9 +251,9 @@ pushUrl = ()=>{
                 <div className="col-md-2 " style={{marginTop:"10px"}}>
                         <select ref="gradeDropdown" onChange={this.gradeSearch} className="form-control">
                            <option value="">--Grade--</option>
-                           <option value="a">--A--</option>
-                           <option value="b">--B--</option>
-                           <option value="c">--C--</option>
+                           <option value="a"> A </option>
+                           <option value="b"> B </option>
+                           <option value="c"> C </option>
                         </select>
                 </div>
                 <div className="col-md-2 " style={{marginTop:"10px"}}>

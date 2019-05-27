@@ -4,9 +4,10 @@ import swal from 'sweetalert'
 import PageNotFound from './404';
 import '../support/product.css'
 import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
 
 class ProductAddDescription extends React.Component{
-    state = {editDataDes:[]}
+    state = {editDataDes:[],klik:false}
     componentDidMount(){
         this.getAllDescription()
     }
@@ -34,6 +35,7 @@ class ProductAddDescription extends React.Component{
         axios.put(`http://localhost:2000/product/editproductdescription/${id_product}`,newData)
         .then((res)=>{
             swal("Success",res.data,"success")
+            this.setState({klik:true})
            
         })
         .catch((err)=>console.log(err))
@@ -97,6 +99,9 @@ class ProductAddDescription extends React.Component{
     }
 
     render(){
+        if(this.state.klik){
+            return <Redirect to='/productmanage'/>            
+        }
         if(this.props.role===1){
             return(
                 <div className="container-fluid form" style={{minHeight:"450px"}}>

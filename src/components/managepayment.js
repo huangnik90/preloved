@@ -188,8 +188,8 @@ class CustomPaginationActionsTable extends React.Component {
 
   renderJSX = ()=>{
     var arrSearchAndFilter = this.state.rows.filter((val)=>{
-      return val.username.toLowerCase().includes(this.state.searchRows) 
-      && (parseInt(val.status_pembayaran) === parseInt(this.state.filterStatusPembayaran)||this.state.filterStatusPembayaran>3) 
+      return  val.username.toLowerCase().includes(this.state.searchRows) 
+              && (parseInt(val.status_pembayaran) === parseInt(this.state.filterStatusPembayaran)||this.state.filterStatusPembayaran>3) 
       //pake includes kalo semua inputan ada hubungan dengan hasil misal kluar smua yg ada huruf o 
     })
     
@@ -300,7 +300,7 @@ if(this.props.role===1){
                   <TableCell align="center">Invoice Number</TableCell>
                   <TableCell align="center">Username</TableCell>
                   <TableCell align="center">Email</TableCell>
-                  <TableCell align="center">Jumlah Barang</TableCell>
+                  <TableCell align="center">Varian Barang</TableCell>
                   <TableCell align="center">Total Harga Belanja</TableCell>
                   <TableCell align="center">Status</TableCell>
                   <TableCell align="center">Action</TableCell>

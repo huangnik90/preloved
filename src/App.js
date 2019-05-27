@@ -82,8 +82,6 @@ class App extends Component {
                  
              <Footer/>
           </ScrollTop>
-         
-          
         </div>
      
          );
